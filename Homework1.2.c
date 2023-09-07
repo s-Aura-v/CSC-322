@@ -219,6 +219,13 @@ void changeRoomEast(struct Room *currentRoom) {
     // if they say go east, check if east is there, if it is, go there
     if (currentRoom->east != -1) {
 
+        //how do I change the data to that of the east room
+        actualRoom->cleanliness = currentRoom;
+        actualRoom->creatureAmount = currentRoom;
+        actualRoom->east = currentRoom;
+        actualRoom->west = currentRoom;
+        actualRoom->north = currentRoom;
+        actualRoom->south = currentRoom;
     } else {
         printf("You try to head East and end up running into the wall!");
     }
@@ -227,8 +234,13 @@ void changeRoomEast(struct Room *currentRoom) {
 void changeRoomWest(struct Room *currentRoom) {
 
     // if they say go east, check if east is there, if it is, go there
-    if (currentRoom->east != -1) {
-        
+    if (currentRoom->west != -1) {
+        actualRoom->cleanliness = currentRoom;
+        actualRoom->creatureAmount = currentRoom;
+        actualRoom->east = currentRoom;
+        actualRoom->west = currentRoom;
+        actualRoom->north = currentRoom;
+        actualRoom->south = currentRoom;
     } else {
         printf("You try to head West and end up running into the wall!");
     }
@@ -237,8 +249,13 @@ void changeRoomWest(struct Room *currentRoom) {
 void changeRoomNorth(struct Room *currentRoom) {
 
     // if they say go east, check if east is there, if it is, go there
-    if (currentRoom->east != -1) {
-
+    if (currentRoom->north != -1) {
+        actualRoom->cleanliness = currentRoom;
+        actualRoom->creatureAmount = currentRoom;
+        actualRoom->east = currentRoom;
+        actualRoom->west = currentRoom;
+        actualRoom->north = currentRoom;
+        actualRoom->south = currentRoom;
     } else {
         printf("You try to head North and end up running into the wall!");
     }
@@ -247,7 +264,13 @@ void changeRoomNorth(struct Room *currentRoom) {
 void changeRoomSouth(struct Room *currentRoom) {
 
     // if they say go east, check if east is there, if it is, go there
-    if (currentRoom->east != -1) {
+    if (currentRoom->south != -1) {
+        actualRoom->cleanliness = currentRoom;
+        actualRoom->creatureAmount = currentRoom;
+        actualRoom->east = currentRoom;
+        actualRoom->west = currentRoom;
+        actualRoom->north = currentRoom;
+        actualRoom->south = currentRoom;
 
     } else {
         printf("You try to head South and end up running into the wall!");
