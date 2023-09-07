@@ -17,14 +17,14 @@ struct Room{
     struct Creature creatures[10];
 };
 bool roomStatus;  //true - room got cleaner // false - room got dirtier
-struct Room *actualRoom; // the room that you are currently in
+struct Room actualRoom; // the room that you are currently in
 
 /* functions to make the program work*/
 void look(struct Room *roomlayout);
 void clean(struct Room *currentRoom);
 void dirty(struct Room *currentRoom);
 void checkCreatureEmotion(struct Room *currentRoom);
-void changeRoomEast(struct Room *currentRoom);
+void changeRoomEast(struct Room *currentRoom, struct Room roomlayout[]);
 void changeRoomWest(struct Room *currentRoom);
 void changeRoomNorth(struct Room *currentRoom);
 void changeRoomSouth(struct Room *currentRoom);
@@ -45,7 +45,7 @@ int main() {
         scanf("%d %d %d %d %d", &roomlayout[i].cleanliness, &roomlayout[i].north, &roomlayout[i].south, &roomlayout[i].east, &roomlayout[i].west);
     }
     // Set current room to the first inputted room
-    currentRoom = &roomlayout[0];
+    currentRoom->cleanliness = roomlayout[0].cleanliness;
 
      /*The number of animals*/
     printf("Enter the amount of creatures: ");
@@ -94,7 +94,7 @@ int main() {
         }
 
         else if (strcmp(input, "east") == 0) {
-            changeRoomEast(currentRoom);
+            changeRoomEast(currentRoom, roomlayout);
         }
 
         else if (strcmp(input, "west") == 0) {
@@ -214,69 +214,77 @@ void checkCreatureEmotion(struct Room *currentRoom) {
 
 /* I can probably combine all of these, but it's easier for me to do this for now*/
 
-void changeRoomEast(struct Room *currentRoom) {
+void changeRoomEast(struct Room *currentRoom, struct Room roomlayout[]) {
 
     // if they say go east, check if east is there, if it is, go there
     if (currentRoom->east != -1) {
 
+        for (int i = 0; i < sizeof(roomlayout)/sizeof(roomlayout[0]); i++) {
+            if (roomlayout[i].west != -1) {
+                actualRoom.cleanliness = roomlayout[i].cleanliness;
+                actualRoom.creatureAmount = roomlayout[i].creatureAmount;
+                actualRoom.east = roomlayout[i].east;
+                actualRoom.west = roomlayout[i].west;
+                actualRoom.north = roomlayout[i].north;
+                actualRoom.south = roomlayout[i].south;
+            }
+        }
+
         //how do I change the data to that of the east room
-        actualRoom->cleanliness = currentRoom;
-        actualRoom->creatureAmount = currentRoom;
-        actualRoom->east = currentRoom;
-        actualRoom->west = currentRoom;
-        actualRoom->north = currentRoom;
-        actualRoom->south = currentRoom;
     } else {
         printf("You try to head East and end up running into the wall!");
     }
 }
 
-void changeRoomWest(struct Room *currentRoom) {
 
-    // if they say go east, check if east is there, if it is, go there
-    if (currentRoom->west != -1) {
-        actualRoom->cleanliness = currentRoom;
-        actualRoom->creatureAmount = currentRoom;
-        actualRoom->east = currentRoom;
-        actualRoom->west = currentRoom;
-        actualRoom->north = currentRoom;
-        actualRoom->south = currentRoom;
-    } else {
-        printf("You try to head West and end up running into the wall!");
-    }
-}
+// void changeRoomWest(struct Room *currentRoom) {
 
-void changeRoomNorth(struct Room *currentRoom) {
+//     // if they say go east, check if east is there, if it is, go there
+//     if (currentRoom->west != -1) {
 
-    // if they say go east, check if east is there, if it is, go there
-    if (currentRoom->north != -1) {
-        actualRoom->cleanliness = currentRoom;
-        actualRoom->creatureAmount = currentRoom;
-        actualRoom->east = currentRoom;
-        actualRoom->west = currentRoom;
-        actualRoom->north = currentRoom;
-        actualRoom->south = currentRoom;
-    } else {
-        printf("You try to head North and end up running into the wall!");
-    }
-}
 
-void changeRoomSouth(struct Room *currentRoom) {
+//         actualRoom->cleanliness = currentRoom;
+//         actualRoom->creatureAmount = currentRoom;
+//         actualRoom->east = currentRoom;
+//         actualRoom->west = currentRoom;
+//         actualRoom->north = currentRoom;
+//         actualRoom->south = currentRoom;
 
-    // if they say go east, check if east is there, if it is, go there
-    if (currentRoom->south != -1) {
-        actualRoom->cleanliness = currentRoom;
-        actualRoom->creatureAmount = currentRoom;
-        actualRoom->east = currentRoom;
-        actualRoom->west = currentRoom;
-        actualRoom->north = currentRoom;
-        actualRoom->south = currentRoom;
 
-    } else {
-        printf("You try to head South and end up running into the wall!");
-    }
-}
+//     } else {
+//         printf("You try to head West and end up running into the wall!");
+//     }
+// }
 
-/* End of Change Room*/
+// void changeRoomNorth(struct Room *currentRoom) {
 
+//     // if they say go north, check if east is there, if it is, go there
+//     if (currentRoom->north != -1) {
+//         actualRoom->cleanliness = currentRoom;
+//         actualRoom->creatureAmount = currentRoom;
+//         actualRoom->east = currentRoom;
+//         actualRoom->west = currentRoom;
+//         actualRoom->north = currentRoom;
+//         actualRoom->south = currentRoom;
+//     } else {
+//         printf("You try to head North and end up running into the wall!");
+//     }
+// }
+
+// void changeRoomSouth(struct Room *currentRoom) {
+
+//     // if they say go east, check if east is there, if it is, go there
+//     if (currentRoom->south != -1) {
+//         actualRoom->cleanliness = currentRoom;
+//         actualRoom->creatureAmount = currentRoom;
+//         actualRoom->east = currentRoom;
+//         actualRoom->west = currentRoom;
+//         actualRoom->north = currentRoom;
+//         actualRoom->south = currentRoom;
+
+//     } else {
+//         printf("You try to head South and end up running into the wall!");
+//     }
+// }
+// /* End of Change Room*/
 
