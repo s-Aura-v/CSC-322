@@ -47,7 +47,9 @@ int main() {
     // Set current room to the first inputted room
     currentRoom.cleanliness = roomlayout[0].cleanliness;
     currentRoom.creatureAmount = roomlayout[0].creatureAmount;
-    currentRoom.creatures[10] = roomlayout[0].creatures[10];
+    for (int i = 0; i < currentRoom.creatureAmount; i++) {
+        currentRoom.creatures[i] = roomlayout[0].creatures[i];
+    }
     currentRoom.north = roomlayout[0].north;
     currentRoom.south = roomlayout[0].south;
     currentRoom.east = roomlayout[0].east;
@@ -226,7 +228,7 @@ void changeRoomEast(struct Room currentRoom, struct Room roomlayout[]) {
     if (currentRoom.east != -1) {
 
         for (int i = 0; i < sizeof(roomlayout)/sizeof(roomlayout[0]); i++) {
-            if (roomlayout[i].west != -1) {
+            if (roomlayout[i].west == currentRoom.cleanliness) {
                 actualRoom.cleanliness = roomlayout[i].cleanliness;
                 actualRoom.creatureAmount = roomlayout[i].creatureAmount;
                 actualRoom.east = roomlayout[i].east;
