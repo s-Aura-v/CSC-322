@@ -21,13 +21,13 @@ struct Room actualRoom; // the room that you are currently in
 
 /* functions to make the program work*/
 void look(struct Room actualRoom);
-void clean(struct Room actualRoom);
-void dirty(struct Room actualRoom);
+void clean();
+void dirty();
 void checkCreatureEmotion(struct Room actualRoom);
-void changeRoomEast(struct Room actualRoom, struct Room roomlayout[], int numOfRooms);
-void changeRoomWest(struct Room actualRoom, struct Room roomlayout[], int numOfRooms);
-void changeRoomNorth(struct Room actualRoom, struct Room roomlayout[], int numOfRooms);
-void changeRoomSouth(struct Room actualRoom, struct Room roomlayout[], int numOfRooms);
+void changeRoomEast(struct Room roomlayout[], int numOfRooms);
+void changeRoomWest(struct Room roomlayout[], int numOfRooms);
+void changeRoomNorth(struct Room roomlayout[], int numOfRooms);
+void changeRoomSouth(struct Room roomlayout[], int numOfRooms);
 
 
 int main() {
@@ -93,27 +93,27 @@ int main() {
         }
 
         else if (strcmp(input, "clean") == 0) {
-            clean(actualRoom);
+            clean();
         }
 
         else if (strcmp(input, "dirty") == 0) {
-            dirty(actualRoom);
+            dirty(  );
         }
 
         else if (strcmp(input, "east") == 0) {
-            changeRoomEast(actualRoom, roomlayout, numOfRooms); //temporarily using roomNumber while i test the code
+            changeRoomEast(roomlayout, numOfRooms); //temporarily using roomNumber while i test the code
         }
 
         else if (strcmp(input, "west") == 0) {
-            changeRoomWest(actualRoom, roomlayout, numOfRooms);
+            changeRoomWest(roomlayout, numOfRooms);
         }
 
         else if (strcmp(input, "north") == 0) {
-            changeRoomNorth(actualRoom, roomlayout, numOfRooms);
+            changeRoomNorth(roomlayout, numOfRooms);
         }
 
         else if (strcmp(input, "south") == 0) {
-            changeRoomSouth(actualRoom, roomlayout, numOfRooms);
+            changeRoomSouth(roomlayout, numOfRooms);
         }
 
         else if (strcmp(input, "exit") == 0) {
@@ -157,7 +157,7 @@ void look(struct Room actualRoom) {
     }
 }
 
-void clean(struct Room actualRoom) {
+void clean() {
         if (actualRoom.cleanliness == 2) { /* if its dirty, make it half dirty, remember the respect system*/
            actualRoom.cleanliness = 1;
            roomStatus = true;
@@ -171,7 +171,7 @@ void clean(struct Room actualRoom) {
         }
     }
 
-void dirty(struct Room actualRoom) {
+void dirty() {
     if (actualRoom.cleanliness == 2) { /* if its dirty, make it half dirty, remember the respect system*/
         printf("Your room is already dirty!");
     } else if (actualRoom.cleanliness == 1) { /* if it's half-dirty, make it dirty*/
@@ -221,7 +221,7 @@ void dirty(struct Room actualRoom) {
 
 /* I can probably combine all of these, but it's easier for me to do this for now*/
 
-void changeRoomEast(struct Room actualRoom, struct Room roomlayout[], int numOfRooms) {
+void changeRoomEast(struct Room roomlayout[], int numOfRooms) {
     if (actualRoom.east != -1) {
 
         for (int i = 0; i < numOfRooms; i++) { //sizeof(roomlayout)/sizeof(roomlayout[0] fix that
@@ -240,7 +240,7 @@ void changeRoomEast(struct Room actualRoom, struct Room roomlayout[], int numOfR
 }
 
 
-void changeRoomWest(struct Room actualRoom, struct Room roomlayout[], int numOfRooms) {
+void changeRoomWest(struct Room roomlayout[], int numOfRooms) {
 
        if (actualRoom.west != -1) {
         for (int i = 0; i < numOfRooms; i++) { //sizeof(roomlayout)/sizeof(roomlayout[0] fix that
@@ -258,7 +258,7 @@ void changeRoomWest(struct Room actualRoom, struct Room roomlayout[], int numOfR
     }
 }
 
-void changeRoomNorth(struct Room actualRoom, struct Room roomlayout[], int numOfRooms) {
+void changeRoomNorth(struct Room roomlayout[], int numOfRooms) {
 
     if (actualRoom.north != -1) {
         for (int i = 0; i < numOfRooms; i++) { //sizeof(roomlayout)/sizeof(roomlayout[0] fix that
@@ -276,7 +276,7 @@ void changeRoomNorth(struct Room actualRoom, struct Room roomlayout[], int numOf
     }
 }
 
-void changeRoomSouth(struct Room actualRoom, struct Room roomlayout[], int numOfRooms) {
+void changeRoomSouth(struct Room roomlayout[], int numOfRooms) {
 
     if (actualRoom.south != -1) {
         for (int i = 0; i < numOfRooms; i++) { //sizeof(roomlayout)/sizeof(roomlayout[0] fix that
