@@ -20,20 +20,19 @@ bool roomStatus;  //true - room got cleaner // false - room got dirtier
 struct Room actualRoom; // the room that you are currently in
 
 /* functions to make the program work*/
-void look(struct Room roomlayout);
-void clean(struct Room currentRoom);
-void dirty(struct Room currentRoom);
-void checkCreatureEmotion(struct Room currentRoom);
-void changeRoomEast(struct Room currentRoom, struct Room roomlayout[], int numOfRooms);
-void changeRoomWest(struct Room currentRoom, struct Room roomlayout[], int numOfRooms);
-void changeRoomNorth(struct Room currentRoom, struct Room roomlayout[], int numOfRooms);
-void changeRoomSouth(struct Room currentRoom, struct Room roomlayout[], int numOfRooms);
+void look(struct Room actualRoom);
+void clean(struct Room actualRoom);
+void dirty(struct Room actualRoom);
+void checkCreatureEmotion(struct Room actualRoom);
+void changeRoomEast(struct Room actualRoom, struct Room roomlayout[], int numOfRooms);
+void changeRoomWest(struct Room actualRoom, struct Room roomlayout[], int numOfRooms);
+void changeRoomNorth(struct Room actualRoom, struct Room roomlayout[], int numOfRooms);
+void changeRoomSouth(struct Room actualRoom, struct Room roomlayout[], int numOfRooms);
 
 
 int main() {
     int numOfRooms; // still have to initalize these two values
     int numOfCreatures;
-    struct Room currentRoom;
     
     printf("Enter the number of rooms: ");
     scanf("%d", &numOfRooms); /* n */
@@ -45,15 +44,15 @@ int main() {
         scanf("%d %d %d %d %d", &roomlayout[i].cleanliness, &roomlayout[i].north, &roomlayout[i].south, &roomlayout[i].east, &roomlayout[i].west);
     }
     // Set current room to the first inputted room
-    currentRoom.cleanliness = roomlayout[0].cleanliness;
-    currentRoom.creatureAmount = roomlayout[0].creatureAmount;
-    for (int i = 0; i < currentRoom.creatureAmount; i++) {
-        currentRoom.creatures[i] = roomlayout[0].creatures[i];
+    actualRoom.cleanliness = roomlayout[0].cleanliness;
+    actualRoom.creatureAmount = roomlayout[0].creatureAmount;
+    for (int i = 0; i < actualRoom.creatureAmount; i++) {
+        actualRoom.creatures[i] = roomlayout[0].creatures[i];
     }
-    currentRoom.north = roomlayout[0].north;
-    currentRoom.south = roomlayout[0].south;
-    currentRoom.east = roomlayout[0].east;
-    currentRoom.west = roomlayout[0].west;
+    actualRoom.north = roomlayout[0].north;
+    actualRoom.south = roomlayout[0].south;
+    actualRoom.east = roomlayout[0].east;
+    actualRoom.west = roomlayout[0].west;
 
      /*The number of animals*/
     printf("Enter the amount of creatures: ");
@@ -90,31 +89,31 @@ int main() {
 
         /*switch to case statement at the end*/
         if (strcmp(input, "look") == 0) {
-            look(currentRoom);
+            look(actualRoom);
         }
 
         else if (strcmp(input, "clean") == 0) {
-            clean(currentRoom);
+            clean(actualRoom);
         }
 
         else if (strcmp(input, "dirty") == 0) {
-            dirty(currentRoom);
+            dirty(actualRoom);
         }
 
         else if (strcmp(input, "east") == 0) {
-            changeRoomEast(currentRoom, roomlayout, numOfRooms); //temporarily using roomNumber while i test the code
+            changeRoomEast(actualRoom, roomlayout, numOfRooms); //temporarily using roomNumber while i test the code
         }
 
         else if (strcmp(input, "west") == 0) {
-            // changeRoomWest(currentRoom);
+            changeRoomWest(actualRoom, roomlayout, numOfRooms);
         }
 
         else if (strcmp(input, "north") == 0) {
-            // changeRoomNorth(currentRoom);
+            changeRoomNorth(actualRoom, roomlayout, numOfRooms);
         }
 
         else if (strcmp(input, "south") == 0) {
-            // changeRoomSouth(currentRoom);
+            changeRoomSouth(actualRoom, roomlayout, numOfRooms);
         }
 
         else if (strcmp(input, "exit") == 0) {
@@ -126,68 +125,68 @@ int main() {
 }
 
 
-void look(struct Room currentRoom) {
+void look(struct Room actualRoom) {
 
-    printf("Room cleaniness: %d ", currentRoom.cleanliness); /* Print out the room cleanliness */
+    printf("Room cleaniness: %d ", actualRoom.cleanliness); /* Print out the room cleanliness */
 
     /* Check neighbors in the room*/
-    printf("neighbors ");
-    if (currentRoom.north != -1) {
-        printf("%d to the north ", currentRoom.north);
+    printf("neighbors ");   
+    if (actualRoom.north != -1) {
+        printf("%d to the north ", actualRoom.north);
     } 
-    if (currentRoom.east != -1) {
-        printf("%d to the east ", currentRoom.east);
+    if (actualRoom.east != -1) {
+        printf("%d to the east ", actualRoom.east);
     }
-    if (currentRoom.south != -1) {
-        printf("%d to the south ", currentRoom.south);
+    if (actualRoom.south != -1) {
+        printf("%d to the south ", actualRoom.south);
     }
-    if (currentRoom.west != -1) {
-        printf("%d to the west ", currentRoom.west);
+    if (actualRoom.west != -1) {
+        printf("%d to the west ", actualRoom.west);
     }
 
     /*Check creatures*/
     printf(" contains:\n PC\n");  /*work on this more, to include all the creatures in the room*/
-    for (int i = 0; i < currentRoom.creatureAmount; i++) {
-        if (currentRoom.creatures->type == 1) {
-            printf("%d 1\n", currentRoom.creatures->type);
+    for (int i = 0; i < actualRoom.creatureAmount; i++) {
+        if (actualRoom.creatures->type == 1) {
+            printf("%d 1\n", actualRoom.creatures->type);
         }
 
-        if (currentRoom.creatures->type == 2) {
-            printf("%d 2\n", currentRoom.creatures->type);
+        if (actualRoom.creatures->type == 2) {
+            printf("%d 2\n", actualRoom.creatures->type);
         }
     }
 }
 
-void clean(struct Room currentRoom) {
-        if (currentRoom.cleanliness == 2) { /* if its dirty, make it half dirty, remember the respect system*/
-           currentRoom.cleanliness = 1;
+void clean(struct Room actualRoom) {
+        if (actualRoom.cleanliness == 2) { /* if its dirty, make it half dirty, remember the respect system*/
+           actualRoom.cleanliness = 1;
            roomStatus = true;
-        //    checkCreatureEmotion(currentRoom);
-        } else if (currentRoom.cleanliness == 1) { /* if it's half-dirty, make it clean*/
-            currentRoom.cleanliness = 0;
+        //    checkCreatureEmotion(actualRoom);
+        } else if (actualRoom.cleanliness == 1) { /* if it's half-dirty, make it clean*/
+            actualRoom.cleanliness = 0;
             roomStatus = true;
-            // checkCreatureEmotion(currentRoom);
+            // checkCreatureEmotion(actualRoom);
         } else { 
             printf("Your room is already clean!");
         }
     }
 
-void dirty(struct Room currentRoom) {
-    if (currentRoom.cleanliness == 2) { /* if its dirty, make it half dirty, remember the respect system*/
+void dirty(struct Room actualRoom) {
+    if (actualRoom.cleanliness == 2) { /* if its dirty, make it half dirty, remember the respect system*/
         printf("Your room is already dirty!");
-    } else if (currentRoom.cleanliness == 1) { /* if it's half-dirty, make it dirty*/
-        currentRoom.cleanliness = 2;
+    } else if (actualRoom.cleanliness == 1) { /* if it's half-dirty, make it dirty*/
+        actualRoom.cleanliness = 2;
         roomStatus = false;
-        // checkCreatureEmotion(currentRoom);
+        // checkCreatureEmotion(actualRoom);
     } else {                                   /*if it's clean, make it half-dirty*/
-        currentRoom.cleanliness = 1;
+        actualRoom.cleanliness = 1;
         roomStatus = false;
-        // checkCreatureEmotion(currentRoom);
+        // checkCreatureEmotion(actualRoom);
 
     }
 }
 
-// void checkCreatureEmotion(struct Room currentRoom) {
+// void checkCreatureEmotion(struct Room actualRoom) {
 
 //     //animal - likes clean | stays in clean/half-dirty
 //     //npc - likes dirty    | stays in half-dirty / dirty
@@ -198,21 +197,21 @@ void dirty(struct Room currentRoom) {
 //     //if creature type is an animal, and the room changes from clean to half dirty, then they growl and 
 //     //                               if it is dirty, then they leave the room 
 
-//     for (int i = 0; i < currentRoom.creatureAmount; i++) {
+//     for (int i = 0; i < actualRoom.creatureAmount; i++) {
 
-//         if((currentRoom.creatures.type == 1) && (roomStatus == false)) {
+//         if((actualRoom.creatures.type == 1) && (roomStatus == false)) {
 
-//             if (currentRoom.cleanliness == 2) {        //leave the room
+//             if (actualRoom.cleanliness == 2) {        //leave the room
 
 //             }
 
-//         } else if ((currentRoom->creatures->type == 1) && (roomStatus == true)) {
+//         } else if ((actualRoom->creatures->type == 1) && (roomStatus == true)) {
 
-//         } else if ((currentRoom->creatures->type == 2) && (roomStatus == false)) {
+//         } else if ((actualRoom->creatures->type == 2) && (roomStatus == false)) {
   
-//         }  else if ((currentRoom->creatures->type == 2) && (roomStatus == true)) {
+//         }  else if ((actualRoom->creatures->type == 2) && (roomStatus == true)) {
 
-//             if (currentRoom->cleanliness == 0) {        //leave the room
+//             if (actualRoom->cleanliness == 0) {        //leave the room
 
 //             }
         
@@ -222,11 +221,11 @@ void dirty(struct Room currentRoom) {
 
 /* I can probably combine all of these, but it's easier for me to do this for now*/
 
-void changeRoomEast(struct Room currentRoom, struct Room roomlayout[], int numOfRooms) {
-    if (currentRoom.east != -1) {
+void changeRoomEast(struct Room actualRoom, struct Room roomlayout[], int numOfRooms) {
+    if (actualRoom.east != -1) {
 
         for (int i = 0; i < numOfRooms; i++) { //sizeof(roomlayout)/sizeof(roomlayout[0] fix that
-            if (roomlayout[i].west == currentRoom.cleanliness) {
+            if (roomlayout[i].west == actualRoom.cleanliness) {
                 actualRoom.cleanliness = roomlayout[i].cleanliness;
                 actualRoom.creatureAmount = roomlayout[i].creatureAmount;
                 actualRoom.east = roomlayout[i].east;
@@ -241,11 +240,11 @@ void changeRoomEast(struct Room currentRoom, struct Room roomlayout[], int numOf
 }
 
 
-void changeRoomWest(struct Room currentRoom, struct Room roomlayout[], int numOfRooms) {
+void changeRoomWest(struct Room actualRoom, struct Room roomlayout[], int numOfRooms) {
 
-       if (currentRoom.west != -1) {
+       if (actualRoom.west != -1) {
         for (int i = 0; i < numOfRooms; i++) { //sizeof(roomlayout)/sizeof(roomlayout[0] fix that
-            if (roomlayout[i].east == currentRoom.cleanliness) {
+            if (roomlayout[i].east == actualRoom.cleanliness) {
                 actualRoom.cleanliness = roomlayout[i].cleanliness;
                 actualRoom.creatureAmount = roomlayout[i].creatureAmount;
                 actualRoom.east = roomlayout[i].east;
@@ -259,11 +258,11 @@ void changeRoomWest(struct Room currentRoom, struct Room roomlayout[], int numOf
     }
 }
 
-void changeRoomNorth(struct Room currentRoom, struct Room roomlayout[], int numOfRooms) {
+void changeRoomNorth(struct Room actualRoom, struct Room roomlayout[], int numOfRooms) {
 
-    if (currentRoom.north != -1) {
+    if (actualRoom.north != -1) {
         for (int i = 0; i < numOfRooms; i++) { //sizeof(roomlayout)/sizeof(roomlayout[0] fix that
-            if (roomlayout[i].south == currentRoom.cleanliness) {
+            if (roomlayout[i].south == actualRoom.cleanliness) {
                 actualRoom.cleanliness = roomlayout[i].cleanliness;
                 actualRoom.creatureAmount = roomlayout[i].creatureAmount;
                 actualRoom.east = roomlayout[i].east;
@@ -277,11 +276,11 @@ void changeRoomNorth(struct Room currentRoom, struct Room roomlayout[], int numO
     }
 }
 
-void changeRoomSouth(struct Room currentRoom, struct Room roomlayout[], int numOfRooms) {
+void changeRoomSouth(struct Room actualRoom, struct Room roomlayout[], int numOfRooms) {
 
-    if (currentRoom.south != -1) {
+    if (actualRoom.south != -1) {
         for (int i = 0; i < numOfRooms; i++) { //sizeof(roomlayout)/sizeof(roomlayout[0] fix that
-            if (roomlayout[i].north == currentRoom.cleanliness) {
+            if (roomlayout[i].north == actualRoom.cleanliness) {
                 actualRoom.cleanliness = roomlayout[i].cleanliness;
                 actualRoom.creatureAmount = roomlayout[i].creatureAmount;
                 actualRoom.east = roomlayout[i].east;
