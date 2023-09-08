@@ -61,7 +61,7 @@ int main() {
     /*The type of creature + location*/
     struct Creature creatures[numOfCreatures];
     for (int i = 0; i < numOfCreatures; i++) {
-        printf("\nEnter the creatureType and location: ");
+        printf("Enter the creatureType and location: ");
         scanf("%d %d", &creatures[i].type, &creatures[i].location);
     }
 
@@ -69,12 +69,9 @@ int main() {
     for (int i = 0; i < numOfRooms; i++) {
 
         for (int j = 0; j < numOfCreatures; j++) {
-
             if (creatures[j].location == i) {
-
                 roomlayout[i].creatures[i].location = creatures[j].location;
                 roomlayout[i].creatures[i].type = creatures[j].type;
-
             }
 
         }
@@ -97,7 +94,7 @@ int main() {
         }
 
         else if (strcmp(input, "dirty") == 0) {
-            dirty(  );
+            dirty();
         }
 
         else if (strcmp(input, "east") == 0) {
