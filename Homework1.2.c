@@ -23,7 +23,7 @@ struct Room actualRoom; // the room that you are currently in
 void look(struct Room actualRoom);
 void clean();
 void dirty();
-void checkCreatureEmotion(struct Room actualRoom);
+void checkCreatureEmotion();
 void changeRoomEast(struct Room roomlayout[], int numOfRooms);
 void changeRoomWest(struct Room roomlayout[], int numOfRooms);
 void changeRoomNorth(struct Room roomlayout[], int numOfRooms);
@@ -67,15 +67,17 @@ int main() {
 
 //i think this code is broken so look at it again
     for (int i = 0; i < numOfRooms; i++) {
+        int nextCreatureIndex = 0;
 
         for (int j = 0; j < numOfCreatures; j++) {
             if (creatures[j].location == i) {
-                roomlayout[i].creatures[i].location = creatures[j].location;
-                roomlayout[i].creatures[i].type = creatures[j].type;
+                roomlayout[i].creatures[nextCreatureIndex].location = creatures[j].location;
+                roomlayout[i].creatures[nextCreatureIndex].type = creatures[j].type;
+                nextCreatureIndex++;
             }
-
         }
     }
+
 
     /*Reading Inputs*/
 
@@ -158,11 +160,11 @@ void clean() {
         if (actualRoom.cleanliness == 2) { /* if its dirty, make it half dirty, remember the respect system*/
            actualRoom.cleanliness = 1;
            roomStatus = true;
-        //    checkCreatureEmotion(actualRoom);
+        //    checkCreatureEmotion();
         } else if (actualRoom.cleanliness == 1) { /* if it's half-dirty, make it clean*/
             actualRoom.cleanliness = 0;
             roomStatus = true;
-            // checkCreatureEmotion(actualRoom);
+            // checkCreatureEmotion();
         } else { 
             printf("Your room is already clean!");
         }
@@ -174,16 +176,16 @@ void dirty() {
     } else if (actualRoom.cleanliness == 1) { /* if it's half-dirty, make it dirty*/
         actualRoom.cleanliness = 2;
         roomStatus = false;
-        // checkCreatureEmotion(actualRoom);
+        // checkCreatureEmotion();
     } else {                                   /*if it's clean, make it half-dirty*/
         actualRoom.cleanliness = 1;
         roomStatus = false;
-        // checkCreatureEmotion(actualRoom);
+        // checkCreatureEmotion();
 
     }
 }
 
-// void checkCreatureEmotion(struct Room actualRoom) {
+// void checkCreatureEmotion() {
 
 //     //animal - likes clean | stays in clean/half-dirty
 //     //npc - likes dirty    | stays in half-dirty / dirty
