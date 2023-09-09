@@ -70,20 +70,29 @@ int main() {
         roomIndex = 0;
         for (int j = 0; j < 10; j++) {
             if (creatures[j].location == i) {
-                 rooms[i].roomCreatures[roomIndex] = creatures[j];
+                rooms[i].roomCreatures[roomIndex] = creatures[j];
                 roomIndex++;
             }
         }
     }
 
-    // test
+    //Current room
     for (int i = 0; i < numOfRooms; i++) {
-        printf(" wallahi - %d", rooms[i].state);
         for (int j = 0; j < 10; j++) {
-            printf("%d - %d\n", rooms[i].roomCreatures[j].type, rooms[i].roomCreatures[j].location);
+            if (rooms[i].roomCreatures[j].type == 2) {
+                //set current room equal to that room
+                currentRoom.state = rooms[i].state;
+                currentRoom.north = rooms[i].north;
+                currentRoom.south = rooms[i].south;
+                currentRoom.east = rooms[i].east;
+                currentRoom.west = rooms[i].west;
+                for (int k = 0; k < 10; k++) {
+                    currentRoom.roomCreatures[k] = rooms[i].roomCreatures[k];
+                }
+            }
         }
     }
-
+    
     //Prevent memory leaks
     free(rooms);
     free(creatures);
