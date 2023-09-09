@@ -5,13 +5,11 @@
 
 /*Initial Setup*/
 
-// Define creature structure
 struct Creature {
     int type;
     int location;
 };
 
-// Define Room
 struct Room {
     int state;
     int north;
@@ -21,15 +19,14 @@ struct Room {
     struct Creature roomCreatures[10];
 };
 
-
 // Global variables
 int respect = 40;
 struct Room *rooms = NULL;
 struct Creature *creatures = NULL;
 
 ///* functions to make the program work*/
-//void look();
-//void clean();
+void look(struct Room currentRoom);
+void clean();
 //void dirty();
 //void changeRoomEast();
 //void changeRoomWest();
@@ -61,7 +58,6 @@ int main() {
     for (int i = 0; i < numOfCreatures; i++) {
         printf("creatures: ");
         scanf("%d %d", &creatures[i].type, &creatures[i].location);
-        printf("%d %d", creatures[i].type, creatures[i].location);
     }
 
     // Add a creature for each location
@@ -79,7 +75,7 @@ int main() {
     //Current room
     for (int i = 0; i < numOfRooms; i++) {
         for (int j = 0; j < 10; j++) {
-            if (rooms[i].roomCreatures[j].type == 2) {
+            if (rooms[i].roomCreatures[j].type == 0) {
                 //set current room equal to that room
                 currentRoom.state = rooms[i].state;
                 currentRoom.north = rooms[i].north;
@@ -92,7 +88,28 @@ int main() {
             }
         }
     }
-    
+
+    //Gameplay
+
+    char input[20];
+    while (1) {
+        //Set the input
+        printf("\nEnter a command: ");
+        scanf("%s", input);
+
+        if (strcmp(input, "look") == 0) {
+            look(currentRoom);
+        }
+        else if (strcmp(input, "clean") == 0) {
+            clean();
+        }
+        else if (strcmp(input, "exit") == 0) {
+            printf("Goodbye!");
+            break;
+        }
+    }
+
+
     //Prevent memory leaks
     free(rooms);
     free(creatures);
@@ -143,8 +160,38 @@ int main() {
     return 0;
 }
 //
-//void look();
-//void clean();
+void look(struct Room currentRoom) {
+
+    printf("Room cleaniness: %d | ", currentRoom.state); /* Print out the room cleanliness */
+
+    /* Check neighbors in the room*/
+    printf("neighbors ");
+    if (currentRoom.north != -1) {
+        printf("%d to the north | ", currentRoom.north);
+    }
+    if (currentRoom.east != -1) {
+        printf("%d to the east | ", currentRoom.east);
+    }
+    if (currentRoom.south != -1) {
+        printf("%d to the south | ", currentRoom.south);
+    }
+    if (currentRoom.west != -1) {
+        printf("%d to the west | ", currentRoom.west);
+    }
+
+    /*Check creatures*/
+    printf("contains:\nPC\n");  /*work on this more, to include all the creatures in the room*/
+    for (int i = 0; i < 10; i++) {
+        if (currentRoom.roomCreatures[i].type != 0) {
+            printf("%d\n", currentRoom.roomCreatures[i].type);
+        }
+    }
+}
+
+void clean() {
+
+}
+
 //void dirty();
 //void changeRoomEast();
 //void changeRoomWest();
