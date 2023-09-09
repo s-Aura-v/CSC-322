@@ -18,7 +18,7 @@ struct Room {
     int south;
     int east;
     int west;
-    struct Creature creatures[10];
+    struct Creature roomCreatures[10];
 };
 
 
@@ -65,11 +65,12 @@ int main() {
     }
 
     // Add a creature for each location
-    int roomIndex = 0;
+    int roomIndex;
     for (int i = 0; i < numOfRooms; i++) {
+        roomIndex = 0;
         for (int j = 0; j < 10; j++) {
             if (creatures[j].location == i) {
-                rooms[i].creatures[roomIndex];
+                creatures[j] = rooms[i].roomCreatures[roomIndex];
                 roomIndex++;
             }
         }
@@ -77,11 +78,15 @@ int main() {
 
     // test
     for (int i = 0; i < numOfRooms; i++) {
-        printf("%d", rooms[i].state);
+        printf(" wallahi - %d", rooms[i].state);
         for (int j = 0; j < 10; j++) {
-            printf("%d - %d\n", rooms[i].creatures[j].type, rooms[i].creatures[j].location);
+            printf("%d - %d\n", rooms[i].roomCreatures[j].type, rooms[i].roomCreatures[j].location);
         }
     }
+
+    //Prevent memory leaks
+    free(rooms);
+    free(creatures);
 
 
 
