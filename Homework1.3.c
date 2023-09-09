@@ -11,6 +11,7 @@ struct Creature {
 };
 
 struct Room {
+    int roomNum; //maybe this might work
     int state;
     int north;
     int south;
@@ -28,7 +29,7 @@ struct Creature *creatures = NULL;
 void look(struct Room currentRoom);
 void clean(struct Room *currentRoom, bool roomStatus);
 void dirty(struct Room *currentRoom, bool roomStatus);
-void updateRoomPointer();
+void updateRoomPointer(struct Room *currentRoom);
 //void changeRoomEast();
 //void changeRoomWest();
 //void changeRoomNorth();
@@ -76,9 +77,11 @@ int main() {
 
     //Current room
     for (int i = 0; i < numOfRooms; i++) {
+        rooms[i].roomNum = i;           //?
         for (int j = 0; j < 10; j++) {
             if (rooms[i].roomCreatures[j].type == 0) {
                 //set current room equal to that room
+                currentRoom.roomNum = i;
                 currentRoom.state = rooms[i].state;
                 currentRoom.north = rooms[i].north;
                 currentRoom.south = rooms[i].south;
@@ -96,12 +99,21 @@ int main() {
     char input[20];
     while (1) {
         //Set the input
-        printf("\nEnter a command: ");
+        printf("Enter a command: ");
         scanf("%s", input);
 
         if (strcmp(input, "look") == 0) {
             look(currentRoom);
         }
+
+        //test code
+        else if (strcmp(input, "tLook") == 0) {
+            for (int i = 0; i < (10); i++) {
+                printf("%d - %d\n", rooms[i].roomNum, rooms[i].state);
+            }
+        }
+
+
         else if (strcmp(input, "clean") == 0) {
             clean(&currentRoom, roomStatus);
         }
@@ -180,12 +192,12 @@ void clean(struct Room *currentRoom, bool roomStatus) {
         currentRoom->state = 1;
         roomStatus = true;
         // checkCreatureEmotion();
-        // updateRoomPointer();
+         updateRoomPointer(currentRoom);
     } else if (currentRoom->state == 1) { /* if it's half-dirty, make it clean*/
         currentRoom->state = 0;
         roomStatus = true;
         // checkCreatureEmotion();
-        // updateRoomPointer();
+         updateRoomPointer(currentRoom);
     } else {
         printf("Your room is already clean!");
     }
@@ -198,16 +210,27 @@ void dirty(struct Room *currentRoom, bool roomStatus) {
         currentRoom->state = 2;
         roomStatus = false;
         // checkCreatureEmotion();
-         updateRoomPointer();
+         updateRoomPointer(currentRoom);
     } else {
         currentRoom->state = 1;
         roomStatus = false;
         // checkCreatureEmotion();
-         updateRoomPointer();
+         updateRoomPointer(currentRoom);
     }
 }
-void updateRoomPointer() {
-
+void updateRoomPointer(struct Room *currentRoom) {
+    for (int i = 0; i < (10); i++) { //maybe use a different index for i < 100 lol sizeof(array)/sizeof(array[0]);  
+        if (rooms[i].roomNum == currentRoom->roomNum) {
+            rooms[i].state = currentRoom->state;
+            rooms[i].north = currentRoom->north;
+            rooms[i].south = currentRoom->south;
+            rooms[i].east = currentRoom->east;
+            rooms[i].west = currentRoom->west;
+            for (int k = 0; k < 10; k++) {
+                rooms[i].roomCreatures[k] = currentRoom->roomCreatures[k];
+            }
+        }
+    }
 }
 
 //void changeRoomEast();
