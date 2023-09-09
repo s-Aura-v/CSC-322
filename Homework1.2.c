@@ -8,6 +8,7 @@ struct Creature {
     int location;
 };
 struct Room{
+    int roomNumber; //use this to assign animals
     int cleanliness;
     int north;
     int east;
@@ -44,6 +45,7 @@ int main() {
         scanf("%d %d %d %d %d", &roomlayout[i].cleanliness, &roomlayout[i].north, &roomlayout[i].south, &roomlayout[i].east, &roomlayout[i].west);
     }
     // Set current room to the first inputted room
+    actualRoom.roomNumber = 0;
     actualRoom.cleanliness = roomlayout[0].cleanliness;
     actualRoom.creatureAmount = roomlayout[0].creatureAmount;
     for (int i = 0; i < actualRoom.creatureAmount; i++) {
@@ -63,18 +65,34 @@ int main() {
     for (int i = 0; i < numOfCreatures; i++) {
         printf("Enter the creatureType and location: ");
         scanf("%d %d", &creatures[i].type, &creatures[i].location);
-    }
+        }
+
+    
 
 //i think this code is broken so look at it again
     for (int i = 0; i < numOfRooms; i++) {
-        int nextCreatureIndex = 0;
+        for (int j = 0; j < 10; j++) {  // make it numOfCreatures instead of 10
+                roomlayout[i].creatures[j].location = -1;
+                roomlayout[i].creatures[j].type = -1;
+            }
+        }
 
-        for (int j = 0; j < numOfCreatures; j++) {
-            if (creatures[j].location == i) {
+    for (int i = 0; i < numOfRooms; i++) {
+        int nextCreatureIndex = 0;
+        for (int j = 0; j < 10; j++) {  // make it numOfCreatures instead of 10
+            if (creatures[j].location == roomlayout[i].roomNumber) {
                 roomlayout[i].creatures[nextCreatureIndex].location = creatures[j].location;
                 roomlayout[i].creatures[nextCreatureIndex].type = creatures[j].type;
                 nextCreatureIndex++;
             }
+        }
+    }
+
+    //test code for animals// 
+
+    for (int i = 0; i < numOfRooms; i++) {
+        for (int j = 0; j < 10; j++) {
+            printf("%d - %d\n", i, roomlayout[i].creatures[j].type);
         }
     }
 
