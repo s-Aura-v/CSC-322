@@ -70,7 +70,7 @@ int main() {
         roomIndex = 0;
         for (int j = 0; j < 10; j++) {
             if (creatures[j].location == i) {
-                creatures[j] = rooms[i].roomCreatures[roomIndex];
+                 rooms[i].roomCreatures[roomIndex] = creatures[j];
                 roomIndex++;
             }
         }
