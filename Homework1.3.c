@@ -30,10 +30,10 @@ void look(struct Room currentRoom);
 void clean(struct Room *currentRoom, bool roomStatus);
 void dirty(struct Room *currentRoom, bool roomStatus);
 void updateRoomPointer(struct Room *currentRoom);
-//void changeRoomEast();
-//void changeRoomWest();
-//void changeRoomNorth();
-//void changeRoomSouth();
+void changeRoomEast(struct Room *currentRoom);
+void changeRoomWest(struct Room *currentRoom);
+void changeRoomNorth(struct Room *currentRoom);
+void changeRoomSouth(struct Room *currentRoom);
 
 
 int main() {
@@ -112,8 +112,7 @@ int main() {
                 printf("%d - %d\n", rooms[i].roomNum, rooms[i].state);
             }
         }
-
-
+        //
         else if (strcmp(input, "clean") == 0) {
             clean(&currentRoom, roomStatus);
         }
@@ -123,7 +122,23 @@ int main() {
         else if (strcmp(input, "exit") == 0) {
             printf("Goodbye!");
             break;
+        } else if (strcmp(input, "east") == 0) {
+            changeRoomEast(&currentRoom);
         }
+
+        else if (strcmp(input, "west") == 0) {
+            changeRoomWest(&currentRoom);
+        }
+
+        else if (strcmp(input, "north") == 0) {
+            changeRoomNorth(&currentRoom);
+        }
+
+        else if (strcmp(input, "south") == 0) {
+            changeRoomSouth(&currentRoom);
+        }
+
+
     }
 
 
@@ -135,22 +150,6 @@ int main() {
 
     //Gameplay
 
-//        else if (strcmp(input, "east") == 0) {
-//            changeRoomEast();
-//        }
-//
-//        else if (strcmp(input, "west") == 0) {
-//            changeRoomWest();
-//        }
-//
-//        else if (strcmp(input, "north") == 0) {
-//            changeRoomNorth();
-//        }
-//
-//        else if (strcmp(input, "south") == 0) {
-//            changeRoomSouth();
-//        }
-//
 //        else if (strcmp(input, "exit") == 0) {
 //            printf("Goodbye!");
 //            break;
@@ -219,7 +218,7 @@ void dirty(struct Room *currentRoom, bool roomStatus) {
     }
 }
 void updateRoomPointer(struct Room *currentRoom) {
-    for (int i = 0; i < (10); i++) { //maybe use a different index for i < 100 lol sizeof(array)/sizeof(array[0]);  
+    for (int i = 0; i < (10); i++) { //maybe use a different index for i < 100 lol sizeof(array)/sizeof(array[0]);
         if (rooms[i].roomNum == currentRoom->roomNum) {
             rooms[i].state = currentRoom->state;
             rooms[i].north = currentRoom->north;
@@ -233,7 +232,84 @@ void updateRoomPointer(struct Room *currentRoom) {
     }
 }
 
-//void changeRoomEast();
-//void changeRoomWest();
-//void changeRoomNorth();
-//void changeRoomSouth();
+void changeRoomEast(struct Room *currentRoom) {
+    if (currentRoom->east == -1) {
+        printf("You tried going east, but ended up running into the wall!\n");
+    } else {
+        for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
+            if(currentRoom->east == rooms[i].state) {                   //edit it later; rn i'm checking it based on state number
+                currentRoom->roomNum = i;
+                currentRoom->state = rooms[i].state;
+                currentRoom->north = rooms[i].north;
+                currentRoom->south = rooms[i].south;
+                currentRoom->east = rooms[i].east;
+                currentRoom->west = rooms[i].west;
+                for (int k = 0; k < 10; k++) {
+                    currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
+                }
+        }
+    }
+}
+void changeRoomWest(struct Room *currentRoom) {
+    if (currentRoom->west == -1) {
+        printf("You tried going west, but ended up running into the wall!\n");
+    } else {
+        for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
+            if(currentRoom->west == rooms[i].state) {                   //edit it later; rn i'm checking it based on state number
+                currentRoom->roomNum = i;
+                currentRoom->state = rooms[i].state;
+                currentRoom->north = rooms[i].north;
+                currentRoom->south = rooms[i].south;
+                currentRoom->east = rooms[i].east;
+                currentRoom->west = rooms[i].west;
+                for (int k = 0; k < 10; k++) {
+                    currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
+                }
+            }
+        }
+    }
+
+
+}
+void changeRoomNorth(struct Room *currentRoom) {
+    if (currentRoom->north == -1) {
+        printf("You tried going east, but ended up running into the wall!\n");
+    } else {
+        for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
+            if(currentRoom->north == rooms[i].state) {                   //edit it later; rn i'm checking it based on state number
+                currentRoom->roomNum = i;
+                currentRoom->state = rooms[i].state;
+                currentRoom->north = rooms[i].north;
+                currentRoom->south = rooms[i].south;
+                currentRoom->east = rooms[i].east;
+                currentRoom->west = rooms[i].west;
+                for (int k = 0; k < 10; k++) {
+                    currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
+                }
+            }
+        }
+    }
+
+
+}
+void changeRoomSouth(struct Room *currentRoom) {
+    if (currentRoom->south == -1) {
+        printf("You tried going east, but ended up running into the wall!\n");
+    } else {
+        for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
+            if(currentRoom->south == rooms[i].state) {                   //edit it later; rn i'm checking it based on state number
+                currentRoom->roomNum = i;
+                currentRoom->state = rooms[i].state;
+                currentRoom->north = rooms[i].north;
+                currentRoom->south = rooms[i].south;
+                currentRoom->east = rooms[i].east;
+                currentRoom->west = rooms[i].west;
+                for (int k = 0; k < 10; k++) {
+                    currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
+                }
+            }
+        }
+    }
+
+
+}
