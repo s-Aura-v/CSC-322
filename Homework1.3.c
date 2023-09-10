@@ -247,6 +247,7 @@ void changeRoomEast(struct Room *currentRoom) {
                 for (int k = 0; k < 10; k++) {
                     currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
                 }
+            }
         }
     }
 }
@@ -268,8 +269,6 @@ void changeRoomWest(struct Room *currentRoom) {
             }
         }
     }
-
-
 }
 void changeRoomNorth(struct Room *currentRoom) {
     if (currentRoom->north == -1) {
@@ -289,8 +288,6 @@ void changeRoomNorth(struct Room *currentRoom) {
             }
         }
     }
-
-
 }
 void changeRoomSouth(struct Room *currentRoom) {
     if (currentRoom->south == -1) {
@@ -310,6 +307,4 @@ void changeRoomSouth(struct Room *currentRoom) {
             }
         }
     }
-
-
 }
