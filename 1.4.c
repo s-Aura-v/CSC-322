@@ -33,8 +33,8 @@ struct Room *rooms = NULL;
 struct Creature *creatures = NULL;
 
 //functions *add later*
-struct Room createRoom(int roomNum, int state);
-void assignRoom(int numOfRooms);
+struct Room createRoom(int roomNum);
+//void assignRoom(int numOfRooms);
 
 
 int main() {
@@ -48,50 +48,49 @@ int main() {
 
     rooms = (struct Room *) malloc(sizeof(struct Room) * numOfRooms);
 
-    int state, north, south, east, west;    //hold values temporarily
-    for (int i = 0; i < numOfRooms; i++) {
+    int state;    //hold values temporarily
+    for (int i = 0; i < 3; i++) {
         printf("rooms: ");
-        scanf("%d %d %d %d %d", &state, &rooms[i].northNum, &rooms[i].southNum, &rooms[i].eastNum, &rooms[i].westNum);
-        rooms[i] = createRoom(i, state);
+        scanf("%d %d %d %d %d", &rooms[i].state, &rooms[i].northNum, &rooms[i].southNum, &rooms[i].eastNum, &rooms[i].westNum);
+        rooms[i] = createRoom(i);
     }
-    assignRoom(numOfRooms);
+//    assignRoom(numOfRooms);
 
     //test code
 
-//    for (int i = 0; i < numOfRooms; i++) {
-//        printf("%d %d %d %d %d", *rooms[i].north, &rooms[i].south, &rooms[i].east, &rooms[i].west);
-//    }
-//
+    for (int i = 0; i < numOfRooms; i++) {
+        printf("%d\n", rooms[i].state);
+    }
+
     //free memory
     free(rooms);
 
 }
 
-struct Room createRoom(int roomNum, int state) {
-    rooms->roomNum = roomNum;
-    rooms->state = state;
-    rooms->north = NULL;
-    rooms->south = NULL;
-    rooms->east = NULL;
-    rooms->west = NULL;
+struct Room createRoom(int roomNum) {
+    rooms[roomNum].roomNum = roomNum;
+    rooms[roomNum].north = NULL;
+    rooms[roomNum].south = NULL;
+    rooms[roomNum].east = NULL;
+    rooms[roomNum].west = NULL;
 }
 
-void assignRoom(int numOfRooms) {
-    for (int i = 0; i < numOfRooms; i++) {
-        for (int j = 0; j < numOfRooms; j++) {
-            if (rooms[i].northNum == rooms[j].roomNum) {
-                *rooms[i].north = rooms[j];
-            }
-            if (rooms[i].southNum == rooms[j].roomNum) {
-                *rooms[i].south = rooms[j];
-            }
-            if (rooms[i].eastNum == rooms[j].roomNum) {
-                *rooms[i].east = rooms[j];
-            }
-            if (rooms[i].westNum == rooms[j].roomNum) {
-                *rooms[i].west = rooms[j];
-            }
-        }
-    }
-}
+//void assignRoom(int numOfRooms) {
+//    for (int i = 0; i < numOfRooms; i++) {
+//        for (int j = 0; j < numOfRooms; j++) {
+//            if (rooms[i].northNum == rooms[j].roomNum) {
+//                rooms[i].north = &rooms[j];
+//            }
+//            if (rooms[i].southNum == rooms[j].roomNum) {
+//                rooms[i].south = &rooms[j];
+//            }
+//            if (rooms[i].eastNum == rooms[j].roomNum) {
+//                rooms[i].east = &rooms[j];
+//            }
+//            if (rooms[i].westNum == rooms[j].roomNum) {
+//                rooms[i].west = &rooms[j];
+//            }
+//        }
+//    }
+//}
 
