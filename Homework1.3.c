@@ -43,10 +43,10 @@ void changeRoomSouth(struct Room *currentRoom);
  void increaseRespect();
  void higherincreaseRespect();
 
-// void growl();
-// void grumble();
-// void lick();
-// void smile();
+ void growl(struct Room *currentRoom);
+ void grumble(struct Room *currentRoom);
+ void lick(struct Room *currentRoom);
+ void smile(struct Room *currentRoom);
 
 
 
@@ -114,7 +114,7 @@ int main() {
     char command[5];        // used in creature command to clean/dirty ; check if its clean or dirty
     int creatureType;       // used in creature command to clean/dirty
 
-    while (respect > 0) {
+    while (respect > 0 || respect < 80) {
         //Set the input
         printf("Enter a command: ");
         scanf("%s", input);
@@ -192,7 +192,10 @@ int main() {
     free(rooms);
     free(creatures);
 
-    printf("You lost! You ran out of respect");
+    if (respect < 0) {
+        printf("You lost! You ran out of respect");
+        return 0;
+    } printf("You won! You have too much respect");
     return 0;
 }
 //
@@ -349,3 +352,34 @@ void higherincreaseRespect() {
     respect+=3;
 }
 
+
+
+void growl(struct Room *currentRoom) {
+    for (int i = 0; i < 10; i++) {
+        if (currentRoom->roomCreatures[i].type == 1) {
+            decreaseRespect();
+        }
+    }
+}
+void grumble(struct Room *currentRoom) {
+    for (int i = 0; i < 10; i++) {
+        if (currentRoom->roomCreatures[i].type == 2) {
+            decreaseRespect();
+        }
+    }
+}
+
+void lick(struct Room *currentRoom) {
+    for (int i = 0; i < 10; i++) {
+        if (currentRoom->roomCreatures[i].type == 1) {
+            increaseRespect();
+        }
+    }
+}
+void smile(struct Room *currentRoom) {
+    for (int i = 0; i < 10; i++) {
+        if (currentRoom->roomCreatures[i].type == 2) {
+            increaseRespect();
+        }
+    }
+}
