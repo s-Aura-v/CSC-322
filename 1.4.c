@@ -35,6 +35,9 @@ struct Creature *creatures = NULL;
 //functions *add later*
 void createRoom(int roomNum);
 void assignRoom(int numOfRooms);
+void assignCreatures(int numOfCreatures);
+
+void checkForNull();
 
 
 int main() {
@@ -48,7 +51,6 @@ int main() {
 
     rooms = (struct Room *) malloc(sizeof(struct Room) * numOfRooms);
 
-    int state;    //hold values temporarily
     for (int i = 0; i < numOfRooms; i++) {
         printf("rooms: ");
         scanf("%d %d %d %d %d", &rooms[i].state, &rooms[i].northNum, &rooms[i].southNum, &rooms[i].eastNum, &rooms[i].westNum);
@@ -62,6 +64,18 @@ int main() {
         printf("%d %d %d %d\n", rooms[i].north->roomNum, rooms[i].west->roomNum, rooms[i].south->roomNum, rooms[i].east->roomNum);
     }
     //fix it so that it doesn't run when its null
+
+    //Creatures
+    printf("# of creatures: ");
+    scanf("%d", &numOfCreatures);
+
+    creatures = (struct Creature *) malloc(sizeof(struct Creature) * numOfCreatures);
+
+    for (int i = 0; i < numOfCreatures; i++) {
+        printf("creatures: ");
+        scanf("%d %d", &creatures[i].type, &creatures[i].location);
+    }
+    assignCreatures(numOfCreatures);
 
     //free memory
     free(rooms);
@@ -99,3 +113,15 @@ void assignRoom(int numOfRooms) {
     }
 }
 
+void assignCreatures(int numOfCreatures) {
+    for (int i = 0; i < numOfCreatures; i++) {
+        if (rooms[i].roomNum == creatures[i].location) {
+            for (int j = 0; j < numOfCreatures; j++) {
+                rooms[i].creatures[j] = creatures[i];
+            }
+        }
+    }
+}
+
+void checkForNull() {
+}
