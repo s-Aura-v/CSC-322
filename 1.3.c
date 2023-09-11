@@ -203,7 +203,7 @@ int main() {
 //
 void look(struct Room *currentRoom) {
 
-    printf("Room state: %d | ", currentRoom->state); /* Print out the room cleanliness */
+    printf("Room number: %d | Room state: %d | ",currentRoom->roomNum, currentRoom->state); /* Print out the room cleanliness */
 
     /* Check neighbors in the room*/
     printf("neighbors ");
