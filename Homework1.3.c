@@ -232,40 +232,44 @@ void updateRoomPointer(struct Room *currentRoom) {
     }
 }
 
+//void changeRoomEast(struct Room *currentRoom) {
+//    if (currentRoom->east == -1) {
+//        printf("You tried going east, but ended up running into the wall!\n");
+//    } else {
+//        for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
+//            if(currentRoom->east == rooms[i].state) {                   //edit it later; rn i'm checking it based on state number
+//                currentRoom->roomNum = i;
+//                currentRoom->state = rooms[i].state;
+//                currentRoom->north = rooms[i].north;
+//                currentRoom->south = rooms[i].south;
+//                currentRoom->east = rooms[i].east;
+//                currentRoom->west = rooms[i].west;
+//                for (int k = 0; k < 10; k++) {
+//                    currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
+//                }
+//            }
+//        }
+//    }
+//}
 void changeRoomEast(struct Room *currentRoom) {
     if (currentRoom->east == -1) {
         printf("You tried going east, but ended up running into the wall!\n");
     } else {
         for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
-            if(currentRoom->east == rooms[i].state) {                   //edit it later; rn i'm checking it based on state number
-                currentRoom->roomNum = i;
-                currentRoom->state = rooms[i].state;
-                currentRoom->north = rooms[i].north;
-                currentRoom->south = rooms[i].south;
-                currentRoom->east = rooms[i].east;
-                currentRoom->west = rooms[i].west;
-                for (int k = 0; k < 10; k++) {
-                    currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
-                }
+            if (currentRoom->east == rooms[i].state) {
+                *currentRoom = rooms[i];
             }
         }
     }
 }
+
 void changeRoomWest(struct Room *currentRoom) {
     if (currentRoom->west == -1) {
         printf("You tried going west, but ended up running into the wall!\n");
     } else {
         for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
-            if(currentRoom->west == rooms[i].state) {                   //edit it later; rn i'm checking it based on state number
-                currentRoom->roomNum = i;
-                currentRoom->state = rooms[i].state;
-                currentRoom->north = rooms[i].north;
-                currentRoom->south = rooms[i].south;
-                currentRoom->east = rooms[i].east;
-                currentRoom->west = rooms[i].west;
-                for (int k = 0; k < 10; k++) {
-                    currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
-                }
+            if (currentRoom->west == rooms[i].state) {//edit it later; rn i'm checking it based on state number
+                *currentRoom = rooms[i];
             }
         }
     }
@@ -276,15 +280,7 @@ void changeRoomNorth(struct Room *currentRoom) {
     } else {
         for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
             if(currentRoom->north == rooms[i].state) {                   //edit it later; rn i'm checking it based on state number
-                currentRoom->roomNum = i;
-                currentRoom->state = rooms[i].state;
-                currentRoom->north = rooms[i].north;
-                currentRoom->south = rooms[i].south;
-                currentRoom->east = rooms[i].east;
-                currentRoom->west = rooms[i].west;
-                for (int k = 0; k < 10; k++) {
-                    currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
-                }
+                *currentRoom = rooms[i];
             }
         }
     }
@@ -294,17 +290,41 @@ void changeRoomSouth(struct Room *currentRoom) {
         printf("You tried going east, but ended up running into the wall!\n");
     } else {
         for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
-            if(currentRoom->south == rooms[i].state) {                   //edit it later; rn i'm checking it based on state number
-                currentRoom->roomNum = i;
-                currentRoom->state = rooms[i].state;
-                currentRoom->north = rooms[i].north;
-                currentRoom->south = rooms[i].south;
-                currentRoom->east = rooms[i].east;
-                currentRoom->west = rooms[i].west;
-                for (int k = 0; k < 10; k++) {
-                    currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
-                }
-            }
+            *currentRoom = rooms[i];
         }
     }
 }
+
+
+
+
+
+
+//void changeRoomSouth(struct Room *currentRoom) {
+//    if (currentRoom->south == -1) {
+//        printf("You tried going south, but ended up running into the wall!\n");
+//    } else {
+//        // Find the room to the south based on its state
+//        int targetState = currentRoom->south;
+//        int roomIndex;
+//
+//        // Search for the room with the matching state
+//        for (roomIndex = 0; roomIndex < 10; roomIndex++) {
+//            if (rooms[roomIndex].state == targetState) {
+//                break; // Found the room
+//            }
+//        }
+//
+//        // Update the current room based on the found room
+//        currentRoom->roomNum = roomIndex;
+//        currentRoom->state = rooms[roomIndex].state;
+//        currentRoom->north = rooms[roomIndex].north;
+//        currentRoom->south = rooms[roomIndex].south;
+//        currentRoom->east = rooms[roomIndex].east;
+//        currentRoom->west = rooms[roomIndex].west;
+//        for (int k = 0; k < 10; k++) {
+//            currentRoom->roomCreatures[k] = rooms[roomIndex].roomCreatures[k];
+//        }
+//    }
+
+
