@@ -26,14 +26,28 @@ struct Room *rooms = NULL;
 struct Creature *creatures = NULL;
 
 ///* functions to make the program work*/
-void look(struct Room currentRoom);
+void look(struct Room *currentRoom);
 void clean(struct Room *currentRoom, bool roomStatus);
 void dirty(struct Room *currentRoom, bool roomStatus);
 void updateRoomPointer(struct Room *currentRoom);
+
+//work in progress
 void changeRoomEast(struct Room *currentRoom);
 void changeRoomWest(struct Room *currentRoom);
 void changeRoomNorth(struct Room *currentRoom);
 void changeRoomSouth(struct Room *currentRoom);
+
+//work work in progress
+ void decreaseRespect();
+ void higherDecreaseRespect();
+ void increaseRespect();
+ void higherincreaseRespect();
+
+// void growl();
+// void grumble();
+// void lick();
+// void smile();
+
 
 
 int main() {
@@ -97,13 +111,16 @@ int main() {
     //Gameplay
 
     char input[20];
-    while (1) {
+    char command[5];        // used in creature command to clean/dirty ; check if its clean or dirty
+    int creatureType;       // used in creature command to clean/dirty
+
+    while (respect > 0) {
         //Set the input
         printf("Enter a command: ");
         scanf("%s", input);
 
         if (strcmp(input, "look") == 0) {
-            look(currentRoom);
+            look(&currentRoom);
         }
 
         //test code
@@ -111,6 +128,16 @@ int main() {
             for (int i = 0; i < (10); i++) {
                 printf("%d - %d\n", rooms[i].roomNum, rooms[i].state);
             }
+        }
+        else if (strcmp(input, "resp") == 0) {
+            increaseRespect();
+            printf("%d", respect);
+            decreaseRespect();
+            printf("%d", respect);
+            higherDecreaseRespect();
+            printf("%d", respect);
+            higherincreaseRespect();
+            printf("%d", respect);
         }
         //
         else if (strcmp(input, "clean") == 0) {
@@ -122,7 +149,28 @@ int main() {
         else if (strcmp(input, "exit") == 0) {
             printf("Goodbye!");
             break;
-        } else if (strcmp(input, "east") == 0) {
+        }
+
+//        else if (strcmp(input, "1:clean") == 0) {
+//            cClean(&currentRoom, roomStatus);
+//        }
+//        else if (strcmp(input, "1:dirty") == 0) {
+//
+//        }
+//        else if (strcmp(input, "2:clean") == 0) {
+//
+//        }
+//        else if (strcmp(input, "2:dirty") == 0) {
+//
+//        }
+//
+//        if (sscanf(input, "%d:%5s", &creatureType, &command) == 0) {
+//            if (strcmp(command, "clean") == 0) {
+//            }
+//        }
+//
+
+            else if (strcmp(input, "east") == 0) {
             changeRoomEast(&currentRoom);
         }
 
@@ -137,8 +185,6 @@ int main() {
         else if (strcmp(input, "south") == 0) {
             changeRoomSouth(&currentRoom);
         }
-
-
     }
 
 
@@ -146,42 +192,34 @@ int main() {
     free(rooms);
     free(creatures);
 
-
-
-    //Gameplay
-
-//        else if (strcmp(input, "exit") == 0) {
-//            printf("Goodbye!");
-//            break;
-//        }
-//    }
+    printf("You lost! You ran out of respect");
     return 0;
 }
 //
-void look(struct Room currentRoom) {
+void look(struct Room *currentRoom) {
 
-    printf("Room state: %d | ", currentRoom.state); /* Print out the room cleanliness */
+    printf("Room state: %d | ", currentRoom->state); /* Print out the room cleanliness */
 
     /* Check neighbors in the room*/
     printf("neighbors ");
-    if (currentRoom.north != -1) {
-        printf("%d to the north | ", currentRoom.north);
+    if (currentRoom->north != -1) {
+        printf("%d to the north | ", currentRoom->north);
     }
-    if (currentRoom.east != -1) {
-        printf("%d to the east | ", currentRoom.east);
+    if (currentRoom->east != -1) {
+        printf("%d to the east | ", currentRoom->east);
     }
-    if (currentRoom.south != -1) {
-        printf("%d to the south | ", currentRoom.south);
+    if (currentRoom->south != -1) {
+        printf("%d to the south | ", currentRoom->south);
     }
-    if (currentRoom.west != -1) {
-        printf("%d to the west | ", currentRoom.west);
+    if (currentRoom->west != -1) {
+        printf("%d to the west | ", currentRoom->west);
     }
 
     /*Check creatures*/
     printf("contains:\nPC\n");  /*work on this more, to include all the creatures in the room*/
     for (int i = 0; i < 10; i++) {
-        if (currentRoom.roomCreatures[i].type != 0) {
-            printf("%d\n", currentRoom.roomCreatures[i].type);
+        if (currentRoom->roomCreatures[i].type != 0) {
+            printf("%d\n", currentRoom->roomCreatures[i].type);
         }
     }
 }
@@ -217,6 +255,27 @@ void dirty(struct Room *currentRoom, bool roomStatus) {
          updateRoomPointer(currentRoom);
     }
 }
+
+//void cClean(struct Room *currentRoom, bool roomStatus) {
+//    if (currentRoom->state == 2) { /* if it's dirty, make it half dirty, remember the respect system*/
+//        currentRoom->state = 1;
+//        roomStatus = true;
+//        // checkCreatureEmotion();
+//        updateRoomPointer(currentRoom);
+//    } else if (currentRoom->state == 1) { /* if it's half-dirty, make it clean*/
+//        currentRoom->state = 0;
+//        roomStatus = true;
+//        // checkCreatureEmotion();
+//        updateRoomPointer(currentRoom);
+//    } else {
+//        printf("Your room is already clean!");
+//    }
+//
+//    printf("%d licks your face")
+//}
+
+
+
 void updateRoomPointer(struct Room *currentRoom) {
     for (int i = 0; i < (10); i++) { //maybe use a different index for i < 100 lol sizeof(array)/sizeof(array[0]);
         if (rooms[i].roomNum == currentRoom->roomNum) {
@@ -232,25 +291,6 @@ void updateRoomPointer(struct Room *currentRoom) {
     }
 }
 
-//void changeRoomEast(struct Room *currentRoom) {
-//    if (currentRoom->east == -1) {
-//        printf("You tried going east, but ended up running into the wall!\n");
-//    } else {
-//        for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
-//            if(currentRoom->east == rooms[i].state) {                   //edit it later; rn i'm checking it based on state number
-//                currentRoom->roomNum = i;
-//                currentRoom->state = rooms[i].state;
-//                currentRoom->north = rooms[i].north;
-//                currentRoom->south = rooms[i].south;
-//                currentRoom->east = rooms[i].east;
-//                currentRoom->west = rooms[i].west;
-//                for (int k = 0; k < 10; k++) {
-//                    currentRoom->roomCreatures[k] = rooms[i].roomCreatures[k];
-//                }
-//            }
-//        }
-//    }
-//}
 void changeRoomEast(struct Room *currentRoom) {
     if (currentRoom->east == -1) {
         printf("You tried going east, but ended up running into the wall!\n");
@@ -267,7 +307,7 @@ void changeRoomWest(struct Room *currentRoom) {
     if (currentRoom->west == -1) {
         printf("You tried going west, but ended up running into the wall!\n");
     } else {
-        for (int i = 0; i < 10; i++) {        // change the i < to the size of the array
+        for (int i = 0; i <  10; i++) {        // change the i < to the size of the array
             if (currentRoom->west == rooms[i].state) {//edit it later; rn i'm checking it based on state number
                 *currentRoom = rooms[i];
             }
@@ -295,36 +335,17 @@ void changeRoomSouth(struct Room *currentRoom) {
     }
 }
 
+void decreaseRespect() {
+    respect--;
+}
 
-
-
-
-
-//void changeRoomSouth(struct Room *currentRoom) {
-//    if (currentRoom->south == -1) {
-//        printf("You tried going south, but ended up running into the wall!\n");
-//    } else {
-//        // Find the room to the south based on its state
-//        int targetState = currentRoom->south;
-//        int roomIndex;
-//
-//        // Search for the room with the matching state
-//        for (roomIndex = 0; roomIndex < 10; roomIndex++) {
-//            if (rooms[roomIndex].state == targetState) {
-//                break; // Found the room
-//            }
-//        }
-//
-//        // Update the current room based on the found room
-//        currentRoom->roomNum = roomIndex;
-//        currentRoom->state = rooms[roomIndex].state;
-//        currentRoom->north = rooms[roomIndex].north;
-//        currentRoom->south = rooms[roomIndex].south;
-//        currentRoom->east = rooms[roomIndex].east;
-//        currentRoom->west = rooms[roomIndex].west;
-//        for (int k = 0; k < 10; k++) {
-//            currentRoom->roomCreatures[k] = rooms[roomIndex].roomCreatures[k];
-//        }
-//    }
-
+void higherDecreaseRespect() {
+    respect-=3;
+}
+void increaseRespect() {
+    respect++;
+}
+void higherincreaseRespect() {
+    respect+=3;
+}
 
