@@ -33,7 +33,7 @@ struct Room *rooms = NULL;
 struct Creature *creatures = NULL;
 
 //functions *add later*
-struct Room createRoom(int roomNum);
+void createRoom(int roomNum);
 void assignRoom(int numOfRooms);
 
 
@@ -59,15 +59,16 @@ int main() {
     //test code
 
     for (int i = 0; i < numOfRooms; i++) {
-        printf("%d %d %d %d %d\n", rooms[i].north->roomNum, rooms[i].west->roomNum, rooms[i].south->roomNum, rooms[i].east->roomNum, rooms[i].west->roomNum);
+        printf("%d %d %d %d\n", rooms[i].north->roomNum, rooms[i].west->roomNum, rooms[i].south->roomNum, rooms[i].east->roomNum);
     }
+    //fix it so that it doesn't run when its null
 
     //free memory
     free(rooms);
 
 }
 
-struct Room createRoom(int roomNum) {
+void createRoom(int roomNum) {
     rooms[roomNum].roomNum = roomNum;
     rooms[roomNum].north = NULL;
     rooms[roomNum].south = NULL;
@@ -79,15 +80,19 @@ void assignRoom(int numOfRooms) {
     for (int i = 0; i < numOfRooms; i++) {
         for (int j = 0; j < numOfRooms; j++) {
             if (rooms[i].northNum == rooms[j].roomNum) {
+//                rooms[i].north = malloc(sizeof(struct Room) * numOfRooms);
                 rooms[i].north = &rooms[j];
             }
             if (rooms[i].southNum == rooms[j].roomNum) {
+//                rooms[i].south = malloc(sizeof(struct Room) * numOfRooms);
                 rooms[i].south = &rooms[j];
             }
             if (rooms[i].eastNum == rooms[j].roomNum) {
+//                rooms[i].east = malloc(sizeof(struct Room) * numOfRooms);
                 rooms[i].east = &rooms[j];
             }
             if (rooms[i].westNum == rooms[j].roomNum) {
+//                rooms[i].west = malloc(sizeof(struct Room) * numOfRooms);
                 rooms[i].west = &rooms[j];
             }
         }
