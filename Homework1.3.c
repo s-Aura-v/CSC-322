@@ -6,6 +6,7 @@
 /*Initial Setup*/
 
 struct Creature {
+    int creatureNum;
     int type;
     int location;
 };
@@ -47,6 +48,7 @@ void changeRoomSouth(struct Room *currentRoom);
  void grumble(struct Room *currentRoom);
  void lick(struct Room *currentRoom);
  void smile(struct Room *currentRoom);
+ void leaveRoom(struct Room *currentRoom);
 
 
 
@@ -381,5 +383,20 @@ void smile(struct Room *currentRoom) {
         if (currentRoom->roomCreatures[i].type == 2) {
             increaseRespect();
         }
+    }
+}
+
+void leaveRoom(struct Room *currentRoom) {
+    if (currentRoom->north != 1) {
+
+    }
+    else if (currentRoom->south != 1) {
+
+    }
+    else if (currentRoom->east != 1) {
+
+    }
+    else if (currentRoom->west != 1) {
+
     }
 }
