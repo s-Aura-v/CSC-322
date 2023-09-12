@@ -40,6 +40,13 @@ void look(struct Room *currentRoom);
 void clean(struct Room *currentRoom, bool roomStatus);
 void dirty(struct Room *currentRoom, bool roomStatus);
 void updateRoomState(struct Room *currentRoom);
+void changeRoomEast(struct Room *currentRoom);
+void changeRoomWest(struct Room *currentRoom);
+void changeRoomNorth(struct Room *currentRoom);
+void changeRoomSouth(struct Room *currentRoom);
+void updateCurrentRoom(int roomNum);
+
+
 
 
 
@@ -117,10 +124,25 @@ int main() {
         }
         //end of test
         else if (strcmp(input, "clean") == 0) {
-            clean(&currentRoom, roomStatus);
+            clean(currentRoom, roomStatus);
         }
         else if (strcmp(input, "dirty") == 0) {
-            dirty(&currentRoom, roomStatus);
+            dirty(currentRoom, roomStatus);
+        }
+        else if (strcmp(input, "east") == 0) {
+            changeRoomEast(currentRoom);
+        }
+
+        else if (strcmp(input, "west") == 0) {
+            changeRoomWest(currentRoom);
+        }
+
+        else if (strcmp(input, "north") == 0) {
+            changeRoomNorth(currentRoom);
+        }
+
+        else if (strcmp(input, "south") == 0) {
+            changeRoomSouth(currentRoom);
         }
         else if (strcmp(input, "exit") == 0) {
             printf("Goodbye!");
@@ -235,13 +257,54 @@ void dirty(struct Room *currentRoom, bool roomStatus) {
     }
 }
 
+
 void updateRoomState(struct Room *currentRoom) {
-    for (int i = 0; i < (10); i++) { //maybe use a different index for i < 100 lol sizeof(array)/sizeof(array[0]);
+    for (int i = 0; i < 10; i++) { //maybe use a different index for i < 100 lol sizeof(array)/sizeof(array[0]);
         if (rooms[i].roomNum == currentRoom->roomNum) {
             rooms[i].state = currentRoom->state;
         }
     }
 }
+
+void changeRoomEast(struct Room *currentRoom) {
+    if (currentRoom->eastNum == -1) {
+        printf("You tried going East, but ran into a wall!");
+    } else {
+        for (int i = 0; i < 10; i++) {  //edit it later to include size of Room
+            if (rooms[i].roomNum == currentRoom->roomNum) {
+                updateCurrentRoom(i);
+            }
+
+        }
+
+    }
+
+}
+void changeRoomWest(struct Room *currentRoom) {
+
+}
+void changeRoomNorth(struct Room *currentRoom) {
+
+}
+void changeRoomSouth(struct Room *currentRoom) {
+
+}
+
+void updateCurrentRoom(int roomNum) {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

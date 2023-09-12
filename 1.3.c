@@ -172,7 +172,7 @@ int main() {
 //        }
 //
 
-            else if (strcmp(input, "east") == 0) {
+        else if (strcmp(input, "east") == 0) {
             changeRoomEast(&currentRoom);
         }
 
