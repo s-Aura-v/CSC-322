@@ -1,6 +1,6 @@
 //
-// Created by Saurav Lamichhane on 9/11/23.
-//
+// Created by Saurav Lamichhane on 9/11/23; I'M USING 3 FOR PC BECAUSE 0 IS THE VALUES PRESENT IN UNINITIALIZED ARRAYS
+// CREATURE TYPES: 1 - ANIMAL | 2 - NPC | 3 - PC
 
 #include <stdio.h>
 #include <string.h>
@@ -36,6 +36,7 @@ struct Creature *creatures = NULL;
 void createRoom(int roomNum);
 void assignRoom(int numOfRooms);
 void assignCreatures(int numOfCreatures, int numOfRooms);
+void look(struct Room *currentRoom);
 
 //void checkForNull();
 
@@ -74,24 +75,16 @@ int main() {
 
     assignCreatures(numOfCreatures, numOfRooms);
 
-                    //test code
-                        for (int i = 0; i < numOfRooms; i++) {
-                            for (int j = 0; j < 10; j++) {
-                                printf("%d %d %d\n", rooms[i].creatures[j].creatureNum, rooms[i].creatures[j].type, rooms[i].creatures[j].location);
-                            }
-                        }
-                        //end of test
     // creating current room
-    struct Room currentRoom;
+    struct Room *currentRoom;
     for (int i = 0; i < numOfRooms; i++) {
-        rooms[i].roomNum = i;           //?
         for (int j = 0; j < 10; j++) {
-            if (rooms[i].creatures[j].type == 0) {
-                //set current room equal to that room
-                currentRoom = rooms[i];
+            if (rooms[i].creatures[j].type == 3) {      // 3 = PC
+                currentRoom = &rooms[i];
             }
         }
     }
+
 
     char input[20];
     char command[5];        // used in creature command to clean/dirty ; check if its clean or dirty
@@ -103,13 +96,13 @@ int main() {
         scanf("%s", input);
 
         if (strcmp(input, "look") == 0) {
+            look(currentRoom);
+        } else if (strcmp(input, "exit") == 0) {
+            printf("Goodbye!");
+            break;
 
         }
-
-
     }
-
-
         //free memory
     free(rooms);
 
@@ -158,6 +151,24 @@ void assignCreatures(int numOfCreatures, int numOfRooms) {
     }
 }
 
-void checkForNull() {
-
+void look(struct Room *currentRoom) {
+    printf("Room number: %d | Room state: %d | ", currentRoom->roomNum, currentRoom->state); /* Print out the room cleanliness */
+    //Print out the neighbors
+    if (currentRoom->north != NULL) {
+        printf("%d to the north | ", currentRoom->northNum);
+    }
+    if (currentRoom->south != NULL) {
+        printf("%d to the south | ", currentRoom->southNum);
+    }
+    if (currentRoom->east != NULL) {
+        printf("%d to the east | ", currentRoom->eastNum);
+    }
+    if (currentRoom->west != NULL) {
+        printf("%d to the west | ", currentRoom->westNum);
+    }
 }
+
+//void checkForNull() {
+//
+//
+//}
