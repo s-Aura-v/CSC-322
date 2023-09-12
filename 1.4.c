@@ -35,10 +35,9 @@ struct Creature *creatures = NULL;
 //functions *add later*
 void createRoom(int roomNum);
 void assignRoom(int numOfRooms);
-void assignCreatures(int numOfCreatures);
+void assignCreatures(int numOfCreatures, int numOfRooms);
 
-void checkForNull();
-
+//void checkForNull();
 
 int main() {
     // Setup (Adding User Input)
@@ -60,9 +59,6 @@ int main() {
 
     //test code
 
-    for (int i = 0; i < numOfRooms; i++) {
-        printf("%d %d %d %d\n", rooms[i].north->roomNum, rooms[i].west->roomNum, rooms[i].south->roomNum, rooms[i].east->roomNum);
-    }
     //fix it so that it doesn't run when its null
 
     //Creatures
@@ -72,12 +68,49 @@ int main() {
     creatures = (struct Creature *) malloc(sizeof(struct Creature) * numOfCreatures);
 
     for (int i = 0; i < numOfCreatures; i++) {
-        printf("creatures: ");
+        printf("type + location: ");
         scanf("%d %d", &creatures[i].type, &creatures[i].location);
     }
-    assignCreatures(numOfCreatures);
 
-    //free memory
+    assignCreatures(numOfCreatures, numOfRooms);
+
+                    //test code
+                        for (int i = 0; i < numOfRooms; i++) {
+                            for (int j = 0; j < 10; j++) {
+                                printf("%d %d %d\n", rooms[i].creatures[j].creatureNum, rooms[i].creatures[j].type, rooms[i].creatures[j].location);
+                            }
+                        }
+                        //end of test
+    // creating current room
+    struct Room currentRoom;
+    for (int i = 0; i < numOfRooms; i++) {
+        rooms[i].roomNum = i;           //?
+        for (int j = 0; j < 10; j++) {
+            if (rooms[i].creatures[j].type == 0) {
+                //set current room equal to that room
+                currentRoom = rooms[i];
+            }
+        }
+    }
+
+    char input[20];
+    char command[5];        // used in creature command to clean/dirty ; check if its clean or dirty
+    int creatureType;       // used in creature command to clean/dirty
+
+    while (respect > 0 || respect < 80) {
+        //Set the input
+        printf("Enter a command: ");
+        scanf("%s", input);
+
+        if (strcmp(input, "look") == 0) {
+
+        }
+
+
+    }
+
+
+        //free memory
     free(rooms);
 
 }
@@ -112,16 +145,19 @@ void assignRoom(int numOfRooms) {
         }
     }
 }
-
-void assignCreatures(int numOfCreatures) {
-    for (int i = 0; i < numOfCreatures; i++) {
-        if (rooms[i].roomNum == creatures[i].location) {
-            for (int j = 0; j < numOfCreatures; j++) {
-                rooms[i].creatures[j] = creatures[i];
+void assignCreatures(int numOfCreatures, int numOfRooms) {
+    for (int i = 0; i < numOfRooms; i++) {
+        int index = 0;
+        for (int j = 0; j < numOfCreatures; j++) {
+            if (creatures[j].location == rooms[i].roomNum) {
+                rooms[i].creatures[index] = creatures[j];
+                rooms[i].creatures[index].creatureNum = index;
+                index++;
             }
         }
     }
 }
 
 void checkForNull() {
+
 }
