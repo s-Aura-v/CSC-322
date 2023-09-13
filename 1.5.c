@@ -11,6 +11,7 @@ struct Creature {
     int creatureNum;
     int type;
     int location;
+    bool isEmpty;
 };
 
 struct Room {
@@ -55,8 +56,8 @@ struct Room growl(struct Room currentRoom);
 struct Room grumble(struct Room currentRoom);
 struct Room lick(struct Room currentRoom);
 struct Room smile(struct Room currentRoom);
-struct Room leaveRoom(struct Room currentRoom);
-void checkCreatureEmotion(struct Room currentRoom, bool roomStatus);
+struct Room leaveRoom(struct Room currentRoom, int creatureType);
+struct Room checkCreatureEmotion(struct Room currentRoom, bool roomStatus);
 
 
 
@@ -97,6 +98,11 @@ int main() {
     for (int i = 0; i < numOfCreatures; i++) {
         printf("type + location: ");
         scanf("%d %d", &creatures[i].type, &creatures[i].location);
+        creatures[i].isEmpty = false;
+    }
+
+    for (int i = 0; i < 10; i++) {
+        printf("%d", creatures[i].isEmpty);
     }
 
     assignCreatures(numOfCreatures, numOfRooms);
@@ -347,7 +353,7 @@ struct Room checkCreatureEmotion(struct Room currentRoom, bool roomStatus) {
         if (currentRoom.creatures[i].type == 1 && roomStatus == false) { //false == dirtier, //1 - animal , 2 = npc // animal - clean, npc - dirty
             decreaseRespect();
             if (currentRoom.state == 2) {
-//                leaveRoom();
+                leaveRoom(currentRoom, currentRoom.creatures[i].creatureNum);
             }
         } else if (currentRoom.creatures[i].type == 1 && roomStatus == true) {
             increaseRespect();
@@ -355,10 +361,69 @@ struct Room checkCreatureEmotion(struct Room currentRoom, bool roomStatus) {
             increaseRespect();
         } else if (currentRoom.creatures[i].type == 2 && roomStatus == true) {
             decreaseRespect();
+            if (currentRoom.state == 0) {
+                leaveRoom(currentRoom, currentRoom.creatures[i].creatureNum);
+            }
         }
     }
     return currentRoom;
 }
+
+struct Room leaveRoom(struct Room currentRoom, int creatureNum) {
+    if (currentRoom.northNum != -1) {
+        for (int i = 0; i < 10; i++) {
+            if (currentRoom.north->creatures[i].creatureNum == 0 && currentRoom.north->creatures[i].isEmpty) {
+                currentRoom.north->creatures[i] = currentRoom.creatures[creatureNum]; //look over it
+                currentRoom.west->creatures[i].isEmpty = false;
+                printf("%d does not like the room state and left to %d", creatureNum, currentRoom.northNum);
+                currentRoom.creatures[creatureNum].type = 0;
+                currentRoom.creatures[creatureNum].isEmpty = true;
+                break;
+            }
+        }
+    }
+    if (currentRoom.southNum != -1) {
+        for (int i = 0; i < 10; i++) {
+            if (currentRoom.south->creatures[i].creatureNum == 0 && currentRoom.south->creatures[i].isEmpty) {
+                currentRoom.south->creatures[i] = currentRoom.creatures[creatureNum]; //look over it
+                currentRoom.west->creatures[i].isEmpty = false;
+                printf("%d does not like the room state and left to %d", creatureNum, currentRoom.southNum);
+                currentRoom.creatures[creatureNum].type = 0;
+                currentRoom.creatures[creatureNum].isEmpty = true;
+                break;
+            }
+        }
+    }
+    if (currentRoom.eastNum != -1 ) {
+        for (int i = 0; i < 10; i++) {
+            if (currentRoom.east->creatures[i].creatureNum == 0 && currentRoom.east->creatures[i].isEmpty) {
+                currentRoom.east->creatures[i] = currentRoom.creatures[creatureNum]; //look over it
+                currentRoom.west->creatures[i].isEmpty = false;
+                printf("%d does not like the room state and left to %d", creatureNum, currentRoom.eastNum);
+                currentRoom.creatures[creatureNum].type = 0;
+                currentRoom.creatures[creatureNum].isEmpty = true;
+                break;
+            }
+        }
+    }
+    if (currentRoom.westNum != -1 ) {
+        for (int i = 0; i < 10; i++) {
+            if (currentRoom.west->creatures[i].creatureNum == 0 && currentRoom.west->creatures[i].isEmpty) {
+                currentRoom.west->creatures[i] = currentRoom.creatures[creatureNum]; //look over it
+                currentRoom.west->creatures[i].isEmpty = false;
+                printf(" %d does not like the room state and left to %d", creatureNum, currentRoom.westNum);
+                currentRoom.creatures[creatureNum].type = 0;
+                currentRoom.creatures[creatureNum].isEmpty = true;
+                break;
+            }
+        }
+    }
+//    if (currentRoom.northNum == -1 && currentRoom.southNum != -1 && currentRoom.eastNum != -1 && currentRoom.westNum != -1) {
+//        printf("%d is stuck in the house without avaliable rooms. They decide to leave.", currentRoom.creatures[creatureNum]);
+//        //leave the house
+//    }
+}
+
 
 void decreaseRespect() {
     respect--;
@@ -386,28 +451,6 @@ struct Room  lick(struct Room currentRoom) {
 struct Room  smile(struct Room currentRoom) {
 
 }
-struct Room leaveRoom(struct Room currentRoom) {
-    if (currentRoom.northNum != -1) {
-
-    }
-    if (currentRoom.southNum != -1) {
-
-    }
-    if (currentRoom.eastNum != -1 ) {
-
-    }
-    if (currentRoom.westNum != -1 ) {
-
-    }
-    if (currentRoom.northNum == -1 && currentRoom.southNum != -1 && currentRoom.eastNum != -1 && currentRoom.westNum != -1) {
-        //leave the house
-    }
-}
-
-
-
-
-
 
 
 
@@ -427,21 +470,6 @@ struct Room creatureDirty(struct Room currentRoom, int creatureType) {
 //
 //
 //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

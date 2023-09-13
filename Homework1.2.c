@@ -7,6 +7,7 @@ struct Creature {
     int type;
     int location;
 };
+
 struct Room{
     int roomNumber; //use this to assign animals
     int cleanliness;
