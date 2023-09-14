@@ -216,18 +216,19 @@ void assignRoom(int numOfRooms) {
     }
 }
 void assignCreatures(int numOfCreatures, int numOfRooms) {
+    for (int i = 0; i < numOfCreatures; i++) {
+        creatures[i].creatureNum = i;
+    }
     for (int i = 0; i < numOfRooms; i++) {
-        int index = 0;
+        int roomIndex = 0;
         for (int j = 0; j < numOfCreatures; j++) {
             if (creatures[j].location == rooms[i].roomNum) {
-                rooms[i].creatures[index] = creatures[j];
-                rooms[i].creatures[index].creatureNum = creatures[j].creatureNum;
-                index++;
+                rooms[i].creatures[roomIndex] = creatures[j];
+                roomIndex++;
             }
         }
     }
 }
-
 struct Room look(struct Room currentRoom) {
     printf("Room number: %d | Room state: %d | ", currentRoom.roomNum, currentRoom.state); /* Print out the room cleanliness */
     //Print out the neighbors
