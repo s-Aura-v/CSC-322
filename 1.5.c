@@ -11,7 +11,6 @@ struct Creature {
     int creatureNum;
     int type;
     int location;
-    bool isEmpty;
 };
 
 struct Room {
@@ -102,22 +101,7 @@ int main() {
         creatures[i].creatureNum = i;
     }
 
-    for (int i = 0; i < 10; i++) {
-        printf("%d", creatures[i].isEmpty);
-    }
-
     assignCreatures(numOfCreatures, numOfRooms);
-
-    //is not Empty
-    for (int i = 0; i < numOfRooms; i++) {      //CHANGE it to num of creatures
-        for (int j = 0; j < 10; j++) {
-            if (rooms[i].creatures[j].type > 0) {
-                rooms[i].creatures[j].isEmpty = false;
-            } else if (rooms[i].creatures[j].type == 0) {
-                rooms[i].creatures[j].isEmpty = true;
-            }
-        }
-    }
 
     // creating current room
     struct Room currentRoom;
@@ -130,16 +114,14 @@ int main() {
     }
 
 
-
-
     //test
     for (int i = 0; i < numOfRooms; i++) {
         printf("%d %d %d %d %d", rooms[i].roomNum, rooms[i].northNum, rooms[i].southNum, rooms[i].eastNum, rooms[i].westNum);
     }
 
-    for (int i = 0; i < numOfRooms; i++) {
+    for (int i = 0; i < numOfCreatures; i++) {
         for (int j = 0; j < 10; j++) {
-            printf("%d - %d - %d - %d\n", rooms[i].creatures[j].creatureNum ,rooms[i].creatures[j].type, rooms[i].creatures[j].location, rooms[i].creatures[j].isEmpty);
+            printf("%d - %d - %d - %d\n", rooms[i].creatures[j].creatureNum ,rooms[i].creatures[j].type, rooms[i].creatures[j].location);
         }
     }
 
@@ -334,6 +316,7 @@ struct Room changeRoomEast(struct Room currentRoom) {     //remember to update t
     }
     return currentRoom;
 }
+
 struct Room changeRoomWest(struct Room currentRoom) {
     if (currentRoom.westNum == -1) {
         printf("You tried going West, but ran into a wall!\n");
@@ -346,6 +329,7 @@ struct Room changeRoomWest(struct Room currentRoom) {
     }
     return currentRoom;
 }
+
 struct Room changeRoomNorth(struct Room currentRoom) {
     if (currentRoom.northNum == -1) {
         printf("You tried going North, but ran into a wall!\n");
@@ -358,6 +342,7 @@ struct Room changeRoomNorth(struct Room currentRoom) {
     }
     return currentRoom;
 }
+
 struct Room changeRoomSouth(struct Room currentRoom) {
     if (currentRoom.southNum == -1) {
         printf("You tried going South, but ran into a wall!\n");
@@ -370,7 +355,6 @@ struct Room changeRoomSouth(struct Room currentRoom) {
     }
     return currentRoom;
 }
-
 
 struct Room checkCreatureEmotion(struct Room currentRoom, bool roomStatus) {
     for (int i = 0; i < 10; i++) {
@@ -396,10 +380,13 @@ struct Room checkCreatureEmotion(struct Room currentRoom, bool roomStatus) {
 struct Room leaveRoom(struct Room currentRoom, int creatureNum) {
     if (currentRoom.northNum != -1) {
         for (int i = 0; i < 10; i++) {
-            if (currentRoom.north->creatures[i].creatureNum == 0) {
+            if (currentRoom.north->creatures[i].type == 0) {
                 currentRoom.north->creatures[i] = currentRoom.creatures[creatureNum]; //look over it
                 printf("%d does not like the room state and left to %d", creatureNum, currentRoom.northNum);
+                //trying to remove him from current room
                 currentRoom.creatures[creatureNum].type = 0;
+                currentRoom.creatures[creatureNum].location = 0;
+                currentRoom.creatures[creatureNum].creatureNum = 0;
                 break;
             }
         }
@@ -426,7 +413,7 @@ struct Room leaveRoom(struct Room currentRoom, int creatureNum) {
     }
     if (currentRoom.westNum != -1 ) {
         for (int i = 0; i < 10; i++) {
-            if (currentRoom.west->creatures[i].creatureNum == 0) {
+            if (currentRoom.west->creatures[i].type == 0) {
                 currentRoom.west->creatures[i] = currentRoom.creatures[creatureNum]; //look over it
                 printf(" %d does not like the room state and left to %d", creatureNum, currentRoom.westNum);
                 currentRoom.creatures[creatureNum].type = 0;
