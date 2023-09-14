@@ -98,7 +98,6 @@ int main() {
     for (int i = 0; i < numOfCreatures; i++) {
         printf("type + location: ");
         scanf("%d %d", &creatures[i].type, &creatures[i].location);
-        creatures[i].creatureNum = i;
     }
 
     assignCreatures(numOfCreatures, numOfRooms);
@@ -120,9 +119,10 @@ int main() {
     }
 
     for (int i = 0; i < numOfCreatures; i++) {
-        for (int j = 0; j < 10; j++) {
-            printf("%d - %d - %d - %d\n", rooms[i].creatures[j].creatureNum ,rooms[i].creatures[j].type, rooms[i].creatures[j].location);
-        }
+//        for (int j = 0; j < 10; j++) {
+//            printf("%d - %d - %d - %d\n", rooms[i].creatures[j].creatureNum ,rooms[i].creatures[j].type, rooms[i].creatures[j].location);
+//        }
+printf("d", creatures[i].creatureNum);
     }
 
     //end of test
@@ -183,7 +183,6 @@ int main() {
     //free memory
     free(rooms);
     free(creatures);
-
 }
 
 void help() {
@@ -222,7 +221,7 @@ void assignCreatures(int numOfCreatures, int numOfRooms) {
         for (int j = 0; j < numOfCreatures; j++) {
             if (creatures[j].location == rooms[i].roomNum) {
                 rooms[i].creatures[index] = creatures[j];
-                rooms[i].creatures[index].creatureNum = index;
+                rooms[i].creatures[index].creatureNum = creatures[j].creatureNum;
                 index++;
             }
         }
