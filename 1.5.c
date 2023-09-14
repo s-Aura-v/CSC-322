@@ -48,25 +48,27 @@ struct Room changeRoomEast(struct Room currentRoom);
 struct Room changeRoomWest(struct Room currentRoom);
 struct Room changeRoomNorth(struct Room currentRoom);
 struct Room changeRoomSouth(struct Room currentRoom);
-struct Room creatureClean(struct Room currentRoom, int creatureType);
-struct Room creatureDirty(struct Room currentRoom, int creatureType);
 void decreaseRespect();
 void higherDecreaseRespect();
 void increaseRespect();
-void higherincreaseRespect();
+void higherIncreaseRespect();
 struct Room growl(struct Room currentRoom);
 struct Room grumble(struct Room currentRoom);
 struct Room lick(struct Room currentRoom);
 struct Room smile(struct Room currentRoom);
-struct Room leaveRoom(struct Room currentRoom, int creatureType);
+struct Room leaveRoom(struct Room currentRoom, int creatureNum);
 struct Room checkCreatureEmotion(struct Room currentRoom, bool roomStatus);
+void updateRoomNeighbors(struct Room currentRoom);
+//struct Room creatureClean(struct Room currentRoom, int creatureNum, bool roomStatus);
+//struct Room creatureDirty(struct Room currentRoom, int creatureNum, bool roomStatus);
+//struct Room creatureChangeRoomEast(struct Room currentRoom, int creatureNum);
+//struct Room creatureChangeRoomWest(struct Room currentRoom, int creatureNum);
+//struct Room creatureChangeRoomNorth(struct Room currentRoom, int creatureNum);
+//struct Room creatureChangeRoomSouth(struct Room currentRoom, int creatureNum);
 
 
 
 
-
-
-//void checkForNull();
 
 int main() {
     // Setup (Adding User Input)
@@ -115,16 +117,7 @@ int main() {
         }
     }
 
-
-    //test
-
-    //end of test
-
     char input[20];
-    char command[5];        // used in creature command to clean/dirty ; check if its clean or dirty
-    int creatureType;       // used in creature command to clean/dirty
-
-
     while (respect > 0 || respect < 80) {
         //Set the input
         printf("Enter a command: ");
@@ -142,15 +135,12 @@ int main() {
         else if (strcmp(input, "east") == 0) {
             currentRoom = changeRoomEast(currentRoom);
         }
-
         else if (strcmp(input, "west") == 0) {
             currentRoom = changeRoomWest(currentRoom);
         }
-
         else if (strcmp(input, "north") == 0) {
             currentRoom = changeRoomNorth(currentRoom);
         }
-
         else if (strcmp(input, "south") == 0) {
             currentRoom = changeRoomSouth(currentRoom);
         }
@@ -161,14 +151,47 @@ int main() {
             printf("Goodbye!");
             break;
         }
-        //tests
-        else if (strcmp(input, "tLook") == 0) {
-            for (int i = 0; i < numOfRooms; i++) {
-                printf("%d - ", rooms[i].roomNum);
-                printf("%d\n", rooms[i].state);
+        else {    //creature commands:
+            char command[6];
+            int creatureNum;
+            char *token = strtok(input, ":");          //separates the input using the : [kinda like indexOf]
+            if (token != NULL) {
+                // The first token (before the colon) is the creature
+                creatureNum = strtol(token, NULL, 10);  //telling it to find an integer with base 10
+                token = strtok(NULL, ":");                      //get the value after :
+                if (token != NULL) {
+                    strncpy(command, token, 5);
+                }
             }
-            printf("%d\n", respect);
+//            if (strcmp(command, "clean") == 0) {
+//                currentRoom = creatureClean(currentRoom, creatureNum, roomStatus);
+//            }
+//            else if (strcmp(command, "dirty") == 0) {
+//                currentRoom = creatureDirty(currentRoom, creatureNum, roomStatus);
+//            }
+//            else if (strcmp(command, "east") == 0) {
+//                currentRoom = creatureChangeRoomEast(currentRoom, creatureNum);
+//            }
+//            else if (strcmp(command, "west") == 0) {
+//                currentRoom = creatureChangeRoomWest(currentRoom, creatureNum);
+//            }
+//            else if (strcmp(command, "north") == 0) {
+//                currentRoom = creatureChangeRoomNorth(currentRoom, creatureNum);
+//            }
+//            else if (strcmp(command, "south") == 0) {
+//                currentRoom = creatureChangeRoomSouth(currentRoom, creatureNum);
+//            }
         }
+
+
+        //tests
+//        else if (strcmp(input, "tLook") == 0) {
+//            for (int i = 0; i < numOfRooms; i++) {
+//                printf("%d - ", rooms[i].roomNum);
+//                printf("%d\n", rooms[i].state);
+//            }
+//            printf("%d\n", respect);
+//        }
     }
     //free memory
     free(rooms);
@@ -176,7 +199,15 @@ int main() {
 }
 
 void help() {
-    printf("Hi!");
+    printf("Important Note: PC, in this game, is recognized as 3 not 0! Change your input accordingly!\n"
+           "To enter the amount of rooms, enter an [int]. <The max amount of rooms is 99>. Example: 3\n"
+           "To input a room, enter [State North South East West] in order. Example: 0 -1 1 -1 2\n"
+           "To enter the amount of creatures, enter an [int]. Example: 4\n"
+           "To input a creature, enter [CreatureType CreatureLocation]. Example: 1 0\n"
+           "Creature Types: PC - 3 | NPC - 2 | Animal - 1 | Each creature is numbered by when they were inputted, starting from 0.\n"
+           "You have several actions in this game: clean, dirty, north, south, east, west.\n"
+           "You can command a creature to do an action as well by inputting [creatureNum:action]. Example: 2:clean\n"
+           "The game ends when your respect reaches 0 or 80. You lose if it's 0 and win if it's 80.\n");
 }
 
 void createRoom(int roomNum) {
@@ -263,14 +294,14 @@ struct Room clean(struct Room currentRoom, bool roomStatus) {
         updateRoomState(currentRoom);
         currentRoom =checkCreatureEmotion(currentRoom, roomStatus);
     } else {
-        printf("Your room is already clean!");
+        printf("Your room is already clean!\n");
     }
     return currentRoom;
 }
 
 struct Room dirty(struct Room currentRoom, bool roomStatus) {
     if (currentRoom.state == 2) { /* if it's dirty, make it half dirty, remember the respect system*/
-        printf("Your room is already dirty!");
+        printf("Your room is already dirty!\n");
     } else if (currentRoom.state == 1) { /* if it's half-dirty, make it clean*/
         currentRoom.state = 2;
         roomStatus = false;
@@ -376,12 +407,13 @@ struct Room leaveRoom(struct Room currentRoom, int creatureNum) {
                     if (currentRoom.east->creatures[j].type == 0 && isExecuted == false) {        //room is free
                         currentRoom.east->creatures[j] = currentRoom.creatures[i];
                         currentRoom.east->creatures[j].location = currentRoom.roomNum;
-                        printf("%d did not like the state of the room and left to %d", currentRoom.creatures[i].creatureNum, currentRoom.eastNum);
+                        printf("%d did not like the state of the room and left to %d\n", currentRoom.creatures[i].creatureNum, currentRoom.eastNum);
                         //Now remove it from old room [bit wonky]
                         currentRoom.creatures[i].type = -1;
                         currentRoom.creatures[i].creatureNum = -1;       //this might be wonky
                         currentRoom.creatures[i].location = -1;
                         isExecuted = true;
+                        updateRoomNeighbors(currentRoom);
                     }
                 }
             }
@@ -394,12 +426,13 @@ struct Room leaveRoom(struct Room currentRoom, int creatureNum) {
                     if (currentRoom.west->creatures[j].type == 0 && isExecuted == false) {        //room is free
                         currentRoom.west->creatures[j] = currentRoom.creatures[i];
                         currentRoom.west->creatures[j].location = currentRoom.roomNum;
-                        printf("%d did not like the state of the room and left to %d", currentRoom.creatures[i].creatureNum, currentRoom.westNum);
+                        printf("%d did not like the state of the room and left to %d\n", currentRoom.creatures[i].creatureNum, currentRoom.westNum);
                         //Now remove it from old room [bit wonky]
                         currentRoom.creatures[i].type = -1;
                         currentRoom.creatures[i].creatureNum = -1;       //this might be wonky
                         currentRoom.creatures[i].location = -1;
                         isExecuted = true;
+                        updateRoomNeighbors(currentRoom);
                     }
                 }
             }
@@ -412,12 +445,13 @@ struct Room leaveRoom(struct Room currentRoom, int creatureNum) {
                     if (currentRoom.north->creatures[j].type == 0 && isExecuted == false) {        //room is free
                         currentRoom.north->creatures[j] = currentRoom.creatures[i];
                         currentRoom.north->creatures[j].location = currentRoom.roomNum;
-                        printf("%d did not like the state of the room and left to %d", currentRoom.creatures[i].creatureNum, currentRoom.northNum);
+                        printf("%d did not like the state of the room and left to %d\n", currentRoom.creatures[i].creatureNum, currentRoom.northNum);
                         //Now remove it from old room [bit wonky]
                         currentRoom.creatures[i].type = -1;
                         currentRoom.creatures[i].creatureNum = -1;       //this might be wonky
                         currentRoom.creatures[i].location = -1;
                         isExecuted = true;
+                        updateRoomNeighbors(currentRoom);
                     }
                 }
             }
@@ -430,23 +464,59 @@ struct Room leaveRoom(struct Room currentRoom, int creatureNum) {
                     if (currentRoom.south->creatures[j].type == 0 && isExecuted == false) {        //room is free
                         currentRoom.south->creatures[j] = currentRoom.creatures[i];
                         currentRoom.south->creatures[j].location = currentRoom.roomNum;
-                        printf("%d did not like the state of the room and left to %d", currentRoom.creatures[i].creatureNum, currentRoom.southNum);
+                        printf("%d did not like the state of the room and left to %d\n", currentRoom.creatures[i].creatureNum, currentRoom.southNum);
                         //Now remove it from old room [bit wonky]
                         currentRoom.creatures[i].type = -1;
                         currentRoom.creatures[i].creatureNum = -1;       //this might be wonky
                         currentRoom.creatures[i].location = -1;
                         isExecuted = true;
+                        updateRoomNeighbors(currentRoom);
                     }
                 }
             }
         }
     }
-    return currentRoom;
-}
-//    if (currentRoom.northNum == -1 && currentRoom.southNum != -1 && currentRoom.eastNum != -1 && currentRoom.westNum != -1) {
-//        printf("%d is stuck in the house without avaliable rooms. They decide to leave.", currentRoom.creatures[creatureNum]);
+//    if (currentRoom.northNum == -1 && currentRoom.southNum == -1 && currentRoom.eastNum == -1 && currentRoom.westNum == -1) {
+//        for (int i = 0; i < 10; i++) {
+//            if (currentRoom.creatures[i].creatureNum == creatureNum) {
+//                for (int j = 0; j < 10; j++) {
+//                    printf("%d is stuck in the house without available rooms. They decide to leave.",
+//                           currentRoom.creatures[creatureNum].creatureNum);
+//                }
+//            }
+//        }
 //        //leave the house
 //    }
+    return currentRoom;
+}
+
+void updateRoomNeighbors(struct Room currentRoom) {
+    for (int i = 0; i < 10; i++) { //maybe use a different index for i < 100 lol sizeof(array)/sizeof(array[0]);
+        if (rooms[i].roomNum == currentRoom.roomNum) {
+            rooms[i] = currentRoom;
+        }
+    }
+
+}
+
+//struct Room creatureClean(struct Room currentRoom, int creatureNum, bool roomStatus) {
+//
+//}
+//struct Room creatureDirty(struct Room currentRoom, int creatureNum, bool roomStatus) {
+//
+//}
+//struct Room creatureChangeRoomEast(struct Room currentRoom, int creatureNum) {
+//
+//}
+//struct Room creatureChangeRoomWest(struct Room currentRoom, int creatureNum) {
+//
+//}
+//struct Room creatureChangeRoomNorth(struct Room currentRoom, int creatureNum) {
+//
+//}
+//struct Room creatureChangeRoomSouth(struct Room currentRoom, int creatureNum) {
+//
+//}
 
 
 void decreaseRespect() {
@@ -463,6 +533,7 @@ void higherincreaseRespect() {
     respect += 3;
 }
 
+
 struct Room growl(struct Room currentRoom) {
 
 }
@@ -475,9 +546,6 @@ struct Room  lick(struct Room currentRoom) {
 struct Room  smile(struct Room currentRoom) {
 
 }
-
-
-
 
 struct Room creatureClean(struct Room currentRoom, int creatureType) {
 
@@ -494,11 +562,6 @@ struct Room creatureDirty(struct Room currentRoom, int creatureType) {
 //
 //
 //}
-
-
-
-
-
 
 
 
