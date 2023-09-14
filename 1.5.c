@@ -544,19 +544,19 @@ struct Room creatureDirty(struct Room currentRoom, int creatureNum, bool roomSta
                 if (currentRoom.state == 2) {
                     currentRoom = leaveRoom(currentRoom, creatureNum);
                 }
-            } else {
-                currentRoom.state = 1;
-                roomStatus = false;
-                updateRoomState(currentRoom);
-                if (currentRoom.creatures[i].type == 1) {
-                    higherDecreaseRespect();
-                    if (currentRoom.state == 2) {
-                        currentRoom = leaveRoom(currentRoom, creatureNum);
-                    }
+            }
+        } else {
+            currentRoom.state = 1;
+            roomStatus = false;
+            updateRoomState(currentRoom);
+            if (currentRoom.creatures[i].type == 1) {
+                higherDecreaseRespect();
+                if (currentRoom.state == 2) {
+                    currentRoom = leaveRoom(currentRoom, creatureNum);
                 }
             }
-            return currentRoom;
         }
+        return currentRoom;
     }
 }
 
