@@ -88,7 +88,41 @@ int main() {
     }
     assignCreatures(numOfCreatures, numOfRooms);
 
-    //Test
+    // creating current room
+    struct Room currentRoom;
+    for (int i = 0; i < numOfRooms; i++) {
+        for (int j = 0; j < 10; j++) {
+            if (rooms[i].creatures[j].type == 3) {      // 3 = PC
+                currentRoom = rooms[i];
+            }
+        }
+    }
+
+    //Gameplay Loop
+    char input[20];
+    while (respect > 0 || respect < 80) {
+        //Set the input
+        printf("Enter a command: ");
+        scanf("%s", input);
+
+        if (strcmp(input, "look") == 0) {
+            look(currentRoom);
+        }
+        else if (strcmp(input, "east") == 0) {
+            currentRoom = changeRoomEast(currentRoom);
+        }
+        else if (strcmp(input, "leaveRoom") == 0) {
+            currentRoom.state = 0;
+            currentRoom = leaveRoom(currentRoom, 2);
+        }
+        else if (strcmp(input, "exit") == 0) {
+            break;
+        }
+    }
+
+
+
+//    Test
     for (int i = 0; i < numOfRooms; i++) {
         for (int j = 0; j < 10; j++) {
         printf("Creature #: %d | Type: %d| Location: %d\n", rooms[i].creatures[j].creatureNum, rooms[i].creatures[j].type, rooms[i].creatures[j].location);
@@ -96,6 +130,53 @@ int main() {
     }
 
 }
+
+struct Room changeRoomEast(struct Room currentRoom) {     //remember to update the creatures
+    if (currentRoom.eastNum == -1) {
+        printf("You tried going East, but ran into a wall!\n");
+    } else {
+        for (int i = 0; i < 10; i++) {  //edit it later to include size of Room
+            if (rooms[i].roomNum == currentRoom.eastNum) {
+                currentRoom = rooms[i];
+            }
+        }
+    }
+    return currentRoom;
+}
+
+
+struct Room leaveRoom(struct Room currentRoom, int creatureNum) {
+    bool isExecuted = false;
+    if (currentRoom.eastNum != -1) {
+        for (int i = 0; i < 10; i++) {
+            if (currentRoom.creatures[i].creatureNum == creatureNum) {
+                for (int j = 0; j < 10; j++) {
+                    if (currentRoom.east->creatures[j].type == 0 && isExecuted == false) {        //room is free
+                        currentRoom.east->creatures[j] = currentRoom.creatures[i];
+                        currentRoom.east->creatures[j].location = currentRoom.roomNum;
+                        //Now remove it from old room [bit wonky]
+                        currentRoom.creatures[i].type = -1;
+                        currentRoom.creatures[i].creatureNum = -1;       //this might be wonky
+                        currentRoom.creatures[i].location = -1;
+                        isExecuted = true;
+                    }
+                }
+            }
+        }
+    }
+    return currentRoom;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 void createRoom(int roomNum) {
     rooms[roomNum].roomNum = roomNum;
@@ -138,3 +219,36 @@ void assignCreatures(int numOfCreatures, int numOfRooms) {
         }
     }
 }
+
+struct Room look(struct Room currentRoom) {
+    printf("Room number: %d | Room state: %d | ", currentRoom.roomNum, currentRoom.state); /* Print out the room cleanliness */
+    //Print out the neighbors
+    if (currentRoom.northNum != -1) {
+        printf("%d to the north | ", currentRoom.northNum);
+    }
+    if (currentRoom.southNum != -1) {
+        printf("%d to the south | ", currentRoom.southNum);
+    }
+    if (currentRoom.eastNum != -1) {
+        printf("%d to the east | ", currentRoom.eastNum);
+    }
+    if (currentRoom.westNum != -1) {
+        printf("%d to the west | ", currentRoom.westNum);
+    }
+
+    //Print out the creatures
+    printf("contains:\n");  /*work on this more, to include all the creatures in the room*/
+    for (int i = 0; i < 10; i++) {
+        if (currentRoom.creatures[i].type == 3) {
+            printf ("PC\n");
+        }
+        else if (currentRoom.creatures[i].type == 2) {
+            printf ("human %d\n", currentRoom.creatures[i].creatureNum);
+        }
+        else if (currentRoom.creatures[i].type == 1) {
+            printf ("animal %d\n", currentRoom.creatures[i].creatureNum);
+        }
+    }
+    return currentRoom;
+}
+
