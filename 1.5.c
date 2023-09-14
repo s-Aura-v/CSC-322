@@ -26,6 +26,7 @@ struct Room {
     int eastNum;
     int westNum;
     struct Creature creatures[10];
+    int creatureCounter;
 };
 
 // Global variables
@@ -98,7 +99,7 @@ int main() {
     for (int i = 0; i < numOfCreatures; i++) {
         printf("type + location: ");
         scanf("%d %d", &creatures[i].type, &creatures[i].location);
-        creatures[i].isEmpty = false;
+        creatures[i].creatureNum = i;
     }
 
     for (int i = 0; i < 10; i++) {
@@ -106,6 +107,17 @@ int main() {
     }
 
     assignCreatures(numOfCreatures, numOfRooms);
+
+    //is not Empty
+    for (int i = 0; i < numOfRooms; i++) {      //CHANGE it to num of creatures
+        for (int j = 0; j < 10; j++) {
+            if (rooms[i].creatures[j].type > 0) {
+                rooms[i].creatures[j].isEmpty = false;
+            } else if (rooms[i].creatures[j].type == 0) {
+                rooms[i].creatures[j].isEmpty = true;
+            }
+        }
+    }
 
     // creating current room
     struct Room currentRoom;
@@ -117,10 +129,21 @@ int main() {
         }
     }
 
+
+
+
     //test
     for (int i = 0; i < numOfRooms; i++) {
         printf("%d %d %d %d %d", rooms[i].roomNum, rooms[i].northNum, rooms[i].southNum, rooms[i].eastNum, rooms[i].westNum);
     }
+
+    for (int i = 0; i < numOfRooms; i++) {
+        for (int j = 0; j < 10; j++) {
+            printf("%d - %d - %d - %d\n", rooms[i].creatures[j].creatureNum ,rooms[i].creatures[j].type, rooms[i].creatures[j].location, rooms[i].creatures[j].isEmpty);
+        }
+    }
+
+    //end of test
 
     char input[20];
     char command[5];        // used in creature command to clean/dirty ; check if its clean or dirty
@@ -177,6 +200,7 @@ int main() {
     }
     //free memory
     free(rooms);
+    free(creatures);
 
 }
 
@@ -372,52 +396,45 @@ struct Room checkCreatureEmotion(struct Room currentRoom, bool roomStatus) {
 struct Room leaveRoom(struct Room currentRoom, int creatureNum) {
     if (currentRoom.northNum != -1) {
         for (int i = 0; i < 10; i++) {
-            if (currentRoom.north->creatures[i].creatureNum == 0 && currentRoom.north->creatures[i].isEmpty) {
+            if (currentRoom.north->creatures[i].creatureNum == 0) {
                 currentRoom.north->creatures[i] = currentRoom.creatures[creatureNum]; //look over it
-                currentRoom.west->creatures[i].isEmpty = false;
                 printf("%d does not like the room state and left to %d", creatureNum, currentRoom.northNum);
                 currentRoom.creatures[creatureNum].type = 0;
-                currentRoom.creatures[creatureNum].isEmpty = true;
                 break;
             }
         }
     }
     if (currentRoom.southNum != -1) {
         for (int i = 0; i < 10; i++) {
-            if (currentRoom.south->creatures[i].creatureNum == 0 && currentRoom.south->creatures[i].isEmpty) {
+            if (currentRoom.south->creatures[i].type == 0) {
                 currentRoom.south->creatures[i] = currentRoom.creatures[creatureNum]; //look over it
-                currentRoom.west->creatures[i].isEmpty = false;
                 printf("%d does not like the room state and left to %d", creatureNum, currentRoom.southNum);
                 currentRoom.creatures[creatureNum].type = 0;
-                currentRoom.creatures[creatureNum].isEmpty = true;
                 break;
             }
         }
     }
     if (currentRoom.eastNum != -1 ) {
         for (int i = 0; i < 10; i++) {
-            if (currentRoom.east->creatures[i].creatureNum == 0 && currentRoom.east->creatures[i].isEmpty) {
+            if (currentRoom.east->creatures[i].type == 0) {
                 currentRoom.east->creatures[i] = currentRoom.creatures[creatureNum]; //look over it
-                currentRoom.west->creatures[i].isEmpty = false;
                 printf("%d does not like the room state and left to %d", creatureNum, currentRoom.eastNum);
                 currentRoom.creatures[creatureNum].type = 0;
-                currentRoom.creatures[creatureNum].isEmpty = true;
                 break;
             }
         }
     }
     if (currentRoom.westNum != -1 ) {
         for (int i = 0; i < 10; i++) {
-            if (currentRoom.west->creatures[i].creatureNum == 0 && currentRoom.west->creatures[i].isEmpty) {
+            if (currentRoom.west->creatures[i].creatureNum == 0) {
                 currentRoom.west->creatures[i] = currentRoom.creatures[creatureNum]; //look over it
-                currentRoom.west->creatures[i].isEmpty = false;
                 printf(" %d does not like the room state and left to %d", creatureNum, currentRoom.westNum);
                 currentRoom.creatures[creatureNum].type = 0;
-                currentRoom.creatures[creatureNum].isEmpty = true;
                 break;
             }
         }
     }
+    return currentRoom;
 //    if (currentRoom.northNum == -1 && currentRoom.southNum != -1 && currentRoom.eastNum != -1 && currentRoom.westNum != -1) {
 //        printf("%d is stuck in the house without avaliable rooms. They decide to leave.", currentRoom.creatures[creatureNum]);
 //        //leave the house
