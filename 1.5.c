@@ -574,6 +574,7 @@ struct Room creatureDirty(struct Room currentRoom, int creatureNum, bool roomSta
                             currentRoom.creatures[i].location = -1;
                             currentRoom.creatures[i].creatureNum = -1;
                             isExecuted = true;
+                            updateRoomNeighbors(currentRoom);
                         }
                     }
                 }
@@ -595,6 +596,7 @@ struct Room creatureChangeRoomWest(struct Room currentRoom, int creatureNum) {
                         currentRoom.creatures[i].location = -1;
                         currentRoom.creatures[i].creatureNum = -1;
                         isExecuted = true;
+                        updateRoomNeighbors(currentRoom);
                     }
                 }
             }
@@ -616,6 +618,7 @@ struct Room creatureChangeRoomNorth(struct Room currentRoom, int creatureNum) {
                         currentRoom.creatures[i].location = -1;
                         currentRoom.creatures[i].creatureNum = -1;
                         isExecuted = true;
+                        updateRoomNeighbors(currentRoom);
                     }
                 }
             }
@@ -637,6 +640,7 @@ struct Room creatureChangeRoomSouth(struct Room currentRoom, int creatureNum) {
                         currentRoom.creatures[i].location = -1;
                         currentRoom.creatures[i].creatureNum = -1;
                         isExecuted = true;
+                        updateRoomNeighbors(currentRoom);
                     }
                 }
             }
