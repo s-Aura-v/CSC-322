@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 struct Creature {
     int creatureNum;
     int type;
@@ -53,10 +52,6 @@ void decreaseRespect();
 void higherDecreaseRespect();
 void increaseRespect();
 void higherIncreaseRespect();
-struct Room growl(struct Room currentRoom);
-struct Room grumble(struct Room currentRoom);
-struct Room lick(struct Room currentRoom);
-struct Room smile(struct Room currentRoom);
 struct Room leaveRoom(struct Room currentRoom, int creatureNum);
 struct Room checkCreatureEmotion(struct Room currentRoom, bool roomStatus);
 void updateRoomNeighbors(struct Room currentRoom);
@@ -333,6 +328,7 @@ struct Room changeRoomEast(struct Room currentRoom) {     //remember to update t
         for (int i = 0; i < 10; i++) {  //edit it later to include size of Room
             if (rooms[i].roomNum == currentRoom.eastNum) {
                 currentRoom = rooms[i];
+
             }
         }
     }
@@ -663,23 +659,6 @@ void increaseRespect() {
 void higherincreaseRespect() {
     respect+=3;
 }
-
-
-struct Room growl(struct Room currentRoom) {
-
-}
-struct Room grumble(struct Room currentRoom) {
-
-}
-struct Room  lick(struct Room currentRoom) {
-
-}
-struct Room  smile(struct Room currentRoom) {
-
-}
-
-
-
 
 
 //tests
