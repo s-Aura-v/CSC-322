@@ -223,7 +223,6 @@ void look(struct Room *currentRoom) {
             printf ("animal %d\n", currentRoom->creatures[i].creatureNum);
         }
     }
-
 }
 
 void clean(struct Room *currentRoom, bool roomStatus) {

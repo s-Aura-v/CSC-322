@@ -443,6 +443,17 @@ struct Room checkCreatureEmotion(struct Room currentRoom, bool roomStatus) {
     return currentRoom;
 }
 
+
+
+
+
+
+
+
+
+
+
+
 struct Room leaveRoom(struct Room currentRoom, int creatureNum) {
     bool isExecuted = false;
     if (currentRoom.eastNum != -1) {
