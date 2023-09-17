@@ -557,6 +557,7 @@ struct Room creatureDirty(struct Room currentRoom, int creatureNum, bool roomSta
 
     struct Room creatureChangeRoomEast(struct Room currentRoom, int creatureNum) {
         bool isExecuted = false;
+        bool isExecuted = false;
         if(currentRoom.eastNum != -1) {
             for (int i = 0; i < 10; i++) {
                 if (currentRoom.creatures[i].creatureNum == creatureNum) {

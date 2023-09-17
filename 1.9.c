@@ -43,12 +43,14 @@ void look();
 void clean();
 void dirty();
 void updateRespect(bool roomStatus);
-
-//work in progress
 void changeRoomEast();
 void changeRoomWest();
 void changeRoomNorth();
 void changeRoomSouth();
+
+//work in progress
+void leaveRoom(int creatureType);
+
 
 
     int main() {
@@ -256,6 +258,7 @@ void dirty() {
         updateRespect(roomStatus);
     }
 }
+
 void updateRespect(bool roomStatus) {       //Update Respect due to PC's actions ONLY
     for (int i = 0; i < currentRoom->creatureCounter; i++) {
         if (roomStatus == true && currentRoom) {   //if room got clean
@@ -265,16 +268,16 @@ void updateRespect(bool roomStatus) {       //Update Respect due to PC's actions
             } else if (currentRoom->creatures[i].type == 2) {
                 respect--;
                 printf("%d growls. Respect is now %d.\n", currentRoom->creatures[i].creatureNum, respect);
-                if (currentRoom->state == 0) {  //if the room becomes clean
-                    //the NPC leaves the room
+                if (currentRoom->state == 0) {  //if the room becomes clean, NPCs leave
+                    leaveRoom(2);
                 }
             }
         } else if (roomStatus == false) {   //if room got dirty
             if (currentRoom->creatures[i].type == 1) {
                 respect--;
                 printf("%d grumbles. Respect is now %d.\n", currentRoom->creatures[i].creatureNum, respect);
-                if (currentRoom->state == 2) {  //if the room becomes clean
-                    //the animal leaves the room
+                if (currentRoom->state == 2) {  //if the room becomes dirty, animal leaves
+                    leaveRoom(1);
                 }
             } else if (currentRoom->creatures[i].type == 2) {
                 respect++;
@@ -284,7 +287,120 @@ void updateRespect(bool roomStatus) {       //Update Respect due to PC's actions
     }
 }
 
-void changeRoomEast() {
+void leaveRoom(int creatureType) {
+    if (currentRoom->eastNum != -1) { //east is open
+        for (int i = 0; i < currentRoom->creatureCounter; i++) {
+            if (currentRoom->creatures[i].type == creatureType) { //type wants to leave
+                //Move them east
+                for (int j = 0; j < currentRoom->east->creatureCounter + 1; j++) {
+                    if (currentRoom->east->creatures[j].type == 0) { //if the creature spot is free, then add the creature there
+                        currentRoom->east->creatures[j] = currentRoom->creatures[i];
+                        currentRoom->east->creatureCounter++;
+                        printf("%d is dissatisfied with the room and leaves to %d\n", currentRoom->creatures[i].creatureNum, currentRoom->eastNum);
+                        break;
+                    }
+                }
+                //Remove them from the current one
+                for (int j = 0; j < currentRoom->creatureCounter; j++) {
+                    if (currentRoom->creatures[j].type == creatureType) {
+                        currentRoom->creatures[j].type = 0;
+                        currentRoom->creatureCounter--;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    if (currentRoom->westNum != -1) {
+        if (currentRoom->westNum != -1) { //east is open
+            for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                if (currentRoom->creatures[i].type == creatureType) { //type wants to leave
+                    //Move them east
+                    for (int j = 0; j < currentRoom->west->creatureCounter + 1; j++) {
+                        if (currentRoom->west->creatures[j].type == 0) { //if the creature spot is free, then add the creature there
+                            currentRoom->west->creatures[j] = currentRoom->creatures[i];
+                            currentRoom->west->creatureCounter++;
+                            printf("%d is dissatisfied with the room and leaves to %d\n", currentRoom->creatures[i].creatureNum, currentRoom->westNum);
+                            break;
+                        }
+                    }
+                    //Remove them from the current one
+                    for (int j = 0; j < currentRoom->creatureCounter; j++) {
+                        if (currentRoom->creatures[j].type == creatureType) {
+                            currentRoom->creatures[j].type = 0;
+                            currentRoom->creatureCounter--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (currentRoom->northNum != -1) {
+        if (currentRoom->northNum != -1) { //east is open
+            for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                if (currentRoom->creatures[i].type == creatureType) { //type wants to leave
+                    //Move them east
+                    for (int j = 0; j < currentRoom->north->creatureCounter + 1; j++) {
+                        if (currentRoom->north->creatures[j].type == 0) { //if the creature spot is free, then add the creature there
+                            currentRoom->north->creatures[j] = currentRoom->creatures[i];
+                            currentRoom->north->creatureCounter++;
+                            printf("%d is dissatisfied with the room and leaves to %d\n", currentRoom->creatures[i].creatureNum, currentRoom->northNum);
+                            break;
+                        }
+                    }
+                    //Remove them from the current one
+                    for (int j = 0; j < currentRoom->creatureCounter; j++) {
+                        if (currentRoom->creatures[j].type == creatureType) {
+                            currentRoom->creatures[j].type = 0;
+                            currentRoom->creatureCounter--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (currentRoom->southNum != -1) {
+        if (currentRoom->southNum != -1) { //east is open
+            for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                if (currentRoom->creatures[i].type == creatureType) { //type wants to leave
+                    //Move them east
+                    for (int j = 0; j < currentRoom->south->creatureCounter + 1; j++) {
+                        if (currentRoom->south->creatures[j].type == 0) { //if the creature spot is free, then add the creature there
+                            currentRoom->south->creatures[j] = currentRoom->creatures[i];
+                            currentRoom->south->creatureCounter++;
+                            printf("%d is dissatisfied with the room and leaves to %d\n", currentRoom->creatures[i].creatureNum, currentRoom->southNum);
+                            break;
+                        }
+                    }
+                    //Remove them from the current one
+                    for (int j = 0; j < currentRoom->creatureCounter; j++) {
+                        if (currentRoom->creatures[j].type == creatureType) {
+                            currentRoom->creatures[j].type = 0;
+                            currentRoom->creatureCounter--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+        void changeRoomEast() {
     //Reference to PC to add later
     struct Creature pc;
     for (int i = 0; i < currentRoom->creatureCounter; i++) {
