@@ -64,6 +64,8 @@ struct Room creatureChangeRoomSouth(struct Room currentRoom, int creatureNum);
 
 
 
+void removePC(int numOfRooms);
+void addPC(struct Room currentRoom, int numOfRooms);
 
 
 int main() {
@@ -159,6 +161,14 @@ int main() {
                 printf("%d\n", rooms[i].state);
             }
             printf("%d\n", respect);
+        }
+        else if (strcmp(input, "tLook2") == 0) {
+            for (int i = 0; i < numOfRooms; i++) {
+                printf("%d %d ", rooms[i].roomNum, rooms[i].state);
+                for (int j = 0; j < 10; j++) {
+                    printf("Creatures: %d %d %d\n", rooms[i].creatures[j].creatureNum, rooms[i].creatures[j].type, rooms[i].creatures[j].location);
+                }
+            }
         }
         else {    //creature commands:
             char command[6];
@@ -332,24 +342,46 @@ struct Room changeRoomEast(struct Room currentRoom, int numOfRooms) {
     } else {
         for (int i = 0; i < numOfRooms; i++) {
             if (rooms[i].roomNum == currentRoom.eastNum) {
-                // Removing PC from the old room then adding them to the new room
-                for (int j = 0; j < 10; j++) {
-                    if (rooms[i].creatures[j].type == 3) {
-                        for (int k = 0; k < 10; k++) {
-                            if (currentRoom.east->creatures[k].type == 0) {
-                                currentRoom.east->creatures[k] = rooms[i].creatures[j];
-                                rooms[i].creatures[j].type = 0;
-                                break; // Exit the loop once the PC is moved
-                            }
-                        }
-                    }
-                }
-                currentRoom = *currentRoom.east; // Update currentRoom with the new room
+                currentRoom = rooms[i];
+                removePC(numOfRooms);
+                addPC(currentRoom, numOfRooms);
             }
         }
     }
     return currentRoom;
 }
+
+void addPC(struct Room currentRoom, int numOfRooms) {
+    for (int i = 0; i < numOfRooms; i++ ) {
+        if (currentRoom.roomNum == rooms[i].roomNum)
+            for (int j = 0; j < 10; j++) {
+                if (currentRoom.creatures[j].type == 0) {   //if its empty
+                    for (int k = 0; k < 10; k++) {
+                        for (int l = 0; l < 10; l++) {
+                            if (rooms[k].creatures[l].type == 3) {
+                                currentRoom.creatures[j] = rooms[k].creatures[l];
+                                removePC(numOfRooms);
+                            }
+                        }
+                    }
+                }
+        }
+    }
+}
+void removePC(int numOfRooms) {
+    for (int i = 0; i < numOfRooms; i++ ) {
+        for (int j = 0; j < 10; j++) {
+            if (rooms[i].creatures[j].type == 3) {
+                rooms[i].creatures[j].type = 0;
+            }
+        }
+    }
+}
+
+
+
+
+
 
 struct Room changeRoomWest(struct Room currentRoom) {
     if (currentRoom.westNum == -1) {
