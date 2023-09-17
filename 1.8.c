@@ -380,9 +380,6 @@ void removePC(int numOfRooms) {
 
 
 
-
-
-
 struct Room changeRoomWest(struct Room currentRoom) {
     if (currentRoom.westNum == -1) {
         printf("You tried going West, but ran into a wall!\n");
@@ -442,11 +439,6 @@ struct Room checkCreatureEmotion(struct Room currentRoom, bool roomStatus) {
     }
     return currentRoom;
 }
-
-
-
-
-
 
 
 
