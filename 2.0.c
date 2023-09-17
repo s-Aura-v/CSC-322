@@ -47,10 +47,9 @@
     void changeRoomWest();
     void changeRoomNorth();
     void changeRoomSouth();
-
-    //work in progress
     void leaveRoom(int creatureType);
 
+    
 
 
     int main() {
@@ -314,6 +313,7 @@
                             break;
                         }
                     }
+                    newRoomClean(creatureNum);
                 }
             }
         }
