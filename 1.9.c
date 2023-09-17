@@ -43,7 +43,12 @@ void look();
 void clean();
 void dirty();
 void updateRespect(bool roomStatus);
-void updateRespect2(bool roomStatus);
+
+//work in progress
+void changeRoomEast(int numOfRooms, int pcNum);
+//struct Room changeRoomWest();
+//struct Room changeRoomNorth();
+//struct Room changeRoomSouth();
 
 
     int main() {
@@ -56,9 +61,7 @@ void updateRespect2(bool roomStatus);
     //Inputting the Rooms
     printf("# of rooms: ");
     scanf("%d", &numOfRooms);
-
     rooms = (struct Room *) malloc(sizeof(struct Room) * numOfRooms);
-
     for (int i = 0; i < numOfRooms; i++) {
         printf("rooms: ");
         scanf("%d %d %d %d %d", &rooms[i].state, &rooms[i].northNum, &rooms[i].southNum, &rooms[i].eastNum,
@@ -74,9 +77,8 @@ void updateRespect2(bool roomStatus);
     //Creatures
     printf("# of creatures: ");
     scanf("%d", &numOfCreatures);
-
     creatures = (struct Creature *) malloc(sizeof(struct Creature) * numOfCreatures);
-
+    int pcNum;
     for (int i = 0; i < numOfCreatures; i++) {
         printf("type + location: ");
         scanf("%d %d", &creatures[i].type, &creatures[i].location);
@@ -84,6 +86,7 @@ void updateRespect2(bool roomStatus);
     for (int i = 0; i < numOfCreatures; i++) {
         if (creatures[i].type == 0) {
             creatures[i].type = 3;
+            pcNum = creatures[i].creatureNum;
         }
     }
     assignCreatures(numOfCreatures, numOfRooms);
@@ -118,7 +121,6 @@ void updateRespect2(bool roomStatus);
             }
         }
 
-
             //end of tests
         else if (strcmp(input, "exit") == 0) {
             printf("Goodbye!");
@@ -133,7 +135,9 @@ void updateRespect2(bool roomStatus);
         else if (strcmp(input, "dirty") == 0) {
             dirty();
         }
-
+        else if (strcmp(input, "east") == 0) {
+            changeRoomEast(numOfRooms, pcNum);
+        }
     }
 
 
@@ -227,10 +231,22 @@ void clean() {
         printf("Your room is already clean!");
     }
 }
-
+void dirty() {
+    bool roomStatus;
+    if (currentRoom->state == 2) { /* if it's dirty, make it half dirty, remember the respect system*/
+        printf("Your room is already dirty!");
+    } else if (currentRoom->state == 1) { /* if it's half-dirty, make it clean*/
+        currentRoom->state = 2;
+        roomStatus = false;
+        updateRespect(roomStatus);
+    } else {
+        currentRoom->state = 1;
+        roomStatus = false;
+        updateRespect(roomStatus);
+    }
+}
 void updateRespect(bool roomStatus) {       //Update Respect due to PC's actions ONLY
     for (int i = 0; i < currentRoom->creatureCounter; i++) {
-
         if (roomStatus == true && currentRoom) {   //if room got clean
             if (currentRoom->creatures[i].type == 1) {
                 respect++;
@@ -257,20 +273,33 @@ void updateRespect(bool roomStatus) {       //Update Respect due to PC's actions
     }
 }
 
-
-void dirty() {
-    bool roomStatus;
-    if (currentRoom->state == 2) { /* if it's dirty, make it half dirty, remember the respect system*/
-        printf("Your room is already dirty!");
-    } else if (currentRoom->state == 1) { /* if it's half-dirty, make it clean*/
-        currentRoom->state = 2;
-        roomStatus = false;
-        updateRespect(roomStatus);
-    } else {
-        currentRoom->state = 1;
-        roomStatus = false;
-        updateRespect(roomStatus);
+void changeRoomEast(int numOfRooms, int pcNum) {
+    if (currentRoom->eastNum != -1) {
+        for (int i = 0; i < numOfRooms; i++) {
+            if(rooms[i].roomNum == currentRoom->east->roomNum) {  //277-278: find the room you want to change into and change
+                //Remove the PC [Go through rooms, creature then remove PC]
+                for (int j = 0; j < numOfRooms; j++) {
+                    for (int k = 0; k < rooms[i].creatureCounter; k++) {
+                        if (rooms[j].creatures[k].type == 3) {
+                            rooms[j].creatures[k].type = 0;
+                            rooms[j].creatureCounter--;
+                        }
+                    }
+                }
+                //Add the PC
+                for (int j = 0; j < numOfRooms; j++) {
+                    for (int k = 0; k < rooms[i].creatureCounter; k++) {
+                        if (rooms[j].creatures[k].type == 0) {
+                            rooms[j].creatures[k].type = 3;
+                            rooms[j].creatures[k].location = rooms[j].roomNum;
+                            rooms[j].creatures[k].creatureNum = pcNum;
+                            rooms[j].creatureCounter++;
+                        }
+                    }
+                }
+                currentRoom = &rooms[i];
+                break;
+            }
+        }
     }
 }
-
-
