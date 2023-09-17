@@ -43,9 +43,10 @@ void look();
 void clean();
 void dirty();
 void updateRespect(bool roomStatus);
+void updateRespect2(bool roomStatus);
 
 
-int main() {
+    int main() {
     // Setup (Adding User Input)
     srand(time(0));
     int numOfRooms;
@@ -229,18 +230,25 @@ void clean() {
 
 void updateRespect(bool roomStatus) {       //Update Respect due to PC's actions ONLY
     for (int i = 0; i < currentRoom->creatureCounter; i++) {
-        if (roomStatus == true) {   //if room got clean
+
+        if (roomStatus == true && currentRoom) {   //if room got clean
             if (currentRoom->creatures[i].type == 1) {
                 respect++;
                 printf("%d licks your face. Respect is now %d.\n", currentRoom->creatures[i].creatureNum, respect);
             } else if (currentRoom->creatures[i].type == 2) {
                 respect--;
                 printf("%d growls. Respect is now %d.\n", currentRoom->creatures[i].creatureNum, respect);
+                if (currentRoom->state == 0) {  //if the room becomes clean
+                    //the NPC leaves the room
+                }
             }
         } else if (roomStatus == false) {   //if room got dirty
             if (currentRoom->creatures[i].type == 1) {
                 respect--;
                 printf("%d grumbles. Respect is now %d.\n", currentRoom->creatures[i].creatureNum, respect);
+                if (currentRoom->state == 2) {  //if the room becomes clean
+                    //the animal leaves the room
+                }
             } else if (currentRoom->creatures[i].type == 2) {
                 respect++;
                 printf("%d smiles. Respect is now %d.\n", currentRoom->creatures[i].creatureNum, respect);
@@ -248,6 +256,7 @@ void updateRespect(bool roomStatus) {       //Update Respect due to PC's actions
         }
     }
 }
+
 
 void dirty() {
     bool roomStatus;
