@@ -409,24 +409,25 @@
             }
         }
         if (currentRoom->northNum == -1 && currentRoom->southNum == -1 && currentRoom->eastNum == -1 && currentRoom->westNum == -1) {
-            for (int i = 0; i < 10; i++) {  //go through the creatures
+            for (int i = 0; i < 10; i++) {  // Go through the creatures
                 if (currentRoom->creatures[i].type == creatureType) {
                     currentRoom->creatures[i].type = -1;
                     printf("%d has nowhere to go so they left through the roof.\n", currentRoom->creatures[i].creatureNum);
-                    //maybe i should lower creature number
+                    // Maybe I should lower creature number
+                    break;  // Exit the loop after finding and processing the creature
                 }
-                //Everybody be mad
-                for (int i = 0; i < currentRoom->creatureCounter; i++) {        //creature counter might break things because -1 still counts also its still broken
-                    if (currentRoom->creatures[i].type == 1 || currentRoom->creatures[i].type == 2) {
-                        printf("%d did not like the way the previous creature was treated.", currentRoom->creatures[i].creatureNum);
-                        currentRoom->creatureCounter--;
-                        respect--;
-                        printf("Respect is now %d\n", respect);
-                        break;
+            }
+            // Everybody be mad
+            for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                if (currentRoom->creatures[i].type == 1 || currentRoom->creatures[i].type == 2) {
+                    printf("%d did not like the way the previous creature was treated. ", currentRoom->creatures[i].creatureNum);
+                    currentRoom->creatureCounter--;
+                    respect--;  // Respect decremented here
+                    printf("Respect is now %d\n", respect);
+                    break;  // This break exits the inner loop after decrementing respect once
                     }
                 }
             }
-        }
     }
 
 
