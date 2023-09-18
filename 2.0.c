@@ -411,7 +411,7 @@
         if (currentRoom->northNum == -1 && currentRoom->southNum == -1 && currentRoom->eastNum == -1 && currentRoom->westNum == -1) {
             for (int i = 0; i < 10; i++) {  // Go through the creatures
                 if (currentRoom->creatures[i].type == creatureType) {
-                    currentRoom->creatures[i].type = -1;
+                    currentRoom->creatures[i].type = 0;
                     printf("%d has nowhere to go so they left through the roof.\n", currentRoom->creatures[i].creatureNum);
                     // Maybe I should lower creature number
                     break;  // Exit the loop after finding and processing the creature
