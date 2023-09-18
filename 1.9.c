@@ -152,8 +152,6 @@ void leaveRoomS(int creatureType);
         else if (strcmp(input, "south") == 0) {
             changeRoomSouth();
         }
-
-
     }
 
 

@@ -52,6 +52,13 @@
 
     //work in progress
     //Room full?
+    void creatureClean(int creatureNum, bool roomStatus);
+    void creatureDirty(int creatureNum, bool roomStatus);
+    void creatureChangeRoomEast(int creatureNum);
+    void creatureChangeRoomWest(int creatureNum);
+    void creatureChangeRoomNorth(int creatureNum);
+    void creatureChangeRoomSouth(int creatureNum);
+
 
     int main() {
         // Setup (Adding User Input)
@@ -148,6 +155,38 @@
             }
             else if (strcmp(input, "south") == 0) {
                 changeRoomSouth();
+            }
+            else {    //creature commands:
+                char command[6];
+                int creatureNum;
+                char *token = strtok(input, ":");          //separates the input using the : [kinda like indexOf]
+                if (token != NULL) {
+                    // The first token (before the colon) is the creature
+                    creatureNum = strtol(token, NULL, 10);  //telling it to find an integer with base 10
+                    token = strtok(NULL, ":");                      //get the value after :
+                    if (token != NULL) {
+                        strncpy(command, token, 6);
+                    }
+                }
+
+                if (strcmp(command, "clean") == 0) {
+
+                }
+                else if (strcmp(command, "dirty") == 0) {
+
+                }
+                else if (strcmp(command, "east") == 0) {
+                    creatureChangeRoomEast(creatureNum);
+                }
+                else if (strcmp(command, "west") == 0) {
+//                    creatureChangeRoomWest(creatureNum);
+                }
+                else if (strcmp(command, "north") == 0) {
+//                    creatureChangeRoomNorth(creatureNum);
+                }
+                else if (strcmp(command, "south") == 0) {
+//                    creatureChangeRoomSouth(creatureNum);
+                }
             }
 
 
@@ -564,3 +603,23 @@
         }
         return false;
     }
+
+    void creatureChangeRoomEast(int creatureNum) {
+        bool isExecuted = false;
+        if (currentRoom->eastNum != -1) {
+            for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                if (currentRoom->creatures[i].creatureNum == creatureNum) {
+                    for (int j = 0; j < currentRoom->east->creatureCounter + 1; j++) {
+                        if (currentRoom->east->creatures[j].type == 0) {
+                            //Add creature to east
+                            currentRoom->east->creatures[j] = currentRoom->creatures[i];
+                            //Remove creature from current
+                            currentRoom->creatures[i].type = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
