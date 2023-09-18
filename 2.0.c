@@ -49,7 +49,8 @@
     void changeRoomSouth();
     void leaveRoom(int creatureType);
 
-    
+    //work in progress
+
 
 
     int main() {
@@ -300,6 +301,10 @@
                         if (currentRoom->east->creatures[j].type == 0) { //if the creature spot is free, then add the creature there
                             currentRoom->east->creatures[j] = currentRoom->creatures[i];
                             currentRoom->east->creatureCounter++;
+                            //Try to change the room if NPC doesn't like it
+                            if ((currentRoom->east->state == 2 && currentRoom->creatures[i].type == 1) || (currentRoom->east->state == 0 && currentRoom->creatures[i].type == 2)) {
+                                currentRoom->east->state = 1;           // clean it or dirty it
+                            }
                             printf("%d is dissatisfied with the room and leaves to %d\n", currentRoom->creatures[i].creatureNum, currentRoom->eastNum);
                             isExecuted = true;
                             break;
@@ -313,7 +318,6 @@
                             break;
                         }
                     }
-                    newRoomClean(creatureNum);
                 }
             }
         }
@@ -326,6 +330,9 @@
                             if (currentRoom->west->creatures[j].type == 0) { //if the creature spot is free, then add the creature there
                                 currentRoom->west->creatures[j] = currentRoom->creatures[i];
                                 currentRoom->west->creatureCounter++;
+                                if ((currentRoom->west->state == 2 && currentRoom->creatures[i].type == 1) || (currentRoom->west->state == 0 && currentRoom->creatures[i].type == 2)) {
+                                    currentRoom->west->state = 1;           // clean it or dirty it
+                                }
                                 printf("%d is dissatisfied with the room and leaves to %d\n", currentRoom->creatures[i].creatureNum, currentRoom->westNum);
                                 isExecuted = true;
                                 break;
@@ -352,6 +359,9 @@
                             if (currentRoom->north->creatures[j].type == 0) { //if the creature spot is free, then add the creature there
                                 currentRoom->north->creatures[j] = currentRoom->creatures[i];
                                 currentRoom->north->creatureCounter++;
+                                if ((currentRoom->north->state == 2 && currentRoom->creatures[i].type == 1) || (currentRoom->north->state == 0 && currentRoom->creatures[i].type == 2)) {
+                                    currentRoom->east->state = 1;           // clean it or dirty it
+                                }
                                 printf("%d is dissatisfied with the room and leaves to %d\n", currentRoom->creatures[i].creatureNum, currentRoom->northNum);
                                 isExecuted = true;
                                 break;
@@ -378,6 +388,9 @@
                             if (currentRoom->south->creatures[j].type == 0) { //if the creature spot is free, then add the creature there
                                 currentRoom->south->creatures[j] = currentRoom->creatures[i];
                                 currentRoom->south->creatureCounter++;
+                                if ((currentRoom->south->state == 2 && currentRoom->creatures[i].type == 1) || (currentRoom->south->state == 0 && currentRoom->creatures[i].type == 2)) {
+                                    currentRoom->south->state = 1;           // clean it or dirty it
+                                }
                                 printf("%d is dissatisfied with the room and leaves to %d\n", currentRoom->creatures[i].creatureNum, currentRoom->southNum);
                                 isExecuted = true;
                                 break;
@@ -396,6 +409,7 @@
             }
         }
     }
+
 
 
     void changeRoomEast() {
