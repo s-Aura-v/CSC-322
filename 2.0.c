@@ -48,10 +48,10 @@
     void changeRoomNorth();
     void changeRoomSouth();
     void leaveRoom(int creatureType);
+    bool roomFull();
 
     //work in progress
-    //digging out of the game
-
+    //Room full?
 
     int main() {
         // Setup (Adding User Input)
@@ -525,7 +525,6 @@
         }
     }
 
-
     void changeRoomSouth() {
         //Reference to PC to add later
         struct Creature pc;
@@ -555,4 +554,13 @@
         } else {
             printf("You tried going south, but ran into a wall.\n");
         }
+    }
+
+    bool roomFull() {       //i might not need this
+        for (int i = 0; i < 10; i++) {
+            if (currentRoom->creatures[i].type == 0 ) {
+                return true;
+            }
+        }
+        return false;
     }
