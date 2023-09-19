@@ -194,7 +194,6 @@ int main() {
     //free memory
     free(rooms);
     free(creatures);
-    free(currentRoom);
 
     return 0;
 }
@@ -518,26 +517,27 @@ void leaveRoom(int creatureType) {
 void changeRoomEast() {
     //Reference to PC to add later
     struct Creature pc;
-    for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+    for (int i = 0; i < currentRoom->creatureCounter; i++) {
         if (currentRoom->creatures[i].type == 3) {
             pc = currentRoom->creatures[i];
         }
     }
     if (currentRoom->eastNum != -1) {
+        //Remove PC from original room
+        for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+            if (currentRoom->creatures[i].type == 3) {
+                currentRoom->creatures[i].type = 0;
+                currentRoom->creatureCounter--;
+                break;
+            }
+        }
+        //Add PC to new room
         if (currentRoom->east->creatureCounter < 10) {
             //Add PC to east room
             for (int i = 0; i < currentRoom->east->creatureCounter + 1; i++) {
                 if (currentRoom->east->creatures[i].type == 0) {
                     currentRoom->east->creatures[i] = pc;
                     currentRoom->east->creatureCounter++;
-                    break;
-                }
-            }
-            //Remove PC from original room
-            for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
-                if (currentRoom->creatures[i].type == 3) {
-                    currentRoom->creatures[i].type = 0;
-                    currentRoom->creatureCounter--;
                     break;
                 }
             }
@@ -553,26 +553,26 @@ void changeRoomEast() {
 void changeRoomWest() {
     //Reference to PC to add later
     struct Creature pc;
-    for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+    for (int i = 0; i < currentRoom->creatureCounter; i++) {
         if (currentRoom->creatures[i].type == 3) {
             pc = currentRoom->creatures[i];
         }
     }
     if (currentRoom->westNum != -1) {
         if (currentRoom->west->creatureCounter < 10) {
-            //Add PC to east room
-            for (int i = 0; i < currentRoom->west->creatureCounter + 1; i++) {
-                if (currentRoom->west->creatures[i].type == 0) {
-                    currentRoom->west->creatures[i] = pc;
-                    currentRoom->west->creatureCounter++;
-                    break;
-                }
-            }
             //Remove PC from original room
             for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
                 if (currentRoom->creatures[i].type == 3) {
                     currentRoom->creatures[i].type = 0;
                     currentRoom->creatureCounter--;
+                    break;
+                }
+            }
+            //Add PC to east room
+            for (int i = 0; i < currentRoom->west->creatureCounter + 1; i++) {
+                if (currentRoom->west->creatures[i].type == 0) {
+                    currentRoom->west->creatures[i] = pc;
+                    currentRoom->west->creatureCounter++;
                     break;
                 }
             }
@@ -588,26 +588,26 @@ void changeRoomWest() {
 void changeRoomNorth() {
     //Reference to PC to add later
     struct Creature pc;
-    for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+    for (int i = 0; i < currentRoom->creatureCounter; i++) {
         if (currentRoom->creatures[i].type == 3) {
             pc = currentRoom->creatures[i];
         }
     }
     if (currentRoom->northNum != -1) {
+        //Remove PC from original room
+        for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+            if (currentRoom->creatures[i].type == 3) {
+                currentRoom->creatures[i].type = 0;
+                currentRoom->creatureCounter--;
+                break;
+            }
+        }
         if (currentRoom->north->creatureCounter < 10) {
             //Add PC to east room
             for (int i = 0; i < currentRoom->north->creatureCounter + 1; i++) {
                 if (currentRoom->north->creatures[i].type == 0) {
                     currentRoom->north->creatures[i] = pc;
                     currentRoom->north->creatureCounter++;
-                    break;
-                }
-            }
-            //Remove PC from original room
-            for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
-                if (currentRoom->creatures[i].type == 3) {
-                    currentRoom->creatures[i].type = 0;
-                    currentRoom->creatureCounter--;
                     break;
                 }
             }
@@ -623,26 +623,26 @@ void changeRoomNorth() {
 void changeRoomSouth() {
     //Reference to PC to add later
     struct Creature pc;
-    for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+    for (int i = 0; i < currentRoom->creatureCounter; i++) {
         if (currentRoom->creatures[i].type == 3) {
             pc = currentRoom->creatures[i];
         }
     }
     if (currentRoom->southNum != -1) {
         if (currentRoom->south->creatureCounter < 10) {
-            //Add PC to south room
-            for (int i = 0; i < currentRoom->south->creatureCounter + 1; i++) {
-                if (currentRoom->south->creatures[i].type == 0) {
-                    currentRoom->south->creatures[i] = pc;
-                    currentRoom->south->creatureCounter++;
-                    break;
-                }
-            }
             //Remove PC from original room
             for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
                 if (currentRoom->creatures[i].type == 3) {
                     currentRoom->creatures[i].type = 0;
                     currentRoom->creatureCounter--;
+                    break;
+                }
+            }
+            //Add PC to south room
+            for (int i = 0; i < currentRoom->south->creatureCounter + 1; i++) {
+                if (currentRoom->south->creatures[i].type == 0) {
+                    currentRoom->south->creatures[i] = pc;
+                    currentRoom->south->creatureCounter++;
                     break;
                 }
             }
@@ -752,7 +752,7 @@ void creatureChangeRoomSouth(int creatureNum) {
 }
 
 void creatureClean(int creatureNum) {   //error
-    for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+    for (int i = 0; i < currentRoom->creatureCounter; i++) {
         if (currentRoom->creatures[i].creatureNum == creatureNum) {
             if (currentRoom->state == 2 && currentRoom->creatures[i].type == 1) {
                 currentRoom->state = 1;
@@ -779,7 +779,7 @@ void creatureClean(int creatureNum) {   //error
 }
 
 void creatureDirty(int creatureNum) {
-    for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+    for (int i = 0; i < currentRoom->creatureCounter; i++) {
         if (currentRoom->creatures[i].creatureNum == creatureNum) {
             if (currentRoom->state == 0 && currentRoom->creatures[i].type == 2) {     // clean and npc dirties
                 currentRoom->state = 1;
