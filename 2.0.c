@@ -475,23 +475,27 @@
             }
         }
         if (currentRoom->eastNum != -1) {
-            //Add PC to east room
-            for (int i = 0; i < currentRoom->east->creatureCounter + 1; i++) {
-                if (currentRoom->east->creatures[i].type == 0) {
-                    currentRoom->east->creatures[i] = pc;
-                    currentRoom->east->creatureCounter++;
-                    break;
+            if (currentRoom->east->creatureCounter < 10) {
+                //Add PC to east room
+                for (int i = 0; i < currentRoom->east->creatureCounter + 1; i++) {
+                    if (currentRoom->east->creatures[i].type == 0) {
+                        currentRoom->east->creatures[i] = pc;
+                        currentRoom->east->creatureCounter++;
+                        break;
+                    }
                 }
-            }
-            //Remove PC from original room
+                //Remove PC from original room
                 for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
-                if (currentRoom->creatures[i].type == 3) {
-                    currentRoom->creatures[i].type = 0;
-                    currentRoom->creatureCounter--;
-                    break;
+                    if (currentRoom->creatures[i].type == 3) {
+                        currentRoom->creatures[i].type = 0;
+                        currentRoom->creatureCounter--;
+                        break;
+                    }
                 }
+                currentRoom = currentRoom->east;
+            } else {
+                printf("Room full!");
             }
-            currentRoom = currentRoom->east;
         } else {
             printf("You tried going east, but ran into a wall.\n");
         }
@@ -506,28 +510,31 @@
             }
         }
         if (currentRoom->westNum != -1) {
-            //Add PC to east room
-            for (int i = 0; i < currentRoom->west->creatureCounter + 1; i++) {
-                if (currentRoom->west->creatures[i].type == 0) {
-                    currentRoom->west->creatures[i] = pc;
-                    currentRoom->west->creatureCounter++;
-                    break;
+            if (currentRoom->west->creatureCounter < 10) {
+                //Add PC to east room
+                for (int i = 0; i < currentRoom->west->creatureCounter + 1; i++) {
+                    if (currentRoom->west->creatures[i].type == 0) {
+                        currentRoom->west->creatures[i] = pc;
+                        currentRoom->west->creatureCounter++;
+                        break;
+                    }
                 }
-            }
-            //Remove PC from original room
-            for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
-                if (currentRoom->creatures[i].type == 3) {
-                    currentRoom->creatures[i].type = 0;
-                    currentRoom->creatureCounter--;
-                    break;
+                //Remove PC from original room
+                for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+                    if (currentRoom->creatures[i].type == 3) {
+                        currentRoom->creatures[i].type = 0;
+                        currentRoom->creatureCounter--;
+                        break;
+                    }
                 }
+                currentRoom = currentRoom->west;
+            } else {
+                printf("Room full!");
             }
-            currentRoom = currentRoom->west;
         } else {
             printf("You tried going west, but ran into a wall.\n");
         }
     }
-
 
     void changeRoomNorth() {
         //Reference to PC to add later
@@ -538,23 +545,27 @@
             }
         }
         if (currentRoom->northNum != -1) {
-            //Add PC to east room
-            for (int i = 0; i < currentRoom->north->creatureCounter + 1; i++) {
-                if (currentRoom->north->creatures[i].type == 0) {
-                    currentRoom->north->creatures[i] = pc;
-                    currentRoom->north->creatureCounter++;
-                    break;
+            if (currentRoom->north->creatureCounter < 10) {
+                //Add PC to east room
+                for (int i = 0; i < currentRoom->north->creatureCounter + 1; i++) {
+                    if (currentRoom->north->creatures[i].type == 0) {
+                        currentRoom->north->creatures[i] = pc;
+                        currentRoom->north->creatureCounter++;
+                        break;
+                    }
                 }
-            }
-            //Remove PC from original room
-            for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
-                if (currentRoom->creatures[i].type == 3) {
-                    currentRoom->creatures[i].type = 0;
-                    currentRoom->creatureCounter--;
-                    break;
+                //Remove PC from original room
+                for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+                    if (currentRoom->creatures[i].type == 3) {
+                        currentRoom->creatures[i].type = 0;
+                        currentRoom->creatureCounter--;
+                        break;
+                    }
                 }
+                currentRoom = currentRoom->north;
+            } else {
+                printf("Room full!");
             }
-            currentRoom = currentRoom->north;
         } else {
             printf("You tried going north, but ran into a wall.\n");
         }
@@ -569,23 +580,27 @@
             }
         }
         if (currentRoom->southNum != -1) {
-            //Add PC to east room
-            for (int i = 0; i < currentRoom->south->creatureCounter + 1; i++) {
-                if (currentRoom->south->creatures[i].type == 0) {
-                    currentRoom->south->creatures[i] = pc;
-                    currentRoom->south->creatureCounter++;
-                    break;
+            if (currentRoom->south->creatureCounter < 10) {
+                //Add PC to south room
+                for (int i = 0; i < currentRoom->south->creatureCounter + 1; i++) {
+                    if (currentRoom->south->creatures[i].type == 0) {
+                        currentRoom->south->creatures[i] = pc;
+                        currentRoom->south->creatureCounter++;
+                        break;
+                    }
                 }
-            }
-            //Remove PC from original room
-            for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
-                if (currentRoom->creatures[i].type == 3) {
-                    currentRoom->creatures[i].type = 0;
-                    currentRoom->creatureCounter--;
-                    break;
+                //Remove PC from original room
+                for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+                    if (currentRoom->creatures[i].type == 3) {
+                        currentRoom->creatures[i].type = 0;
+                        currentRoom->creatureCounter--;
+                        break;
+                    }
                 }
+                currentRoom = currentRoom->south;
+            } else {
+                printf("Room full!");
             }
-            currentRoom = currentRoom->south;
         } else {
             printf("You tried going south, but ran into a wall.\n");
         }
