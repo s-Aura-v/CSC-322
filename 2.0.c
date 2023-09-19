@@ -399,7 +399,7 @@
                                 currentRoom->north->creatures[j] = currentRoom->creatures[i];
                                 currentRoom->north->creatureCounter++;
                                 if ((currentRoom->north->state == 2 && currentRoom->creatures[i].type == 1) || (currentRoom->north->state == 0 && currentRoom->creatures[i].type == 2)) {
-                                    currentRoom->east->state = 1;           // clean it or dirty it
+                                    currentRoom->north->state = 1;           // clean it or dirty it
                                 }
                                 printf("%d is dissatisfied with the room and leaves to %d\n", currentRoom->creatures[i].creatureNum, currentRoom->northNum);
                                 isExecuted = true;
