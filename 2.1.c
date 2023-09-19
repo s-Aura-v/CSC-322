@@ -37,6 +37,7 @@ struct Room *currentRoom;
 //functions:
 void createRoom(int roomNum);
 void assignRoom(int numOfRooms);
+void setCreatures(int numOfRooms);
 void assignCreatures(int numOfCreatures, int numOfRooms);
 void help();
 void look();
@@ -87,6 +88,7 @@ int main() {
             creatures[i].type = 3;
         }
     }
+    setCreatures(numOfRooms);
     assignCreatures(numOfCreatures, numOfRooms);
 
     //Assigning current room
@@ -232,6 +234,13 @@ void assignRoom(int numOfRooms) {
             if (rooms[i].westNum == rooms[j].roomNum) {
                 rooms[i].west = &rooms[j];
             }
+        }
+    }
+}
+void setCreatures(int numOfRooms) {
+    for (int i = 0; i < numOfRooms; i++) {
+        for (int j = 0; j < 10; j++) {
+            rooms[i].creatures[j].type = 0;
         }
     }
 }
