@@ -179,13 +179,13 @@
                     creatureChangeRoomEast(creatureNum);
                 }
                 else if (strcmp(command, "west") == 0) {
-//                    creatureChangeRoomWest(creatureNum);
+                    creatureChangeRoomWest(creatureNum);
                 }
                 else if (strcmp(command, "north") == 0) {
-//                    creatureChangeRoomNorth(creatureNum);
+                    creatureChangeRoomNorth(creatureNum);
                 }
                 else if (strcmp(command, "south") == 0) {
-//                    creatureChangeRoomSouth(creatureNum);
+                    creatureChangeRoomSouth(creatureNum);
                 }
             }
 
@@ -195,7 +195,7 @@
         //free memory
         free(rooms);
         free(creatures);
-        free(currentRoom);
+//        free(currentRoom);
 
         return 0;
     }
@@ -488,7 +488,7 @@
                 }
             }
             //Remove PC from original room
-            for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+                for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
                 if (currentRoom->creatures[i].type == 3) {
                     currentRoom->creatures[i].type = 0;
                     currentRoom->creatureCounter--;
@@ -613,8 +613,11 @@
                         if (currentRoom->east->creatures[j].type == 0) {
                             //Add creature to east
                             currentRoom->east->creatures[j] = currentRoom->creatures[i];
+                            currentRoom->east->creatureCounter++;
                             //Remove creature from current
                             currentRoom->creatures[i].type = 0;
+                            currentRoom->creatureCounter--;
+                            break;
                         }
                     }
                 }
@@ -622,4 +625,65 @@
         }
     }
 
+    void creatureChangeRoomWest(int creatureNum) {
+        bool isExecuted = false;
+        if (currentRoom->westNum!= -1) {
+            for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                if (currentRoom->creatures[i].creatureNum == creatureNum) {
+                    for (int j = 0; j < currentRoom->west->creatureCounter + 1; j++) {
+                        if (currentRoom->west->creatures[j].type == 0) {
+                            //Add creature to east
+                            currentRoom->west->creatures[j] = currentRoom->creatures[i];
+                            currentRoom->west->creatureCounter++;
+                            //Remove creature from current
+                            currentRoom->creatures[i].type = 0;
+                            currentRoom->creatureCounter--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
+    void creatureChangeRoomNorth(int creatureNum) {
+        bool isExecuted = false;
+        if (currentRoom->northNum != -1) {
+            for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                if (currentRoom->creatures[i].creatureNum == creatureNum) {
+                    for (int j = 0; j < currentRoom->north->creatureCounter + 1; j++) {
+                        if (currentRoom->north->creatures[j].type == 0) {
+                            //Add creature to east
+                            currentRoom->north->creatures[j] = currentRoom->creatures[i];
+                            currentRoom->north->creatureCounter++;
+                            //Remove creature from current
+                            currentRoom->creatures[i].type = 0;
+                            currentRoom->creatureCounter--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void creatureChangeRoomSouth(int creatureNum) {
+        bool isExecuted = false;
+        if (currentRoom->southNum != -1) {
+            for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                if (currentRoom->creatures[i].creatureNum == creatureNum) {
+                    for (int j = 0; j < currentRoom->south->creatureCounter + 1; j++) {
+                        if (currentRoom->south->creatures[j].type == 0) {
+                            //Add creature to east
+                            currentRoom->south->creatures[j] = currentRoom->creatures[i];
+                            currentRoom->south->creatureCounter++;
+                            //Remove creature from current
+                            currentRoom->creatures[i].type = 0;
+                            currentRoom->creatureCounter--;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
