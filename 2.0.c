@@ -48,16 +48,16 @@
     void changeRoomNorth();
     void changeRoomSouth();
     void leaveRoom(int creatureType);
-    bool roomFull();
-
-    //work in progress
-    //Room full?
-    void creatureClean(int creatureNum, bool roomStatus);
-    void creatureDirty(int creatureNum, bool roomStatus);
     void creatureChangeRoomEast(int creatureNum);
     void creatureChangeRoomWest(int creatureNum);
     void creatureChangeRoomNorth(int creatureNum);
     void creatureChangeRoomSouth(int creatureNum);
+
+    //work in progress
+    //Room full?
+    bool roomFull();
+    void creatureClean(int creatureNum);
+    void creatureDirty(int creatureNum, bool roomStatus);
 
 
     int main() {
@@ -170,7 +170,7 @@
                 }
 
                 if (strcmp(command, "clean") == 0) {
-
+                    creatureClean(creatureNum);
                 }
                 else if (strcmp(command, "dirty") == 0) {
 
@@ -605,7 +605,6 @@
     }
 
     void creatureChangeRoomEast(int creatureNum) {
-        bool isExecuted = false;
         if (currentRoom->eastNum != -1) {
             for (int i = 0; i < currentRoom->creatureCounter; i++) {
                 if (currentRoom->creatures[i].creatureNum == creatureNum) {
@@ -626,7 +625,6 @@
     }
 
     void creatureChangeRoomWest(int creatureNum) {
-        bool isExecuted = false;
         if (currentRoom->westNum!= -1) {
             for (int i = 0; i < currentRoom->creatureCounter; i++) {
                 if (currentRoom->creatures[i].creatureNum == creatureNum) {
@@ -647,7 +645,6 @@
     }
 
     void creatureChangeRoomNorth(int creatureNum) {
-        bool isExecuted = false;
         if (currentRoom->northNum != -1) {
             for (int i = 0; i < currentRoom->creatureCounter; i++) {
                 if (currentRoom->creatures[i].creatureNum == creatureNum) {
@@ -668,7 +665,6 @@
     }
 
     void creatureChangeRoomSouth(int creatureNum) {
-        bool isExecuted = false;
         if (currentRoom->southNum != -1) {
             for (int i = 0; i < currentRoom->creatureCounter; i++) {
                 if (currentRoom->creatures[i].creatureNum == creatureNum) {
@@ -687,3 +683,31 @@
             }
         }
     }
+
+    void creatureClean(int creatureNum) {   //error
+        for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+            if (currentRoom->creatures[i].creatureNum == creatureNum) {
+                if (currentRoom->state == 2 && currentRoom->creatures[i].type == 1) {
+                    currentRoom->state = 1;
+                    respect += 3;
+                    printf("%d licks your face a lot! Respect is now %d\n", creatureNum, respect);
+                } else if (currentRoom->state == 1 && currentRoom->creatures[i].type == 1) {
+                    currentRoom->state = 0;
+                    respect += 3;
+                    printf("%d licks your face a lot! Respect is now %d\n", creatureNum, respect);
+                } else if (currentRoom->state == 0) {
+                    printf("Room is already clean!");
+                } else if (currentRoom->state == 1 && currentRoom->creatures[i].type == 2) {
+                    currentRoom->state = 0;
+                    respect -= 3;
+                    printf("%d grumbles lot! Respect is now %d\n", creatureNum, respect);
+                    leaveRoom(2);
+                } else if (currentRoom->state == 2 && currentRoom->creatures[i].type == 2) {
+                    currentRoom->state = 1;
+                    respect -= 3;
+                    printf("%d grumbles lot! Respect is now %d\n", creatureNum, respect);
+                }
+            }
+        }
+    }
+
