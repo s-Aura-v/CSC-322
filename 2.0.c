@@ -52,12 +52,12 @@
     void creatureChangeRoomWest(int creatureNum);
     void creatureChangeRoomNorth(int creatureNum);
     void creatureChangeRoomSouth(int creatureNum);
+    void creatureClean(int creatureNum);
+    void creatureDirty(int creatureNum);
 
     //work in progress
     //Room full?
     bool roomFull();
-    void creatureClean(int creatureNum);
-    void creatureDirty(int creatureNum, bool roomStatus);
 
 
     int main() {
@@ -173,7 +173,7 @@
                     creatureClean(creatureNum);
                 }
                 else if (strcmp(command, "dirty") == 0) {
-
+                    creatureDirty(creatureNum);
                 }
                 else if (strcmp(command, "east") == 0) {
                     creatureChangeRoomEast(creatureNum);
@@ -711,3 +711,29 @@
         }
     }
 
+    void creatureDirty(int creatureNum) {
+        for (int i = 0; i < currentRoom->creatureCounter + 1; i++) {
+            if (currentRoom->creatures[i].creatureNum == creatureNum) {
+                if (currentRoom->state == 0 && currentRoom->creatures[i].type == 2) {     // clean and npc dirties
+                    currentRoom->state = 1;
+                    respect += 3;
+                    printf("%d smiles a lot! Respect is now %d\n", creatureNum, respect);
+                } else if (currentRoom->state == 1 && currentRoom->creatures[i].type == 2) {
+                    currentRoom->state = 1;
+                    respect += 3;
+                    printf("%d smiles a lot! Respect is now %d\n", creatureNum, respect);
+                } else if (currentRoom->state == 2) {
+                    printf("Room is already dirty!");
+                } else if (currentRoom->state == 1 && currentRoom->creatures[i].type == 1) {     // clean and npc dirties
+                    currentRoom->state = 2;
+                    respect -= 3;
+                    printf("%d growls a lot! Respect is now %d\n", creatureNum, respect);
+                    leaveRoom(1);
+                } else if (currentRoom->state == 2 && currentRoom->creatures[i].type == 1) {     // clean and npc dirties
+                    currentRoom->state = 1;
+                    respect -= 3;
+                    printf("%d growls a lot! Respect is now %d\n", creatureNum, respect);
+                }
+            }
+        }
+    }
