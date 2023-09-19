@@ -78,7 +78,6 @@ int main() {
     printf("# of creatures: ");
     scanf("%d", &numOfCreatures);
     creatures = (struct Creature *) malloc(sizeof(struct Creature) * numOfCreatures);
-    int pcNum;
     for (int i = 0; i < numOfCreatures; i++) {
         printf("type + location: ");
         scanf("%d %d", &creatures[i].type, &creatures[i].location);
@@ -86,7 +85,6 @@ int main() {
     for (int i = 0; i < numOfCreatures; i++) {
         if (creatures[i].type == 0) {
             creatures[i].type = 3;
-            pcNum = creatures[i].creatureNum;
         }
     }
     assignCreatures(numOfCreatures, numOfRooms);
@@ -194,6 +192,7 @@ int main() {
     //free memory
     free(rooms);
     free(creatures);
+    free(currentRoom);
 
     return 0;
 }
@@ -270,7 +269,7 @@ void look() {
 
     //Print out the creatures
     printf("contains:\n");  /*work on this more, to include all the creatures in the room*/
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < currentRoom->creatureCounter; i++) {
         if (currentRoom->creatures[i].type == 3) {
             printf ("PC\n");
         }
@@ -645,15 +644,6 @@ void changeRoomSouth() {
     } else {
         printf("You tried going south, but ran into a wall.\n");
     }
-}
-
-bool roomFull() {       //i might not need this
-    for (int i = 0; i < 10; i++) {
-        if (currentRoom->creatures[i].type == 0 ) {
-            return true;
-        }
-    }
-    return false;
 }
 
 void creatureChangeRoomEast(int creatureNum) {
