@@ -55,9 +55,6 @@
     void creatureClean(int creatureNum);
     void creatureDirty(int creatureNum);
 
-    //work in progress
-    //Room full?: Yes, we need to make it impossible for PC to enter a full room
-    bool roomFull();
 
 
     int main() {
@@ -494,7 +491,7 @@
                 }
                 currentRoom = currentRoom->east;
             } else {
-                printf("Room full!");
+                printf("Room full!\n");
             }
         } else {
             printf("You tried going east, but ran into a wall.\n");
@@ -529,7 +526,7 @@
                 }
                 currentRoom = currentRoom->west;
             } else {
-                printf("Room full!");
+                printf("Room full!\n");
             }
         } else {
             printf("You tried going west, but ran into a wall.\n");
@@ -564,7 +561,7 @@
                 }
                 currentRoom = currentRoom->north;
             } else {
-                printf("Room full!");
+                printf("Room full!\n");
             }
         } else {
             printf("You tried going north, but ran into a wall.\n");
@@ -599,7 +596,7 @@
                 }
                 currentRoom = currentRoom->south;
             } else {
-                printf("Room full!");
+                printf("Room full!\n");
             }
         } else {
             printf("You tried going south, but ran into a wall.\n");
@@ -617,80 +614,96 @@
 
     void creatureChangeRoomEast(int creatureNum) {
         if (currentRoom->eastNum != -1) {
-            for (int i = 0; i < currentRoom->creatureCounter; i++) {
-                if (currentRoom->creatures[i].creatureNum == creatureNum) {
-                    for (int j = 0; j < currentRoom->east->creatureCounter + 1; j++) {
-                        if (currentRoom->east->creatures[j].type == 0) {
-                            //Add creature to east
-                            currentRoom->east->creatures[j] = currentRoom->creatures[i];
-                            currentRoom->east->creatureCounter++;
-                            //Remove creature from current
-                            currentRoom->creatures[i].type = 0;
-                            currentRoom->creatureCounter--;
-                            break;
+            if (currentRoom->east->creatureCounter < 10) {
+                for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                    if (currentRoom->creatures[i].creatureNum == creatureNum) {
+                        for (int j = 0; j < currentRoom->east->creatureCounter + 1; j++) {
+                            if (currentRoom->east->creatures[j].type == 0) {
+                                //Add creature to east
+                                currentRoom->east->creatures[j] = currentRoom->creatures[i];
+                                currentRoom->east->creatureCounter++;
+                                //Remove creature from current
+                                currentRoom->creatures[i].type = 0;
+                                currentRoom->creatureCounter--;
+                                break;
+                            }
                         }
                     }
                 }
+            } else {
+                printf("Room full!\n");
             }
         }
     }
 
     void creatureChangeRoomWest(int creatureNum) {
         if (currentRoom->westNum!= -1) {
-            for (int i = 0; i < currentRoom->creatureCounter; i++) {
-                if (currentRoom->creatures[i].creatureNum == creatureNum) {
-                    for (int j = 0; j < currentRoom->west->creatureCounter + 1; j++) {
-                        if (currentRoom->west->creatures[j].type == 0) {
-                            //Add creature to east
-                            currentRoom->west->creatures[j] = currentRoom->creatures[i];
-                            currentRoom->west->creatureCounter++;
-                            //Remove creature from current
-                            currentRoom->creatures[i].type = 0;
-                            currentRoom->creatureCounter--;
-                            break;
+            if (currentRoom->west->creatureCounter < 10) {
+                for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                    if (currentRoom->creatures[i].creatureNum == creatureNum) {
+                        for (int j = 0; j < currentRoom->west->creatureCounter + 1; j++) {
+                            if (currentRoom->west->creatures[j].type == 0) {
+                                //Add creature to east
+                                currentRoom->west->creatures[j] = currentRoom->creatures[i];
+                                currentRoom->west->creatureCounter++;
+                                //Remove creature from current
+                                currentRoom->creatures[i].type = 0;
+                                currentRoom->creatureCounter--;
+                                break;
+                            }
                         }
                     }
                 }
+            } else {
+                printf("Room full!\n");
             }
         }
     }
 
     void creatureChangeRoomNorth(int creatureNum) {
         if (currentRoom->northNum != -1) {
-            for (int i = 0; i < currentRoom->creatureCounter; i++) {
-                if (currentRoom->creatures[i].creatureNum == creatureNum) {
-                    for (int j = 0; j < currentRoom->north->creatureCounter + 1; j++) {
-                        if (currentRoom->north->creatures[j].type == 0) {
-                            //Add creature to east
-                            currentRoom->north->creatures[j] = currentRoom->creatures[i];
-                            currentRoom->north->creatureCounter++;
-                            //Remove creature from current
-                            currentRoom->creatures[i].type = 0;
-                            currentRoom->creatureCounter--;
-                            break;
+            if (currentRoom->north->creatureCounter < 10) {
+                for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                    if (currentRoom->creatures[i].creatureNum == creatureNum) {
+                        for (int j = 0; j < currentRoom->north->creatureCounter + 1; j++) {
+                            if (currentRoom->north->creatures[j].type == 0) {
+                                //Add creature to east
+                                currentRoom->north->creatures[j] = currentRoom->creatures[i];
+                                currentRoom->north->creatureCounter++;
+                                //Remove creature from current
+                                currentRoom->creatures[i].type = 0;
+                                currentRoom->creatureCounter--;
+                                break;
+                            }
                         }
                     }
                 }
+            } else {
+                printf("Room full!\n");
             }
         }
     }
 
     void creatureChangeRoomSouth(int creatureNum) {
         if (currentRoom->southNum != -1) {
-            for (int i = 0; i < currentRoom->creatureCounter; i++) {
-                if (currentRoom->creatures[i].creatureNum == creatureNum) {
-                    for (int j = 0; j < currentRoom->south->creatureCounter + 1; j++) {
-                        if (currentRoom->south->creatures[j].type == 0) {
-                            //Add creature to east
-                            currentRoom->south->creatures[j] = currentRoom->creatures[i];
-                            currentRoom->south->creatureCounter++;
-                            //Remove creature from current
-                            currentRoom->creatures[i].type = 0;
-                            currentRoom->creatureCounter--;
-                            break;
+            if (currentRoom->south->creatureCounter < 10) {
+                for (int i = 0; i < currentRoom->creatureCounter; i++) {
+                    if (currentRoom->creatures[i].creatureNum == creatureNum) {
+                        for (int j = 0; j < currentRoom->south->creatureCounter + 1; j++) {
+                            if (currentRoom->south->creatures[j].type == 0) {
+                                //Add creature to east
+                                currentRoom->south->creatures[j] = currentRoom->creatures[i];
+                                currentRoom->south->creatureCounter++;
+                                //Remove creature from current
+                                currentRoom->creatures[i].type = 0;
+                                currentRoom->creatureCounter--;
+                                break;
+                            }
                         }
                     }
                 }
+            } else {
+                printf("Room full!\n");
             }
         }
     }
