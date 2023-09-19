@@ -662,12 +662,13 @@ void creatureChangeRoomEast(int creatureNum) {
                 if (currentRoom->creatures[i].creatureNum == creatureNum) {
                     for (int j = 0; j < currentRoom->east->creatureCounter + 1; j++) {
                         if (currentRoom->east->creatures[j].type == 0) {
-                            //Add creature to east
-                            currentRoom->east->creatures[j] = currentRoom->creatures[i];
-                            currentRoom->east->creatureCounter++;
+                            struct Creature temp = currentRoom->creatures[i];
                             //Remove creature from current
                             currentRoom->creatures[i].type = 0;
                             currentRoom->creatureCounter--;
+                            //Add creature to east
+                            currentRoom->east->creatures[j] = temp;
+                            currentRoom->east->creatureCounter++;
                             break;
                         }
                     }
@@ -686,12 +687,14 @@ void creatureChangeRoomWest(int creatureNum) {
                 if (currentRoom->creatures[i].creatureNum == creatureNum) {
                     for (int j = 0; j < currentRoom->west->creatureCounter + 1; j++) {
                         if (currentRoom->west->creatures[j].type == 0) {
-                            //Add creature to east
-                            currentRoom->west->creatures[j] = currentRoom->creatures[i];
-                            currentRoom->west->creatureCounter++;
+                            //Temp to add it to new room
+                            struct Creature temp = currentRoom->creatures[i];
                             //Remove creature from current
                             currentRoom->creatures[i].type = 0;
                             currentRoom->creatureCounter--;
+                            //Add creature to east
+                            currentRoom->west->creatures[j] = temp;
+                            currentRoom->west->creatureCounter++;
                             break;
                         }
                     }
