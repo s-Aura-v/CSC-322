@@ -56,7 +56,7 @@
     void creatureDirty(int creatureNum);
 
     //work in progress
-    //Room full?
+    //Room full?: Yes, we need to make it impossible for PC to enter a full room
     bool roomFull();
 
 
@@ -168,7 +168,6 @@
                         strncpy(command, token, 6);
                     }
                 }
-
                 if (strcmp(command, "clean") == 0) {
                     creatureClean(creatureNum);
                 }
@@ -188,14 +187,11 @@
                     creatureChangeRoomSouth(creatureNum);
                 }
             }
-
-
         }
 
         //free memory
         free(rooms);
         free(creatures);
-//        free(currentRoom);
 
         return 0;
     }
@@ -719,17 +715,17 @@
                     respect += 3;
                     printf("%d smiles a lot! Respect is now %d\n", creatureNum, respect);
                 } else if (currentRoom->state == 1 && currentRoom->creatures[i].type == 2) {
-                    currentRoom->state = 1;
+                    currentRoom->state = 2;
                     respect += 3;
                     printf("%d smiles a lot! Respect is now %d\n", creatureNum, respect);
                 } else if (currentRoom->state == 2) {
                     printf("Room is already dirty!");
-                } else if (currentRoom->state == 1 && currentRoom->creatures[i].type == 1) {     // clean and npc dirties
+                } else if (currentRoom->state == 1 && currentRoom->creatures[i].type == 1) {     // clean and animal dirties
                     currentRoom->state = 2;
                     respect -= 3;
                     printf("%d growls a lot! Respect is now %d\n", creatureNum, respect);
                     leaveRoom(1);
-                } else if (currentRoom->state == 2 && currentRoom->creatures[i].type == 1) {     // clean and npc dirties
+                } else if (currentRoom->state == 0 && currentRoom->creatures[i].type == 1) {
                     currentRoom->state = 1;
                     respect -= 3;
                     printf("%d growls a lot! Respect is now %d\n", creatureNum, respect);
