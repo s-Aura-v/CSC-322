@@ -92,7 +92,6 @@ int main() {
     assignCreatures(numOfCreatures, numOfRooms);
 
     //Assigning current room
-    currentRoom = malloc(sizeof (struct Room));
     for (int i = 0; i < numOfRooms; i++) {
         for (int j = 0; j < rooms[i].creatureCounter; j++) {
             if (rooms[i].creatures[j].type == 3) {      // 3 = PC
