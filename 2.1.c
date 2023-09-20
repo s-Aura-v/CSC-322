@@ -188,7 +188,6 @@ int main() {
         printf("Did you lose the game because you played this game or did you play this game because you wanted to lose?\n");
     } else {
         printf("Goodbye! Quitting is actually the real way to win\n");
-
     }
 
     //free memory
@@ -236,10 +235,13 @@ void assignRoom(int numOfRooms) {
         }
     }
 }
+
 void setCreatures(int numOfRooms) {
     for (int i = 0; i < numOfRooms; i++) {
         for (int j = 0; j < 10; j++) {
+            rooms[i].creatures[j].creatureNum = -1;
             rooms[i].creatures[j].type = 0;
+            rooms[i].creatures[j].location = -1;
         }
     }
 }
@@ -277,7 +279,7 @@ void look() {
 
     //Print out the creatures
     printf("contains:\n");  /*work on this more, to include all the creatures in the room*/
-    for (int i = 0; i < currentRoom->creatureCounter; i++) {
+    for (int i = 0; i < 10; i++) {
         if (currentRoom->creatures[i].type == 3) {
             printf ("PC\n");
         }
@@ -656,11 +658,12 @@ void changeRoomSouth() {
 }
 
 void creatureChangeRoomEast(int creatureNum) {
+    bool isExecuted = false;
     if (currentRoom->eastNum != -1) {
         if (currentRoom->east->creatureCounter < 10) {
             for (int i = 0; i < currentRoom->creatureCounter; i++) {
                 if (currentRoom->creatures[i].creatureNum == creatureNum) {
-                    for (int j = 0; j < currentRoom->east->creatureCounter + 1; j++) {
+                    for (int j = 0; j < 10; j++) {
                         if (currentRoom->east->creatures[j].type == 0) {
                             struct Creature temp = currentRoom->creatures[i];
                             //Remove creature from current
@@ -669,6 +672,7 @@ void creatureChangeRoomEast(int creatureNum) {
                             //Add creature to east
                             currentRoom->east->creatures[j] = temp;
                             currentRoom->east->creatureCounter++;
+                            isExecuted = true;
                             break;
                         }
                     }
@@ -713,12 +717,14 @@ void creatureChangeRoomNorth(int creatureNum) {
                 if (currentRoom->creatures[i].creatureNum == creatureNum) {
                     for (int j = 0; j < currentRoom->north->creatureCounter + 1; j++) {
                         if (currentRoom->north->creatures[j].type == 0) {
-                            //Add creature to east
-                            currentRoom->north->creatures[j] = currentRoom->creatures[i];
-                            currentRoom->north->creatureCounter++;
+                            //Temp to add it to new room
+                            struct Creature temp = currentRoom->creatures[i];
                             //Remove creature from current
                             currentRoom->creatures[i].type = 0;
                             currentRoom->creatureCounter--;
+                            //Add creature to east
+                            currentRoom->north->creatures[j] = temp;
+                            currentRoom->north->creatureCounter++;
                             break;
                         }
                     }
@@ -737,12 +743,14 @@ void creatureChangeRoomSouth(int creatureNum) {
                 if (currentRoom->creatures[i].creatureNum == creatureNum) {
                     for (int j = 0; j < currentRoom->south->creatureCounter + 1; j++) {
                         if (currentRoom->south->creatures[j].type == 0) {
-                            //Add creature to east
-                            currentRoom->south->creatures[j] = currentRoom->creatures[i];
-                            currentRoom->south->creatureCounter++;
+                            //Temp to add it to new room
+                            struct Creature temp = currentRoom->creatures[i];
                             //Remove creature from current
                             currentRoom->creatures[i].type = 0;
                             currentRoom->creatureCounter--;
+                            //Add creature to south
+                            currentRoom->south->creatures[j] = temp;
+                            currentRoom->south->creatureCounter++;
                             break;
                         }
                     }
