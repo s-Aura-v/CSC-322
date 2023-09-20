@@ -185,7 +185,7 @@ int main() {
     if (respect > 80) {
         printf("You actually won!\n");
     } else if (respect < 0){
-        printf("Did you lose the game because you played this game or did you play this game because you wanted to lose?\n");
+        printf("Did you lose this game because you played this game or did you play this game because you wanted to lose?\n");
     } else {
         printf("Goodbye! Quitting is actually the real way to win\n");
     }
@@ -278,7 +278,7 @@ void look() {
 
     //Print out the creatures
     printf("contains:\n");  /*work on this more, to include all the creatures in the room*/
-    for (int i = 0; i < 10 + 1; i++) {
+    for (int i = 0; i < 10; i++) {
         if (currentRoom->creatures[i].type == 3) {
             printf ("PC\n");
         }
