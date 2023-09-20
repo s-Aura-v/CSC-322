@@ -202,7 +202,7 @@ void help() {
             "To input a room, enter [State North South East West] in order. Example: 0 -1 1 -1 2\n"
             "To enter the amount of creatures, enter an [int]. Example: 4\n"
             "To input a creature, enter [CreatureType CreatureLocation]. Example: 1 0\n"
-            "Creature Types: PC - 0 | Animal - 1 | Animal - 2 | Each creature is numbered by when they were inputted, starting from 0.\n"
+            "Creature Types: PC - 0 | Animal - 1 | NPC - 2 | Each creature is numbered by when they were inputted, starting from 0.\n"
             "You have several actions in this game: clean, dirty, north, south, east, west.\n"
             "You can command a creature to do an action as well by inputting [creatureNum:action]. Example: 2:clean\n"
             "The game ends when your respect reaches 0 or 80. You lose if it's 0 and win if it's 80.\n");
@@ -661,7 +661,6 @@ void changeRoomSouth() {
 }
 
 void creatureChangeRoomEast(int creatureNum) {
-    bool isExecuted = false;
     if (currentRoom->eastNum != -1) {
         if (currentRoom->east->creatureCounter < 10) {
             for (int i = 0; i < currentRoom->creatureCounter; i++) {
@@ -675,7 +674,13 @@ void creatureChangeRoomEast(int creatureNum) {
                             //Add creature to east
                             currentRoom->east->creatures[j] = temp;
                             currentRoom->east->creatureCounter++;
-                            isExecuted = true;
+                            //Change state of room
+                            if (currentRoom->east->state == 2 && temp.type == 1) { //if dirty and animal
+                                currentRoom->east->state = 1; //half-dirty
+                            } else if (currentRoom->east->state == 0 && temp.type == 2) { //if clean and NPC
+                                currentRoom->east->state = 1;
+                            }
+
                             break;
                         }
                     }
@@ -703,6 +708,12 @@ void creatureChangeRoomWest(int creatureNum) {
                             //Add creature to east
                             currentRoom->west->creatures[j] = temp;
                             currentRoom->west->creatureCounter++;
+                            //Change state of room
+                            if (currentRoom->west->state == 2 && temp.type == 1) { //if dirty and animal
+                                currentRoom->west->state = 1; //half-dirty
+                            } else if (currentRoom->west->state == 0 && temp.type == 2) { //if clean and NPC
+                                currentRoom->west->state = 1;
+                            }
                             break;
                         }
                     }
@@ -730,6 +741,12 @@ void creatureChangeRoomNorth(int creatureNum) {
                             //Add creature to east
                             currentRoom->north->creatures[j] = temp;
                             currentRoom->north->creatureCounter++;
+                            //Change state of room
+                            if (currentRoom->north->state == 2 && temp.type == 1) { //if dirty and animal
+                                currentRoom->north->state = 1; //half-dirty
+                            } else if (currentRoom->north->state == 0 && temp.type == 2) { //if clean and NPC
+                                currentRoom->north->state = 1;
+                            }
                             break;
                         }
                     }
@@ -757,6 +774,12 @@ void creatureChangeRoomSouth(int creatureNum) {
                             //Add creature to south
                             currentRoom->south->creatures[j] = temp;
                             currentRoom->south->creatureCounter++;
+                            //Change state of room
+                            if (currentRoom->south->state == 2 && temp.type == 1) { //if dirty and animal
+                                currentRoom->south->state = 1; //half-dirty
+                            } else if (currentRoom->south->state == 0 && temp.type == 2) { //if clean and NPC
+                                currentRoom->south->state = 1;
+                            }
                             break;
                         }
                     }
@@ -772,25 +795,58 @@ void creatureChangeRoomSouth(int creatureNum) {
 void creatureClean(int creatureNum) {   //error
     for (int i = 0; i < currentRoom->creatureCounter; i++) {
         if (currentRoom->creatures[i].creatureNum == creatureNum) {
-            if (currentRoom->state == 2 && currentRoom->creatures[i].type == 1) {
+            if (currentRoom->state == 2 && currentRoom->creatures[i].type == 1) {   //Room:Dirty | Animal:Clean | Animal-happy, npc-sad
                 currentRoom->state = 1;
                 respect += 3;
                 printf("%d licks your face a lot! Respect is now %d\n", creatureNum, respect);
+                //Decrease respect based on other creatures
+                for (int j = 0; j < 10; j++) {
+                    if (currentRoom->creatures[j].type == 2) {
+                        respect--;
+                        printf("%d grumbles! Respect is now %d\n", currentRoom->creatures[j].creatureNum, respect);
+                    }
+                }
             } else if (currentRoom->state == 1 && currentRoom->creatures[i].type == 1) {
                 currentRoom->state = 0;
                 respect += 3;
                 printf("%d licks your face a lot! Respect is now %d\n", creatureNum, respect);
-            } else if (currentRoom->state == 0) {
+
+                //Decrease respect based on other creatures
+                for (int j = 0; j < 10; j++) {
+                    if (currentRoom->creatures[j].type == 2) {
+                        respect--;
+                        printf("%d grumbles! Respect is now %d\n", currentRoom->creatures[j].creatureNum,
+                               respect);
+                        leaveRoom(2);   //room is clean so NPC now leaves
+                    }
+                }
+                } else if (currentRoom->state == 0) {
                 printf("Room is already clean!");
             } else if (currentRoom->state == 1 && currentRoom->creatures[i].type == 2) {
                 currentRoom->state = 0;
                 respect -= 3;
                 printf("%d grumbles lot! Respect is now %d\n", creatureNum, respect);
                 leaveRoom(2);
-            } else if (currentRoom->state == 2 && currentRoom->creatures[i].type == 2) {
+                //Increase respect based on other creatures
+                for (int j = 0; j < 10; j++) {
+                    if (currentRoom->creatures[j].type == 1) {
+                        respect++;
+                        printf("%d licks your face! Respect is now %d\n", currentRoom->creatures[j].creatureNum,
+                               respect);
+                    }
+                }
+                } else if (currentRoom->state == 2 && currentRoom->creatures[i].type == 2) {
                 currentRoom->state = 1;
                 respect -= 3;
                 printf("%d grumbles lot! Respect is now %d\n", creatureNum, respect);
+                //Increase respect based on other creatures
+                for (int j = 0; j < 10; j++) {
+                    if (currentRoom->creatures[j].type == 1) {
+                        respect++;
+                        printf("%d licks your face! Respect is now %d\n", currentRoom->creatures[j].creatureNum,
+                               respect);
+                    }
+                }
             }
         }
     }
