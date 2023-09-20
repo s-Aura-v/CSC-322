@@ -193,7 +193,6 @@ int main() {
     //free memory
     free(rooms);
     free(creatures);
-
     return 0;
 }
 
@@ -358,11 +357,20 @@ void leaveRoom(int creatureType) {
             if (currentRoom->eastNum != -1 && isExecuted == false) { //east is open
                 for (int i = 0; i < currentRoom->creatureCounter; i++) {
                     if (currentRoom->creatures[i].type == creatureType) { //type wants to leave
+                        struct Creature temp = currentRoom->creatures[i];
+                        //Remove them from the current one
+                        for (int j = 0; j < currentRoom->creatureCounter; j++) {
+                            if (currentRoom->creatures[j].type == creatureType) {
+                                currentRoom->creatures[j].type = 0;
+                                currentRoom->creatureCounter--;
+                                break;
+                            }
+                        }
                         //Move them east
                         for (int j = 0; j < currentRoom->east->creatureCounter + 1; j++) {
                             if (currentRoom->east->creatures[j].type ==
                                 0) { //if the creature spot is free, then add the creature there
-                                currentRoom->east->creatures[j] = currentRoom->creatures[i];
+                                currentRoom->east->creatures[j] = temp;
                                 currentRoom->east->creatureCounter++;
                                 //Try to change the room if NPC doesn't like it
                                 if ((currentRoom->east->state == 2 && currentRoom->creatures[i].type == 1) ||
@@ -375,14 +383,6 @@ void leaveRoom(int creatureType) {
                                 break;
                             }
                         }
-                        //Remove them from the current one
-                        for (int j = 0; j < currentRoom->creatureCounter; j++) {
-                            if (currentRoom->creatures[j].type == creatureType) {
-                                currentRoom->creatures[j].type = 0;
-                                currentRoom->creatureCounter--;
-                                break;
-                            }
-                        }
                     }
                 }
             }
@@ -392,11 +392,20 @@ void leaveRoom(int creatureType) {
                 if (currentRoom->westNum != -1) { //east is open
                     for (int i = 0; i < currentRoom->creatureCounter; i++) {
                         if (currentRoom->creatures[i].type == creatureType) { //type wants to leave
-                            //Move them east
+                            struct Creature temp = currentRoom->creatures[i];
+                            //Remove them from the current one
+                            for (int j = 0; j < currentRoom->creatureCounter; j++) {
+                                if (currentRoom->creatures[j].type == creatureType) {
+                                    currentRoom->creatures[j].type = 0;
+                                    currentRoom->creatureCounter--;
+                                    break;
+                                }
+                            }
+                            //Move them west
                             for (int j = 0; j < currentRoom->west->creatureCounter + 1; j++) {
                                 if (currentRoom->west->creatures[j].type ==
                                     0) { //if the creature spot is free, then add the creature there
-                                    currentRoom->west->creatures[j] = currentRoom->creatures[i];
+                                    currentRoom->west->creatures[j] = temp;
                                     currentRoom->west->creatureCounter++;
                                     if ((currentRoom->west->state == 2 && currentRoom->creatures[i].type == 1) ||
                                         (currentRoom->west->state == 0 && currentRoom->creatures[i].type == 2)) {
@@ -405,14 +414,6 @@ void leaveRoom(int creatureType) {
                                     printf("%d is dissatisfied with the room and leaves to %d\n",
                                            currentRoom->creatures[i].creatureNum, currentRoom->westNum);
                                     isExecuted = true;
-                                    break;
-                                }
-                            }
-                            //Remove them from the current one
-                            for (int j = 0; j < currentRoom->creatureCounter; j++) {
-                                if (currentRoom->creatures[j].type == creatureType) {
-                                    currentRoom->creatures[j].type = 0;
-                                    currentRoom->creatureCounter--;
                                     break;
                                 }
                             }
@@ -426,11 +427,20 @@ void leaveRoom(int creatureType) {
                 if (currentRoom->northNum != -1) { //east is open
                     for (int i = 0; i < currentRoom->creatureCounter; i++) {
                         if (currentRoom->creatures[i].type == creatureType) { //type wants to leave
+                            struct Creature temp = currentRoom->creatures[i];
+                            //Remove them from the current one
+                            for (int j = 0; j < currentRoom->creatureCounter; j++) {
+                                if (currentRoom->creatures[j].type == creatureType) {
+                                    currentRoom->creatures[j].type = 0;
+                                    currentRoom->creatureCounter--;
+                                    break;
+                                }
+                            }
                             //Move them east
                             for (int j = 0; j < currentRoom->north->creatureCounter + 1; j++) {
                                 if (currentRoom->north->creatures[j].type ==
                                     0) { //if the creature spot is free, then add the creature there
-                                    currentRoom->north->creatures[j] = currentRoom->creatures[i];
+                                    currentRoom->north->creatures[j] = temp;
                                     currentRoom->north->creatureCounter++;
                                     if ((currentRoom->north->state == 2 && currentRoom->creatures[i].type == 1) ||
                                         (currentRoom->north->state == 0 && currentRoom->creatures[i].type == 2)) {
@@ -439,14 +449,6 @@ void leaveRoom(int creatureType) {
                                     printf("%d is dissatisfied with the room and leaves to %d\n",
                                            currentRoom->creatures[i].creatureNum, currentRoom->northNum);
                                     isExecuted = true;
-                                    break;
-                                }
-                            }
-                            //Remove them from the current one
-                            for (int j = 0; j < currentRoom->creatureCounter; j++) {
-                                if (currentRoom->creatures[j].type == creatureType) {
-                                    currentRoom->creatures[j].type = 0;
-                                    currentRoom->creatureCounter--;
                                     break;
                                 }
                             }
@@ -460,11 +462,20 @@ void leaveRoom(int creatureType) {
                 if (currentRoom->southNum != -1) { //east is open
                     for (int i = 0; i < currentRoom->creatureCounter; i++) {
                         if (currentRoom->creatures[i].type == creatureType) { //type wants to leave
+                            struct Creature temp = currentRoom->creatures[i];
+                            //Remove them from the current one
+                            for (int j = 0; j < currentRoom->creatureCounter; j++) {
+                                if (currentRoom->creatures[j].type == creatureType) {
+                                    currentRoom->creatures[j].type = 0;
+                                    currentRoom->creatureCounter--;
+                                    break;
+                                }
+                            }
                             //Move them east
                             for (int j = 0; j < currentRoom->south->creatureCounter + 1; j++) {
                                 if (currentRoom->south->creatures[j].type ==
                                     0) { //if the creature spot is free, then add the creature there
-                                    currentRoom->south->creatures[j] = currentRoom->creatures[i];
+                                    currentRoom->south->creatures[j] = temp;
                                     currentRoom->south->creatureCounter++;
                                     if ((currentRoom->south->state == 2 && currentRoom->creatures[i].type == 1) ||
                                         (currentRoom->south->state == 0 && currentRoom->creatures[i].type == 2)) {
@@ -473,14 +484,6 @@ void leaveRoom(int creatureType) {
                                     printf("%d is dissatisfied with the room and leaves to %d\n",
                                            currentRoom->creatures[i].creatureNum, currentRoom->southNum);
                                     isExecuted = true;
-                                    break;
-                                }
-                            }
-                            //Remove them from the current one
-                            for (int j = 0; j < currentRoom->creatureCounter; j++) {
-                                if (currentRoom->creatures[j].type == creatureType) {
-                                    currentRoom->creatures[j].type = 0;
-                                    currentRoom->creatureCounter--;
                                     break;
                                 }
                             }
