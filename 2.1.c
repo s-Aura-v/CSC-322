@@ -682,7 +682,8 @@ void creatureChangeRoomEast(int creatureNum) {
                 }
             }
         } else {
-            printf("Room full!\n");
+            respect--;
+            printf("%d tried to enter the room, but ended up getting blocked by the mass of bodies. Respect is now %d\n", creatureNum, respect);
         }
     }
 }
@@ -708,7 +709,8 @@ void creatureChangeRoomWest(int creatureNum) {
                 }
             }
         } else {
-            printf("Room full!\n");
+            respect--;
+            printf("%d tried to enter the room, but ended up getting blocked by the mass of bodies. Respect is now %d\n", creatureNum, respect);
         }
     }
 }
@@ -734,7 +736,8 @@ void creatureChangeRoomNorth(int creatureNum) {
                 }
             }
         } else {
-            printf("Room full!\n");
+            respect--;
+            printf("%d tried to enter the room, but ended up getting blocked by the mass of bodies. Respect is now %d\n", creatureNum, respect);
         }
     }
 }
@@ -760,7 +763,8 @@ void creatureChangeRoomSouth(int creatureNum) {
                 }
             }
         } else {
-            printf("Room full!\n");
+            printf("%d tried to enter the room, but ended up getting blocked by the mass of bodies. Respect is now %d\n", creatureNum, respect);
+            respect--;
         }
     }
 }
