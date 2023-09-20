@@ -279,7 +279,7 @@ void look() {
 
     //Print out the creatures
     printf("contains:\n");  /*work on this more, to include all the creatures in the room*/
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10 + 1; i++) {
         if (currentRoom->creatures[i].type == 3) {
             printf ("PC\n");
         }
@@ -519,7 +519,7 @@ void leaveRoom(int creatureType) {
 void changeRoomEast() {
     //Reference to PC to add later
     struct Creature pc;
-    for (int i = 0; i < currentRoom->creatureCounter; i++) {
+    for (int i = 0; i < 10; i++) {
         if (currentRoom->creatures[i].type == 3) {
             pc = currentRoom->creatures[i];
         }
@@ -555,7 +555,7 @@ void changeRoomEast() {
 void changeRoomWest() {
     //Reference to PC to add later
     struct Creature pc;
-    for (int i = 0; i < currentRoom->creatureCounter; i++) {
+    for (int i = 0; i < 10; i++) {
         if (currentRoom->creatures[i].type == 3) {
             pc = currentRoom->creatures[i];
         }
@@ -590,7 +590,7 @@ void changeRoomWest() {
 void changeRoomNorth() {
     //Reference to PC to add later
     struct Creature pc;
-    for (int i = 0; i < currentRoom->creatureCounter; i++) {
+    for (int i = 0; i < 10; i++) {
         if (currentRoom->creatures[i].type == 3) {
             pc = currentRoom->creatures[i];
         }
@@ -625,7 +625,7 @@ void changeRoomNorth() {
 void changeRoomSouth() {
     //Reference to PC to add later
     struct Creature pc;
-    for (int i = 0; i < currentRoom->creatureCounter; i++) {
+    for (int i = 0; i < 10; i++) {
         if (currentRoom->creatures[i].type == 3) {
             pc = currentRoom->creatures[i];
         }
