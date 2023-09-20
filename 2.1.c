@@ -680,7 +680,6 @@ void creatureChangeRoomEast(int creatureNum) {
                             } else if (currentRoom->east->state == 0 && temp.type == 2) { //if clean and NPC
                                 currentRoom->east->state = 1;
                             }
-
                             break;
                         }
                     }
@@ -862,7 +861,7 @@ void creatureDirty(int creatureNum) {
                 for (int j = 0; j < 10; j++) {
                     if (currentRoom->creatures[j].type == 1) {
                         respect--;
-                        printf("%d growls. Respect is now %d", currentRoom->creatures[j].creatureNum, respect);
+                        printf("%d growls. Respect is now %d\n", currentRoom->creatures[j].creatureNum, respect);
                     }
                 }
             } else if (currentRoom->state == 1 && currentRoom->creatures[i].type == 2) {
@@ -872,7 +871,7 @@ void creatureDirty(int creatureNum) {
                 for (int j = 0; j < 10; j++) {
                     if (currentRoom->creatures[j].type == 1) {
                         respect--;
-                        printf("%d growls. Respect is now %d", currentRoom->creatures[j].creatureNum, respect);
+                        printf("%d growls. Respect is now %d\n", currentRoom->creatures[j].creatureNum, respect);
                         leaveRoom(1);
                     }
                 }
@@ -886,7 +885,7 @@ void creatureDirty(int creatureNum) {
                 for (int j = 0; j < 10; j++) {
                     if (currentRoom->creatures[j].type == 2) {
                         respect++;
-                        printf("%d smiles. Respect is now %d", currentRoom->creatures[j].creatureNum, respect);
+                        printf("%d smiles. Respect is now %d\n", currentRoom->creatures[j].creatureNum, respect);
                     }
                 }
             } else if (currentRoom->state == 0 && currentRoom->creatures[i].type == 1) {
@@ -896,7 +895,7 @@ void creatureDirty(int creatureNum) {
                 for (int j = 0; j < 10; j++) {
                     if (currentRoom->creatures[j].type == 2) {
                         respect++;
-                        printf("%d smiles. Respect is now %d", currentRoom->creatures[j].creatureNum, respect);
+                        printf("%d smiles. Respect is now %d\n", currentRoom->creatures[j].creatureNum, respect);
                     }
                 }
             }
