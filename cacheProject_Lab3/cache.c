@@ -33,8 +33,8 @@ int totalMiss = 0;
 int totalCycles = 0;
 
 //Prototypes
-CacheLine ** createCacheLine(int S, int E);
-
+CacheLine **createCacheLine(int S, int E);
+void cacheSimulation(CacheLine **cache);
 
 
 int main() {
@@ -57,21 +57,16 @@ int main() {
     printf("Enter the number of physical memory bits (m): \n");
     scanf("%d", &m);
     printf("Choose a policy: [LFU or LRU]: \n");
-    char temp[2];
-    scanf("%s", &temp);                             //setting up policy as a char so it's easier to compare
-    policy = temp[1];
+    scanf("%s", &policy);
     printf("Enter the hit time: \n");
     scanf("%d", &hitTime);
     printf("Enter the miss penalty: \n");
     scanf("%d", &missPenalty);
 
-    CacheLine **cache = createCacheLine(S, E);
-
     //Store the inputs
     char input[2];
-    int finalInput;
     while (atoi(input) != -1) {
-        scanf("%s", &input);        //just remember the input is strings for now; convert it to decimal later
+        scanf("%s", &input);        //just remember the input is strings for now; convert it to hex later
         printf("%s\n", input);
     }
 
@@ -80,14 +75,20 @@ int main() {
     // b = log(2) (m) - Offset
     // s = log2 (S) -
     int s = log2 (S);
-    printf("%d\n",s);
     int b = log2 (m);
-    printf("%d\n",b);
     int t = m - (b + s);
-    printf("%d\n",t);
+
+    //Create + Populate Cache
+    CacheLine **cache = createCacheLine(S, E);
+    cacheSimulation(cache);
+
 }
 
-CacheLine ** createCacheLine(int S, int E) {
+void cacheSimulation(CacheLine **cache) {
+    //Body
+}
+
+CacheLine **createCacheLine(int S, int E) {
     CacheLine ** cache = malloc(S * sizeof(CacheLine **));
     for (int i = 0; i < E; i++) {
         cache = malloc(E * sizeof(CacheLine **));
