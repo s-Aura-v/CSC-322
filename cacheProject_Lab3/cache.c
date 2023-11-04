@@ -11,14 +11,10 @@
 typedef struct {
     int valid;
     int tag;
+    int setNumber;
     int amntUsed;              //LFU requires you to remove the value that is used the least
     int cycleCounter;           //LRU requires you to remove the value that is the oldest in the timeline
 } CacheLine;
-
-typedef struct {
-    int numberOfLines;
-    CacheLine** cacheLine;
-} CacheSet;
 
 //Globals
 double totalMiss = 0;
@@ -31,6 +27,7 @@ char* binaryAddress;
 //Prototypes
 void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b, int t, char input[]);
 void hexToBinary(char memoryAddress[]);
+int binaryToInt(char* setID);
 
 int main() {
     //Necessary variables
@@ -77,6 +74,7 @@ int main() {
         for (int j = 0; j < E; j++) {
             cache[i][j].valid = 0;
             cache[i][j].tag = 0;
+            cache[i][j].setNumber = -1; //set can actually be 0, so set it to -1
             cache[i][j].amntUsed = 0;
             cache[i][j].cycleCounter = 0;
         }
@@ -102,7 +100,9 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
     //2. Get Set ID: complete
     char *setID = malloc(20 * sizeof(char *));  //20 is temporary value for now
     strncpy(setID, binaryAddress + t, s);
+    int setNum = binaryToInt(setID);
     printf("SetID: %s\n", setID);
+    printf("SetNum: %d\n", setNum);
 
     //3. Tag Number: complete
     char *tagNum = malloc(50 * sizeof(char *)); //50 temp
@@ -120,12 +120,19 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
         totalCycles += 1;
 
         for (int i = 0; i < S; i++) {
-            if (lineExist == true) {
-                break;
+            for (int j = 0; j < E; j++) {
+                if (lineExist == true) {
+                    break;
+                }
+                if (cache[i][j].setNumber == setNum) {
+
+
+                }
+
+
+
+
             }
-//            if (cache[][] == setID)
-
-
         }
 
         complete = true;
@@ -193,5 +200,10 @@ void hexToBinary(char memoryAddress[]) {
                 break;
         }
     }
+}
+
+int binaryToInt(char* setID) {
+    int binary = (int) strtol(setID, NULL, 2);
+    return binary;
 }
 
