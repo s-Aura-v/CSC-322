@@ -3,10 +3,10 @@
 //
 
 #include <stdbool.h>
-#include <printf.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
-#include <libc.h>
 
 typedef struct {
     int valid;
@@ -59,8 +59,8 @@ int main() {
     // (t = m - (b + s)) - Tag
     // b = log(2) (m) - Offset
     // s = log2 (S) -
-    int s = log2(S);
-    int b = log2(m);
+    int s = (int) log2 ((double) S);
+    int b = (int) log2 ((double) m);
     int t = m - (b + s);
 
     //Create the cache
@@ -81,9 +81,10 @@ int main() {
     }
 
     //Get the inputs
-    char input[64];
+    char * input;
+    input = malloc(sizeof (char) * 64);
     while (atoi(input) != -1) {
-        scanf("%s", &input);
+        scanf("%s", input);
 //        printf("Input: %s\n", input);
         if (atoi(input) != -1) {
             cacheSimulation(cache, S, E, B, m, s, b, t, input);
@@ -91,11 +92,16 @@ int main() {
     }
 
     //Final Calculations:
-    int missRate = ((totalMiss/totalRuns) * 100);
+    int missRate = round((totalMiss/totalRuns) * 100);
     printf("%d %d", missRate, (int) totalCycles);
 
     //Free Memories
-
+    free(binaryAddress);
+    free(input);
+    for (int i = 0; i < S; i++) {
+        free(cache[i]);
+    }
+    free(cache);
 }
 
 void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b, int t, char input[]) {
@@ -119,7 +125,6 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
 //    printf("SetNum: %d\n", setNum);
 //    printf("tagStr: %s\n", tagStr);
 //    printf("tagNum: %d\n", tagNum);
-
 
     //4. Do the simulation
     bool complete = false;
@@ -161,7 +166,7 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
                             //1. There is room for the address
                             if (cache[i][j].valid == 0 && roomAdded == false) {
                                 totalMiss++;
-                                totalCycles += missPenalty;
+                                totalCycles += missPenalty + hitTime;
 
                                 cache[i][j].valid = 1;
                                 cache[i][j].tag = tagNum;
@@ -215,7 +220,7 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
                             if (cache[i][j].amntUsed == leastUsed && roomAdded == false) {
                                 //evict!
                                 totalMiss++;
-                                totalCycles += missPenalty;
+                                totalCycles += missPenalty + hitTime;
 
                                 cache[i][j].tag = tagNum;
                                 cache[i][j].cycleCounter = totalCycles;
@@ -234,7 +239,7 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
                                 cache[i][j].cycleCounter = totalCycles;
 
                                 totalMiss++;
-                                totalCycles += missPenalty;
+                                totalCycles += missPenalty + hitTime;
 
                                 printf("%s M\n", input);
                                 roomAdded = true;
@@ -245,7 +250,11 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
                 }
             }
         }
+        //End the simulation
+        free(setID);
+        free(tagStr);
         complete = true;
+
     }
 }
 
