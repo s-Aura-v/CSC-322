@@ -229,11 +229,12 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
                         if (cache[i][j].setNumber == setNum) {
                             if (cache[i][j].cycleCounter == leastCycles && roomAdded == false) {
                                 //evict!
-                                totalMiss++;
-                                totalCycles += missPenalty;
 
                                 cache[i][j].tag = tagNum;
                                 cache[i][j].cycleCounter = totalCycles;
+
+                                totalMiss++;
+                                totalCycles += missPenalty;
 
                                 printf("%s M\n", input);
                                 roomAdded = true;
