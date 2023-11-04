@@ -90,7 +90,7 @@ int main() {
         scanf("%s", &input);        //just remember the input is strings for now; convert it to binary later
         printf("Input: %s\n", input);
         if (atoi(input) != -1) {
-            cacheSimulation(cache, S, E, B, m s, b, t, input);
+            cacheSimulation(cache, S, E, B, m, s, b, t, input);
         }
     }
 
@@ -107,14 +107,24 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
     printf("%s\n", binaryAddress);
 
     //2. Get Set ID
-    char * setID = malloc(20 * sizeof(char *));  //20 is temporary value for now
+    char *setID = malloc(20 * sizeof(char *));  //20 is temporary value for now
     //start from substring and go to the end and set it as setID
-    int binaryCounter = strlen(binaryAddress) - 1 - b;
-    strcat(setID, &binaryAddress[binaryCounter]); /
+    int binaryStart = strlen(binaryAddress) - 1 - b - s;
+    int binaryEnd = strlen(binaryAddress) - 1 - b;
+    strncpy(setID, binaryAddress, binaryEnd);
 
-    //3. Tag Number
-    char * tagNum = malloc(50 * sizeof (char *)); //50 temp
-    binaryCounter = strlen(binaryAddress) - 1 - (s +b);
+    printf("SetID: %s\n", setID);
+
+
+
+
+    //3. Tag Number: complete 
+    char *tagNum = malloc(50 * sizeof(char *)); //50 temp
+    binaryEnd = strlen(binaryAddress) - (s + b);
+    strncpy(tagNum, binaryAddress, binaryEnd);
+    printf("tagNum: %s\n", tagNum);
+
+
 
     printf("BinAdd: %s\n", binaryAddress);
     printf("TempAdd: %s", setID);
@@ -124,24 +134,23 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
     bool complete = false;
     int currentCycle = 0;
 
-    while (complete == false) {
-        bool lineExist = false;
-        totalCycles += hitTime;
-        totalCycles += 1;
-
-        for (int i = 0; i < S; i++) {
-            if (lineExist == true) {
-                break;
-            }
-            if (cache[][] == setID)
-
-
-        }
+//    while (complete == false) {
+//        bool lineExist = false;
+//        totalCycles += hitTime;
+//        totalCycles += 1;
+//
+//        for (int i = 0; i < S; i++) {
+//            if (lineExist == true) {
+//                break;
+//            }
+//            if (cache[][] == setID)
+//
+//
+//        }
 
         complete = true;
     }
     //Body
-}
 
 
 void hexToBinary(char memoryAddress[]) {
