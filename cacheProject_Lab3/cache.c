@@ -97,28 +97,18 @@ int main() {
 }
 
 void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b, int t, char input[]) {
-    //apply masks so that you can sort and replace things
-    //mask - string of binary stuff
-    //  do bitwise operations
-    // binary list of 1: you can and it aganist some other number, anything
-
-    //1. Convert hex to binary
+    //1. Convert hex to binary: complete
     hexToBinary(input);
     printf("%s\n", binaryAddress);
 
-    //2. Get Set ID
+    //2. Get Set ID: complete
     char *setID = malloc(20 * sizeof(char *));  //20 is temporary value for now
     //start from substring and go to the end and set it as setID
-    int binaryStart = strlen(binaryAddress) - 1 - b - s;
     int binaryEnd = strlen(binaryAddress) - 1 - b;
-    strncpy(setID, binaryAddress, binaryEnd);
-
+    strncpy(setID, binaryAddress + t, s);
     printf("SetID: %s\n", setID);
 
-
-
-
-    //3. Tag Number: complete 
+    //3. Tag Number: complete
     char *tagNum = malloc(50 * sizeof(char *)); //50 temp
     binaryEnd = strlen(binaryAddress) - (s + b);
     strncpy(tagNum, binaryAddress, binaryEnd);
