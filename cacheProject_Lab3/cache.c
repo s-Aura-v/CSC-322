@@ -20,7 +20,6 @@ typedef struct {
 double totalMiss = 0;
 double totalCycles = 0;
 double totalRuns = 0;
-int totalHits = 0;
 char policy = 'F'; //F for LFU and R for LRU
 int hitTime = 0;
 int missPenalty = 0;
@@ -84,12 +83,18 @@ int main() {
     //Get the inputs
     char input[64];
     while (atoi(input) != -1) {
-        scanf("%s", &input);        //just remember the input is strings for now; convert it to binary later
+        scanf("%s", &input);
 //        printf("Input: %s\n", input);
         if (atoi(input) != -1) {
             cacheSimulation(cache, S, E, B, m, s, b, t, input);
         }
     }
+
+    //Final Calculations:
+    int missRate = ((totalMiss/totalRuns) * 100);
+    printf("%d %d", missRate, (int) totalCycles);
+
+    //Free Memories
 
 }
 
@@ -118,10 +123,8 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
 
     //4. Do the simulation
     bool complete = false;
-    int currentCycle = 0;
 
     while (complete == false) {
-        totalCycles += hitTime;
         totalRuns += 1;
 
         //Check if bits/tags exists
@@ -135,10 +138,11 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
                     if (cache[i][j].valid == 1) {
                         validBitExists = true;
                         if (cache[i][j].tag == tagNum) {
-                            tagExists = true;
+                            totalCycles += hitTime;
+                            cache[i][j].cycleCounter = totalCycles;
+
                             printf("%s H\n", input);
-                            totalHits++;
-                            //If it hit, then it's done.
+                            tagExists = true;
                             complete = true;
                             break;
                         }
@@ -148,21 +152,24 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
         }
 
         //1: Assume that validBit does not exist.
-//        int roomExists = false;
-
+        int roomAdded = false;
         if (complete == false) {
             if (validBitExists == false) {
                 for (int i = 0; i < S; i++) {
                     for (int j = 0; j < E; j++) {
                         if (cache[i][j].setNumber == setNum) {
                             //1. There is room for the address
-                            if (cache[i][j].valid == 0) {
+                            if (cache[i][j].valid == 0 && roomAdded == false) {
+                                totalMiss++;
+                                totalCycles += missPenalty;
+
                                 cache[i][j].valid = 1;
                                 cache[i][j].tag = tagNum;
-//                            roomExists = true;
-                                //1. It missed, but it added the value to the cache.
+                                cache[i][j].cycleCounter = totalCycles;
+                                cache[i][j].amntUsed++;
+
                                 printf("%s M\n", input);
-                                totalMiss++;
+                                roomAdded = true;
                                 complete = true;
                             }
                         }
@@ -172,6 +179,7 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
         }
 
         //2. Assume that validBit does exist and the tag does not match. Evict!
+        roomAdded = false;
         //a. Find the least used
         if (complete == false) {
             int leastUsed = 0;
@@ -204,21 +212,33 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
                 for (int j = 0; j < E; j++) {
                     if (policy == 'F') {
                         if (cache[i][j].setNumber == setNum) {
-                            if (cache[i][j].amntUsed == leastUsed) {
+                            if (cache[i][j].amntUsed == leastUsed && roomAdded == false) {
                                 //evict!
-                                cache[i][j].tag = tagNum;
                                 totalMiss++;
+                                totalCycles += missPenalty;
+
+                                cache[i][j].tag = tagNum;
+                                cache[i][j].cycleCounter = totalCycles;
+                                cache[i][j].amntUsed++;
+
                                 printf("%s M\n", input);
+                                roomAdded = true;
                                 complete = true;
                             }
                         }
                     } else { //LRU
                         if (cache[i][j].setNumber == setNum) {
-                            if (cache[i][j].cycleCounter == leastCycles) {
+                            if (cache[i][j].cycleCounter == leastCycles && roomAdded == false) {
                                 //evict!
-                                cache[i][j].tag = tagNum;
                                 totalMiss++;
+                                totalCycles += missPenalty;
+
+                                cache[i][j].tag = tagNum;
+                                cache[i][j].cycleCounter = totalCycles;
+                                cache[i][j].amntUsed++;
+
                                 printf("%s M\n", input);
+                                roomAdded = true;
                                 complete = true;
                             }
                         }
@@ -229,11 +249,6 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
         complete = true;
     }
 }
-
-
-
-
-
 
 void hexToBinary(char memoryAddress[]) {
     binaryAddress = malloc(100* sizeof (char*));
