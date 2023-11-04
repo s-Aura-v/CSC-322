@@ -19,6 +19,7 @@ typedef struct {
 //Globals
 double totalMiss = 0;
 double totalCycles = 0;
+double totalRuns = 0;
 int totalHits = 0;
 char policy = 'F'; //F for LFU and R for LRU
 int hitTime = 0;
@@ -47,7 +48,6 @@ int main() {
     printf("Enter the number of physical memory bits (m): \n");
     scanf("%d", &m);
     printf("Choose a policy: [LFU or LRU]: \n");
-    //this sets the m to 0 for some reason, relating to s and d error \0
     char temp[4];
     scanf("%s", temp);
     policy = temp[1];
@@ -85,7 +85,7 @@ int main() {
     char input[64];
     while (atoi(input) != -1) {
         scanf("%s", &input);        //just remember the input is strings for now; convert it to binary later
-        printf("Input: %s\n", input);
+//        printf("Input: %s\n", input);
         if (atoi(input) != -1) {
             cacheSimulation(cache, S, E, B, m, s, b, t, input);
         }
@@ -96,23 +96,24 @@ int main() {
 void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b, int t, char input[]) {
     //1. Convert hex to binary: complete
     hexToBinary(input);
-    printf("%s\n", binaryAddress);
 
     //2. Get Set ID: complete
     char *setID = malloc(20 * sizeof(char *));  //20 is temporary value for now
     strncpy(setID, binaryAddress + t, s);
     int setNum = binaryToInt(setID);
-    printf("SetID: %s\n", setID);
-    printf("SetNum: %d\n", setNum);
 
     //3. Tag Number: complete
     char *tagStr = malloc(50 * sizeof(char *)); //50 temp
     int binaryEnd = strlen(binaryAddress) - (s + b);
     strncpy(tagStr, binaryAddress, binaryEnd);
     int tagNum = binaryToInt(tagStr);
-    printf("tagStr: %s\n", tagStr);
-    printf("tagNum: %d\n", tagNum);
 
+//    //Debug
+//    printf("%s\n", binaryAddress);
+//    printf("SetID: %s\n", setID);
+//    printf("SetNum: %d\n", setNum);
+//    printf("tagStr: %s\n", tagStr);
+//    printf("tagNum: %d\n", tagNum);
 
 
     //4. Do the simulation
@@ -120,9 +121,8 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
     int currentCycle = 0;
 
     while (complete == false) {
-        bool lineExist = false;
         totalCycles += hitTime;
-        totalCycles += 1;
+        totalRuns += 1;
 
         //Check if bits/tags exists
         bool validBitExists = false;
@@ -130,17 +130,16 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
         for (int i = 0; i < S; i++) {
             for (int j = 0; j < E; j++) {
                 //No need to continue after finding a hit;
-                if (tagExists == true) {
-                    break;
-                }
                 //1. Assuming it is in the cache: ValidBit exists and TagExists
                 if (cache[i][j].setNumber == setNum) {
                     if (cache[i][j].valid == 1) {
                         validBitExists = true;
-                        if (cache[i][j].tag == tagStr) {
+                        if (cache[i][j].tag == tagNum) {
                             tagExists = true;
-                            printf("%s H", input);
+                            printf("%s H\n", input);
                             totalHits++;
+                            //If it hit, then it's done.
+                            complete = true;
                             break;
                         }
                     }
@@ -149,16 +148,23 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
         }
 
         //1: Assume that validBit does not exist.
-        int roomExists = false;
-        if (validBitExists == false) {
-            for (int i = 0; i < S; i++) {
-                for (int j = 0; j < E; j++) {
-                    if (cache[i][j].setNumber == setNum) {
-                        //1. There is room for the address
-                        if (cache[i][j].valid == 0) {
-                            cache[i][j].valid = 1;
-                            cache[i][j].tag = tagNum;
-                            roomExists = true;
+//        int roomExists = false;
+
+        if (complete == false) {
+            if (validBitExists == false) {
+                for (int i = 0; i < S; i++) {
+                    for (int j = 0; j < E; j++) {
+                        if (cache[i][j].setNumber == setNum) {
+                            //1. There is room for the address
+                            if (cache[i][j].valid == 0) {
+                                cache[i][j].valid = 1;
+                                cache[i][j].tag = tagNum;
+//                            roomExists = true;
+                                //1. It missed, but it added the value to the cache.
+                                printf("%s M\n", input);
+                                totalMiss++;
+                                complete = true;
+                            }
                         }
                     }
                 }
@@ -167,61 +173,62 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
 
         //2. Assume that validBit does exist and the tag does not match. Evict!
         //a. Find the least used
-        int leastUsed = 0;
-        for (int i = 0; i < S; i++) {
-            for (int j = 0; j < E; j++) {
-                if (cache[i][j].setNumber == setNum) {
-                    leastUsed = cache[i][j].amntUsed;
-                    int challenger = cache[i][j].amntUsed;
-                    if (challenger < leastUsed) {
-                        leastUsed = challenger;
+        if (complete == false) {
+            int leastUsed = 0;
+            for (int i = 0; i < S; i++) {
+                for (int j = 0; j < E; j++) {
+                    if (cache[i][j].setNumber == setNum) {
+                        leastUsed = cache[i][j].amntUsed;
+                        int challenger = cache[i][j].amntUsed;
+                        if (challenger < leastUsed) {
+                            leastUsed = challenger;
+                        }
                     }
                 }
             }
-        }
-        //b. Find the oldest in the time-line
-        int leastCycles = 0;
-        for (int i = 0; i < S; i++) {
-            for (int j = 0; j < E; j++) {
-                if (cache[i][j].setNumber == setNum) {
-                    leastCycles = cache[i][j].cycleCounter;
-                    int challenger = cache[i][j].cycleCounter;
-                    if (challenger < leastCycles) {
-                        leastCycles = challenger;
+            //b. Find the oldest in the time-line
+            int leastCycles = 0;
+            for (int i = 0; i < S; i++) {
+                for (int j = 0; j < E; j++) {
+                    if (cache[i][j].setNumber == setNum) {
+                        leastCycles = cache[i][j].cycleCounter;
+                        int challenger = cache[i][j].cycleCounter;
+                        if (challenger < leastCycles) {
+                            leastCycles = challenger;
+                        }
                     }
                 }
             }
-        }
-        //c. Compare and Evict!
-        for (int i = 0; i < S; i++) {
+            //c. Compare and Evict!
+            for (int i = 0; i < S; i++) {
                 for (int j = 0; j < E; j++) {
                     if (policy == 'F') {
                         if (cache[i][j].setNumber == setNum) {
                             if (cache[i][j].amntUsed == leastUsed) {
                                 //evict!
+                                cache[i][j].tag = tagNum;
+                                totalMiss++;
+                                printf("%s M\n", input);
+                                complete = true;
                             }
                         }
                     } else { //LRU
                         if (cache[i][j].setNumber == setNum) {
                             if (cache[i][j].cycleCounter == leastCycles) {
                                 //evict!
+                                cache[i][j].tag = tagNum;
+                                totalMiss++;
+                                printf("%s M\n", input);
+                                complete = true;
                             }
                         }
                     }
                 }
             }
-
-
+        }
         complete = true;
     }
 }
-
-
-
-
-
-
-
 
 
 
