@@ -133,7 +133,7 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
                 if (tagExists == true) {
                     break;
                 }
-                //1. Assuming it is in the cache
+                //1. Assuming it is in the cache: ValidBit exists and TagExists
                 if (cache[i][j].setNumber == setNum) {
                     if (cache[i][j].valid == 1) {
                         validBitExists = true;
@@ -147,7 +147,9 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
                 }
             }
         }
+
         //1: Assume that validBit does not exist.
+        int roomExists = false;
         if (validBitExists == false) {
             for (int i = 0; i < S; i++) {
                 for (int j = 0; j < E; j++) {
@@ -156,11 +158,58 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
                         if (cache[i][j].valid == 0) {
                             cache[i][j].valid = 1;
                             cache[i][j].tag = tagNum;
+                            roomExists = true;
                         }
                     }
                 }
             }
         }
+
+        //2. Assume that validBit does exist and the tag does not match. Evict!
+        //a. Find the least used
+        int leastUsed = 0;
+        for (int i = 0; i < S; i++) {
+            for (int j = 0; j < E; j++) {
+                if (cache[i][j].setNumber == setNum) {
+                    leastUsed = cache[i][j].amntUsed;
+                    int challenger = cache[i][j].amntUsed;
+                    if (challenger < leastUsed) {
+                        leastUsed = challenger;
+                    }
+                }
+            }
+        }
+        //b. Find the oldest in the time-line
+        int leastCycles = 0;
+        for (int i = 0; i < S; i++) {
+            for (int j = 0; j < E; j++) {
+                if (cache[i][j].setNumber == setNum) {
+                    leastCycles = cache[i][j].cycleCounter;
+                    int challenger = cache[i][j].cycleCounter;
+                    if (challenger < leastCycles) {
+                        leastCycles = challenger;
+                    }
+                }
+            }
+        }
+        //c. Compare and Evict!
+        for (int i = 0; i < S; i++) {
+                for (int j = 0; j < E; j++) {
+                    if (policy == 'F') {
+                        if (cache[i][j].setNumber == setNum) {
+                            if (cache[i][j].amntUsed == leastUsed) {
+                                //evict!
+                            }
+                        }
+                    } else { //LRU
+                        if (cache[i][j].setNumber == setNum) {
+                            if (cache[i][j].cycleCounter == leastCycles) {
+                                //evict!
+                            }
+                        }
+                    }
+                }
+            }
 
 
         complete = true;
