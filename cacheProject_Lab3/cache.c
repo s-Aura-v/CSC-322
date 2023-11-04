@@ -93,11 +93,9 @@ int main() {
 
     //Final Calculations:
     int missRate = round((totalMiss/totalRuns) * 100);
-    printf("%d %d", missRate, (int) totalCycles);
+    printf("%d %d\n", missRate, (int) totalCycles);
 
     //Free Memories
-    free(binaryAddress);
-    free(input);
     for (int i = 0; i < S; i++) {
         free(cache[i]);
     }
@@ -251,6 +249,8 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
             }
         }
         //End the simulation
+        free(input);
+        free(binaryAddress);
         free(setID);
         free(tagStr);
         complete = true;
