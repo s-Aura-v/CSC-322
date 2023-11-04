@@ -19,6 +19,7 @@ typedef struct {
 //Globals
 double totalMiss = 0;
 double totalCycles = 0;
+int totalHits = 0;
 char policy = 'F'; //F for LFU and R for LRU
 int hitTime = 0;
 int missPenalty = 0;
@@ -66,7 +67,7 @@ int main() {
     //Create the cache
     CacheLine ** cache = malloc(S * sizeof(CacheLine *));
     for (int i = 0; i < S; i++) {
-        cache[i] = malloc(E * sizeof(CacheLine *));
+        cache[i] = malloc(E * sizeof(CacheLine));
     }
 
     //Set Variable
@@ -74,7 +75,7 @@ int main() {
         for (int j = 0; j < E; j++) {
             cache[i][j].valid = 0;
             cache[i][j].tag = 0;
-            cache[i][j].setNumber = -1; //set can actually be 0, so set it to -1
+            cache[i][j].setNumber = i; //i = rows
             cache[i][j].amntUsed = 0;
             cache[i][j].cycleCounter = 0;
         }
@@ -105,10 +106,14 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
     printf("SetNum: %d\n", setNum);
 
     //3. Tag Number: complete
-    char *tagNum = malloc(50 * sizeof(char *)); //50 temp
+    char *tagStr = malloc(50 * sizeof(char *)); //50 temp
     int binaryEnd = strlen(binaryAddress) - (s + b);
-    strncpy(tagNum, binaryAddress, binaryEnd);
-    printf("tagNum: %s\n", tagNum);
+    strncpy(tagStr, binaryAddress, binaryEnd);
+    int tagNum = binaryToInt(tagStr);
+    printf("tagStr: %s\n", tagStr);
+    printf("tagNum: %d\n", tagNum);
+
+
 
     //4. Do the simulation
     bool complete = false;
@@ -119,25 +124,59 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
         totalCycles += hitTime;
         totalCycles += 1;
 
+        //Check if bits/tags exists
+        bool validBitExists = false;
+        bool tagExists = false;
         for (int i = 0; i < S; i++) {
             for (int j = 0; j < E; j++) {
-                if (lineExist == true) {
+                //No need to continue after finding a hit;
+                if (tagExists == true) {
                     break;
                 }
+                //1. Assuming it is in the cache
                 if (cache[i][j].setNumber == setNum) {
-
-
+                    if (cache[i][j].valid == 1) {
+                        validBitExists = true;
+                        if (cache[i][j].tag == tagStr) {
+                            tagExists = true;
+                            printf("%s H", input);
+                            totalHits++;
+                            break;
+                        }
+                    }
                 }
-
-
-
-
             }
         }
+        //1: Assume that validBit does not exist.
+        if (validBitExists == false) {
+            for (int i = 0; i < S; i++) {
+                for (int j = 0; j < E; j++) {
+                    if (cache[i][j].setNumber == setNum) {
+                        //1. There is room for the address
+                        if (cache[i][j].valid == 0) {
+                            cache[i][j].valid = 1;
+                            cache[i][j].tag = tagNum;
+                        }
+                    }
+                }
+            }
+        }
+
 
         complete = true;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 void hexToBinary(char memoryAddress[]) {
