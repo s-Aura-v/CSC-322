@@ -152,7 +152,7 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
         }
 
         //1: Assume that validBit does not exist.
-        int roomAdded = false;
+        bool roomAdded = false;
         if (complete == false) {
             if (validBitExists == false) {
                 for (int i = 0; i < S; i++) {
@@ -219,7 +219,6 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
 
                                 cache[i][j].tag = tagNum;
                                 cache[i][j].cycleCounter = totalCycles;
-                                cache[i][j].amntUsed++;
 
                                 printf("%s M\n", input);
                                 roomAdded = true;
@@ -235,7 +234,6 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
 
                                 cache[i][j].tag = tagNum;
                                 cache[i][j].cycleCounter = totalCycles;
-                                cache[i][j].amntUsed++;
 
                                 printf("%s M\n", input);
                                 roomAdded = true;
@@ -316,4 +314,3 @@ int binaryToInt(char* setID) {
     int binary = (int) strtol(setID, NULL, 2);
     return binary;
 }
-
