@@ -82,13 +82,18 @@ int main() {
 
     //Get the inputs
     char * input;
-    input = malloc(sizeof (char) * 64);
+    input = malloc(64* sizeof (char));
+    scanf("%s", input);
+    int i = 0;
     while (atoi(input) != -1) {
-        scanf("%s", input);
-//        printf("Input: %s\n", input);
+        if (i != 0) {
+            input = malloc(64 * sizeof(char));
+            scanf("%s", input);
+        }
         if (atoi(input) != -1) {
             cacheSimulation(cache, S, E, B, m, s, b, t, input);
         }
+        i++;
     }
 
     //Final Calculations:
@@ -100,9 +105,13 @@ int main() {
         free(cache[i]);
     }
     free(cache);
+    free(input);
 }
 
 void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b, int t, char input[]) {
+    binaryAddress = calloc(100, sizeof (char*));
+    binaryAddress[0] = '\0';
+
     //1. Convert hex to binary: complete
     hexToBinary(input);
 
@@ -254,12 +263,10 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
         free(setID);
         free(tagStr);
         complete = true;
-
     }
 }
 
 void hexToBinary(char memoryAddress[]) {
-    binaryAddress = malloc(100* sizeof (char*));
     for (int i = 0; memoryAddress[i] != '\0'; i++) {
         switch (memoryAddress[i]) {
             case '0':
@@ -321,6 +328,9 @@ void hexToBinary(char memoryAddress[]) {
 }
 
 int binaryToInt(char* setID) {
-    int binary = (int) strtol(setID, NULL, 2);
-    return binary;
+    if (setID != NULL) {
+        int binary = (int) strtol(setID, NULL, 2);
+        return binary;
+    }
+    return -1;
 }
