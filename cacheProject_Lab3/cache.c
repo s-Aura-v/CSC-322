@@ -24,6 +24,10 @@ char policy = 'F'; //F for LFU and R for LRU
 int hitTime = 0;
 int missPenalty = 0;
 char* binaryAddress;
+char setID[64];
+char tagStr[64];
+
+
 
 //Prototypes
 void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b, int t, char input[]);
@@ -82,7 +86,7 @@ int main() {
 
     //Get the inputs
     char * input;
-    input = malloc(64* sizeof (char));
+    input = malloc(65 * sizeof (char));
     scanf("%s", input);
     int i = 0;
     while (atoi(input) != -1) {
@@ -109,19 +113,19 @@ int main() {
 }
 
 void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b, int t, char input[]) {
-    binaryAddress = calloc(100, sizeof (char*));
+    binaryAddress = calloc(260, sizeof (char*));
     binaryAddress[0] = '\0';
 
     //1. Convert hex to binary: complete
     hexToBinary(input);
 
     //2. Get Set ID: complete
-    char *setID = malloc(20 * sizeof(char *));  //20 is temporary value for now
+//    char *setID = malloc(20 * sizeof(char *));  //20 is temporary value for now
     strncpy(setID, binaryAddress + t, s);
     int setNum = binaryToInt(setID);
 
     //3. Tag Number: complete
-    char *tagStr = malloc(50 * sizeof(char *)); //50 temp
+//    char *tagStr = malloc(50 * sizeof(char *)); //50 temp
     int binaryEnd = strlen(binaryAddress) - (s + b);
     strncpy(tagStr, binaryAddress, binaryEnd);
     int tagNum = binaryToInt(tagStr);
@@ -260,8 +264,8 @@ void cacheSimulation(CacheLine **cache, int S, int E, int B, int m, int s, int b
         //End the simulation
         free(input);
         free(binaryAddress);
-        free(setID);
-        free(tagStr);
+//        free(setID);
+//        free(tagStr);
         complete = true;
     }
 }

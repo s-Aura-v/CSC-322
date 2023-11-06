@@ -1,74 +1,43 @@
-Last login: Sat Nov  4 19:06:16 on console
-survive@res-dhcp-129-3-156-252 ~ % ssh slamich2@pi.cs.oswego.edu
-slamich2@pi.cs.oswego.edu's password:
-Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.0-88-generic x86_64)
+Automatic:
+valgrind --leak-check=full \
+         --show-leak-kinds=all \
+         --track-origins=yes \
+         --verbose \
+         --log-file=valgrind-out.txt \
+         ./my_program < input2
 
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/advantage
-
-Expanded Security Maintenance for Applications is not enabled.
-
-0 updates can be applied immediately.
-
-14 additional security updates can be applied with ESM Apps.
-Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+Manual:
+valgrind --track-origins=yes -s ./my_program
 
 
-2 updates could not be installed automatically. For more details,
-see /var/log/unattended-upgrades/unattended-upgrades.log
 
-Last login: Sat Nov  4 17:35:37 2023 from 129.3.156.252
-slamich2@pi:~$ cd CSC322/
-Project1/ Project2/ Project3/ tests/
-slamich2@pi:~$ cd CSC322/Project3/
-slamich2@pi:~/CSC322/Project3$ ls
-cache.c  my_program  valgrind-out.txt
-slamich2@pi:~/CSC322/Project3$ vi valgrind-out.txt
-
-==140861==    by 0x1095F7: main (in /home/slamich2/CSC322/Project3/my_program)
-==140861==
-==140861==
-==140861== 12 errors in context 23 of 25:
-==140861== Invalid write of size 1
-==140861==    at 0x49B6573: __vfscanf_internal (vfscanf-internal.c:1101)
-==140861==    by 0x49B3141: __isoc99_scanf (isoc99_scanf.c:30)
-==140861==    by 0x109618: main (in /home/slamich2/CSC322/Project3/my_program)
-==140861==  Address 0x4b7bae0 is 0 bytes inside a block of size 64 free'd
-==140861==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==140861==    by 0x10A0AD: cacheSimulation (in /home/slamich2/CSC322/Project3/my_program)
-==140861==    by 0x109655: main (in /home/slamich2/CSC322/Project3/my_program)
-==140861==  Block was alloc'd at
-==140861==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==140861==    by 0x1095F7: main (in /home/slamich2/CSC322/Project3/my_program)
-==140861==
-==140861==
-==140861== 13 errors in context 24 of 25:
-==140861== Invalid read of size 1
-==140861==    at 0x4998661: ____strtol_l_internal (strtol_l.c:431)
-==140861==    by 0x4994653: atoi (atoi.c:27)
-==140861==    by 0x109665: main (in /home/slamich2/CSC322/Project3/my_program)
-==140861==  Address 0x4b7bae1 is 1 bytes inside a block of size 64 free'd
-==140861==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==140861==    by 0x10A0AD: cacheSimulation (in /home/slamich2/CSC322/Project3/my_program)
-==140861==    by 0x109655: main (in /home/slamich2/CSC322/Project3/my_program)
-==140861==  Block was alloc'd at
-==140861==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==140861==    by 0x1095F7: main (in /home/slamich2/CSC322/Project3/my_program)
-==140861==
-==140861==
-==140861== 15 errors in context 25 of 25:
-==140861== Invalid read of size 1
-==140861==    at 0x10A36D: hexToBinary (in /home/slamich2/CSC322/Project3/my_program)
-==140861==    by 0x109755: cacheSimulation (in /home/slamich2/CSC322/Project3/my_program)
-==140861==    by 0x109655: main (in /home/slamich2/CSC322/Project3/my_program)
-==140861==  Address 0x4b7bae0 is 0 bytes inside a block of size 64 free'd
-==140861==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==140861==    by 0x10A0AD: cacheSimulation (in /home/slamich2/CSC322/Project3/my_program)
-==140861==    by 0x109655: main (in /home/slamich2/CSC322/Project3/my_program)
-==140861==  Block was alloc'd at
-==140861==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==140861==    by 0x1095F7: main (in /home/slamich2/CSC322/Project3/my_program)
-==140861==
-==140861== ERROR SUMMARY: 142 errors from 25 contexts (suppressed: 0 from 0)
-                                                                                                                            783,1         Bot
+==215488== ERROR SUMMARY: 18 errors from 2 contexts (suppressed: 0 from 0)
+==215488==
+==215488== 6 errors in context 1 of 2:
+==215488== Invalid read of size 1
+==215488==    at 0x4998580: ____strtol_l_internal (strtol_l.c:291)
+==215488==    by 0x4994653: atoi (atoi.c:27)
+==215488==    by 0x1096BF: main (in /home/slamich2/CSC322/Project3/my_program)
+==215488==  Address 0x4b7d6e0 is 0 bytes inside a block of size 65 free'd
+==215488==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==215488==    by 0x10A12A: cacheSimulation (in /home/slamich2/CSC322/Project3/my_program)
+==215488==    by 0x1096AB: main (in /home/slamich2/CSC322/Project3/my_program)
+==215488==  Block was alloc'd at
+==215488==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==215488==    by 0x109617: main (in /home/slamich2/CSC322/Project3/my_program)
+==215488==
+==215488==
+==215488== 12 errors in context 2 of 2:
+==215488== Invalid read of size 1
+==215488==    at 0x4998661: ____strtol_l_internal (strtol_l.c:431)
+==215488==    by 0x4994653: atoi (atoi.c:27)
+==215488==    by 0x1096BF: main (in /home/slamich2/CSC322/Project3/my_program)
+==215488==  Address 0x4b7d6e1 is 1 bytes inside a block of size 65 free'd
+==215488==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==215488==    by 0x10A12A: cacheSimulation (in /home/slamich2/CSC322/Project3/my_program)
+==215488==    by 0x1096AB: main (in /home/slamich2/CSC322/Project3/my_program)
+==215488==  Block was alloc'd at
+==215488==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==215488==    by 0x109617: main (in /home/slamich2/CSC322/Project3/my_program)
+==215488==
+==215488== ERROR SUMMARY: 18 errors from 2 contexts (suppressed: 0 from 0)
