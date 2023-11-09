@@ -9,35 +9,5 @@ valgrind --leak-check=full \
 Manual:
 valgrind --track-origins=yes -s ./my_program
 
-
-
-==215488== ERROR SUMMARY: 18 errors from 2 contexts (suppressed: 0 from 0)
-==215488==
-==215488== 6 errors in context 1 of 2:
-==215488== Invalid read of size 1
-==215488==    at 0x4998580: ____strtol_l_internal (strtol_l.c:291)
-==215488==    by 0x4994653: atoi (atoi.c:27)
-==215488==    by 0x1096BF: main (in /home/slamich2/CSC322/Project3/my_program)
-==215488==  Address 0x4b7d6e0 is 0 bytes inside a block of size 65 free'd
-==215488==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==215488==    by 0x10A12A: cacheSimulation (in /home/slamich2/CSC322/Project3/my_program)
-==215488==    by 0x1096AB: main (in /home/slamich2/CSC322/Project3/my_program)
-==215488==  Block was alloc'd at
-==215488==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==215488==    by 0x109617: main (in /home/slamich2/CSC322/Project3/my_program)
-==215488==
-==215488==
-==215488== 12 errors in context 2 of 2:
-==215488== Invalid read of size 1
-==215488==    at 0x4998661: ____strtol_l_internal (strtol_l.c:431)
-==215488==    by 0x4994653: atoi (atoi.c:27)
-==215488==    by 0x1096BF: main (in /home/slamich2/CSC322/Project3/my_program)
-==215488==  Address 0x4b7d6e1 is 1 bytes inside a block of size 65 free'd
-==215488==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==215488==    by 0x10A12A: cacheSimulation (in /home/slamich2/CSC322/Project3/my_program)
-==215488==    by 0x1096AB: main (in /home/slamich2/CSC322/Project3/my_program)
-==215488==  Block was alloc'd at
-==215488==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==215488==    by 0x109617: main (in /home/slamich2/CSC322/Project3/my_program)
-==215488==
-==215488== ERROR SUMMARY: 18 errors from 2 contexts (suppressed: 0 from 0)
+GCC Complier:
+gcc -o my_program cache.c -lm

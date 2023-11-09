@@ -1,5 +1,6 @@
 //
 // Created by Saurav Lamichhane on 10/24/23.
+// Note: Use: gcc -o a.out cache.c -lm to compile!
 //
 
 #include <stdbool.h>
@@ -62,6 +63,9 @@ int main() {
     // b = log(2) (m) - Offset
     // s = log2 (S) -
     int s = (int) log2 ((double) S);
+    if (s == 0) {
+        s = 1;
+    }
     int b = (int) log2 ((double) m);
     int t = m - (b + s);
 
@@ -104,7 +108,7 @@ int main() {
 }
 
 void cacheSimulation(CacheLine **cache, int S, int E, int s, int b, int t, char input[]) {
-    binaryAddress = calloc(260, sizeof (char*));
+    binaryAddress = malloc(260 * sizeof (char*));
     binaryAddress[0] = '\0';
 
     //1. Convert hex to binary: complete
