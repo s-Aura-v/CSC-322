@@ -177,11 +177,10 @@ void cacheSimulation(CacheLine **cache, int S, int E, int s, int b, int t, char 
     roomAdded = false;
     //a. Find the least used
     if (complete == false) {
-        int leastUsed = 0;
+        int leastUsed = 10000;
         for (int i = 0; i < S; i++) {
             for (int j = 0; j < E; j++) {
                 if (cache[i][j].setNumber == setNum) {
-                    leastUsed = cache[i][j].amntUsed;
                     int challenger = cache[i][j].amntUsed;
                     if (challenger < leastUsed) {
                         leastUsed = challenger;
@@ -190,11 +189,10 @@ void cacheSimulation(CacheLine **cache, int S, int E, int s, int b, int t, char 
             }
         }
         //b. Find the oldest in the time-line
-        int leastCycles = 0;
+        int leastCycles = 10000;
         for (int i = 0; i < S; i++) {
             for (int j = 0; j < E; j++) {
                 if (cache[i][j].setNumber == setNum) {
-                    leastCycles = cache[i][j].cycleCounter;
                     int challenger = cache[i][j].cycleCounter;
                     if (challenger < leastCycles) {
                         leastCycles = challenger;
@@ -225,11 +223,12 @@ void cacheSimulation(CacheLine **cache, int S, int E, int s, int b, int t, char 
                         if (cache[i][j].cycleCounter == leastCycles && roomAdded == false) {
                             //evict!
 
+                            totalMiss++;
+                            totalCycles += missPenalty + hitTime;
+
                             cache[i][j].tag = tagNum;
                             cache[i][j].cycleCounter = totalCycles;
 
-                            totalMiss++;
-                            totalCycles += missPenalty + hitTime;
 
                             printf("%s M\n", input);
                             roomAdded = true;
