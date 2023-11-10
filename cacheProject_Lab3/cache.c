@@ -63,10 +63,7 @@ int main() {
     // b = log(2) (m) - Offset
     // s = log2 (S) -
     int s = (int) log2 ((double) S);
-    if (s == 0) {
-        s = 1;
-    }
-    int b = (int) log2 ((double) m);
+    int b = (int) log2 ((double) B);
     int t = m - (b + s);
 
     //Create the cache

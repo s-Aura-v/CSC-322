@@ -4,10 +4,10 @@ valgrind --leak-check=full \
          --track-origins=yes \
          --verbose \
          --log-file=valgrind-out.txt \
-         ./my_program < input2
+         ./a.out < input2
 
 Manual:
-valgrind --track-origins=yes -s ./my_program
+valgrind --track-origins=yes -s ./a.out
 
 GCC Complier:
-gcc -o my_program cache.c -lm
+gcc -o a.out cache.c -lm
