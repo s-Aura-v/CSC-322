@@ -1,0 +1,3 @@
+/Users/survive/Desktop/EEATO/23Fall/CSC 322/shLab_Lab4/cmake-build-debug/CMakeFiles/shLab_Lab4.dir
+/Users/survive/Desktop/EEATO/23Fall/CSC 322/shLab_Lab4/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/survive/Desktop/EEATO/23Fall/CSC 322/shLab_Lab4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
