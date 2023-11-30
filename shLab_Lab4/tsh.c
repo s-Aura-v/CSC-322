@@ -165,8 +165,8 @@ int main(int argc, char **argv)
  * background children don't receive SIGINT (SIGTSTP) from the kernel
  * when we type ctrl-c (ctrl-z) at the keyboard.
 */
-void eval(char *cmdline)
-{
+void eval(char *cmdline) {
+
     // Initialize things (page 755)
     char *argv[MAXARGS];
     char buf[MAXLINE];
@@ -183,6 +183,7 @@ void eval(char *cmdline)
     if (argv[0] == NULL) {
         return;
     }
+
     if (!builtin_cmd(argv)) {
         // Block before fork so that child and parent don't mess each other up (765)
         sigprocmask(SIG_BLOCK, &mask, &prev_mask);
@@ -190,18 +191,30 @@ void eval(char *cmdline)
         if ((pid = fork()) == 0) {
             //SIG_UNBLOCK to unblock
             sigprocmask(SIG_UNBLOCK, &mask, &prev_mask);
+            setpgid(0, 0);
+
             if (execve(argv[0], argv, environ) < 0) {
                 printf("%s: Command not found.\n", argv[0]);
                 exit(0);
             }
         }
+        // Parent
         if (!bg) {
+            addjob(jobs, pid, FG, cmdline);
+            //SIG_UNBLOCK to unblock
+            sigprocmask(SIG_UNBLOCK, &mask, &prev_mask);
+
+            // Replaces my waitfg method (might be wrong, TODO: look into this)
             int status;
             if (waitpid(pid, &status, 0) < 0) {
                 unix_error("waitfg: waitpid error");
             } else {
                 printf("%d %s", pid, cmdline);
             }
+            // Foreground
+        } else {
+            addjob(jobs, pid, BG, cmdline);
+            printf("[%d] (%d) %s", pid2jid(pid), pid, cmdline);
         }
     }
     return;
@@ -296,7 +309,10 @@ void do_bgfg(char **argv)
  */
 void waitfg(pid_t pid)
 {
-    return;
+    while (pid == fgpid(jobs)) {
+        sleep(1);
+    }
+
 }
 
 /*****************
@@ -313,8 +329,8 @@ void waitfg(pid_t pid)
 void sigchld_handler(int sig)
 {
 //    int olderrno = errno;
-//    pid = Waitpid(-1, NULL, 0);
-//    errno = olderrno;
+//    pid_t pid;
+
 }
 
 /*
@@ -324,7 +340,10 @@ void sigchld_handler(int sig)
  */
 void sigint_handler(int sig)
 {
-    return;
+    pid_t fg_pid = fgpid(jobs);
+    if (fg_pid > 0) {
+        kill(fg_pid, SIGINT);
+    }
 }
 
 /*
