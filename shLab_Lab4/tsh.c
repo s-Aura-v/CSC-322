@@ -1,6 +1,3 @@
-//
-// Created by Saurav Lamichhane on 11/14/23.
-//
 /* tsh - A tiny shell program with job control
         *
         *  Saurav Lamichhane : slamich2@oswego.edu
@@ -173,11 +170,6 @@ void eval(char *cmdline) {
     int bg;
     pid_t pid;
 
-    //Create the masks (765)
-    sigset_t mask, prev_mask;
-    sigemptyset(&mask);
-    sigaddset(&mask, SIGCHLD);
-
     strcpy(buf, cmdline);
     bg = parseline(buf, argv);
     if (argv[0] == NULL) {
@@ -186,6 +178,10 @@ void eval(char *cmdline) {
 
     if (!builtin_cmd(argv)) {
         // Block before fork so that child and parent don't mess each other up (765)
+        //Create the masks (765)
+        sigset_t mask, prev_mask;
+        sigemptyset(&mask);
+        sigaddset(&mask, SIGCHLD);
         sigprocmask(SIG_BLOCK, &mask, &prev_mask);
 
         if ((pid = fork()) == 0) {
@@ -203,15 +199,8 @@ void eval(char *cmdline) {
             addjob(jobs, pid, FG, cmdline);
             //SIG_UNBLOCK to unblock
             sigprocmask(SIG_UNBLOCK, &mask, &prev_mask);
-
-            // Replaces my waitfg method (might be wrong, TODO: look into this)
-            int status;
-            if (waitpid(pid, &status, 0) < 0) {
-                unix_error("waitfg: waitpid error");
-            } else {
-                printf("%d %s", pid, cmdline);
-            }
-            // Foreground
+            waitfg(pid);
+            // background
         } else {
             addjob(jobs, pid, BG, cmdline);
             printf("[%d] (%d) %s", pid2jid(pid), pid, cmdline);
@@ -309,10 +298,12 @@ void do_bgfg(char **argv)
  */
 void waitfg(pid_t pid)
 {
-    while (pid == fgpid(jobs)) {
-        sleep(1);
+    int status;
+    if (waitpid(pid, &status, 0) < 0) {
+        unix_error("waitfg: waitpid error");
+    } else {
+        printf("%d", pid);
     }
-
 }
 
 /*****************
@@ -328,9 +319,15 @@ void waitfg(pid_t pid)
  */
 void sigchld_handler(int sig)
 {
-//    int olderrno = errno;
-//    pid_t pid;
+    pid_t pid;
+    int status;
 
+    // Reap Children (783)
+    while ((pid = waitpid(-1, &status, WNOHANG) > 0)) {
+        if (WIFEXITED(status)) {
+            deletejob(jobs, pid);
+        }
+    }
 }
 
 /*
@@ -340,9 +337,11 @@ void sigchld_handler(int sig)
  */
 void sigint_handler(int sig)
 {
-    pid_t fg_pid = fgpid(jobs);
+    pid_t fg_pid;
+    fg_pid = fgpid(jobs);
+
     if (fg_pid > 0) {
-        kill(fg_pid, SIGINT);
+        kill(-fg_pid, SIGINT);
     }
 }
 
@@ -353,7 +352,12 @@ void sigint_handler(int sig)
  */
 void sigtstp_handler(int sig)
 {
-    return;
+    pid_t fg_pid;
+    fg_pid = fgpid(jobs);
+
+    if (fg_pid > 0) {
+        kill(-fg_pid, SIGTSTP);
+    }
 }
 
 /*********************

@@ -1,4 +1,4 @@
-# Install script for directory: /Users/survive/Desktop/EEATO/Oswego Fall 2023/CSC 322/cacheProject_Lab3
+# Install script for directory: /Users/survive/Desktop/EEATO/23Fall/CSC 322/cacheProject_Lab3
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/survive/Desktop/EEATO/Oswego Fall 2023/CSC 322/cacheProject_Lab3/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/survive/Desktop/EEATO/23Fall/CSC 322/cacheProject_Lab3/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

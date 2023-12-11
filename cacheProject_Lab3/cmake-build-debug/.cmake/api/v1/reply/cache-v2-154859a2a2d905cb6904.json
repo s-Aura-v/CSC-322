@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/survive/Desktop/EEATO/Oswego Fall 2023/CSC 322/cacheProject_Lab3/cmake-build-debug"
+			"value" : "/Users/survive/Desktop/EEATO/23Fall/CSC 322/cacheProject_Lab3/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -383,7 +383,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/survive/Desktop/EEATO/Oswego Fall 2023/CSC 322/cacheProject_Lab3/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/Users/survive/Desktop/EEATO/23Fall/CSC 322/cacheProject_Lab3/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -443,7 +443,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/survive/Desktop/EEATO/Oswego Fall 2023/CSC 322/cacheProject_Lab3"
+			"value" : "/Users/survive/Desktop/EEATO/23Fall/CSC 322/cacheProject_Lab3"
 		},
 		{
 			"name" : "CMAKE_INSTALL_NAME_TOOL",
@@ -1015,7 +1015,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/survive/Desktop/EEATO/Oswego Fall 2023/CSC 322/cacheProject_Lab3/cmake-build-debug"
+			"value" : "/Users/survive/Desktop/EEATO/23Fall/CSC 322/cacheProject_Lab3/cmake-build-debug"
 		},
 		{
 			"name" : "cacheProject_Lab3_IS_TOP_LEVEL",
@@ -1039,7 +1039,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/survive/Desktop/EEATO/Oswego Fall 2023/CSC 322/cacheProject_Lab3"
+			"value" : "/Users/survive/Desktop/EEATO/23Fall/CSC 322/cacheProject_Lab3"
 		}
 	],
 	"kind" : "cache",
