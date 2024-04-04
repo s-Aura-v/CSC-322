@@ -12,6 +12,8 @@ Instructor: Pantaleev, Aleksandar (Primary)
 
 Year: Fall 2023 
 
-
 Three out of four projects are here. 
-Shell Lab is utterly incomplete. It does not function at all, past the first three traces. All projects are done in C. 
+Shell Lab is incomplete. It does not function at all, past the first three traces. All projects are done in C. 
+
+Find more details here:
+https://www.cs.oswego.edu/~alex/teaching/csc322/
